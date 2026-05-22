@@ -611,7 +611,75 @@ background:#b7c0c9;
 color:#1f2933;
 
 }
+@media (max-width: 1100px) {
 
+.dashboard{
+grid-template-columns: 1fr;
+}
+
+.side{
+order:2;
+}
+
+.yard{
+order:1;
+}
+
+/* GRID más flexible en tablet */
+.grid{
+grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+}
+
+/* cards más cómodas */
+.card{
+height:78px;
+font-size:12px;
+}
+
+/* KPI más compactos */
+.kpis{
+grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+}
+
+/* header en columna si no cabe */
+.header{
+flex-wrap: wrap;
+gap:10px;
+}
+
+.right{
+flex-wrap: wrap;
+justify-content: flex-end;
+}
+
+}
+
+/* ===== TELÉFONO ===== */
+
+@media (max-width: 600px) {
+
+.grid{
+grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
+}
+
+.card{
+height:70px;
+}
+
+.code{
+font-size:13px;
+}
+
+.small{
+font-size:7px;
+}
+
+.zona{
+width:60px;
+font-size:10px;
+}
+
+}
 </style>
 
 </head>
