@@ -611,75 +611,7 @@ background:#b7c0c9;
 color:#1f2933;
 
 }
-@media (max-width: 1100px) {
 
-.dashboard{
-grid-template-columns: 1fr;
-}
-
-.side{
-order:2;
-}
-
-.yard{
-order:1;
-}
-
-/* GRID más flexible en tablet */
-.grid{
-grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-}
-
-/* cards más cómodas */
-.card{
-height:78px;
-font-size:12px;
-}
-
-/* KPI más compactos */
-.kpis{
-grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-}
-
-/* header en columna si no cabe */
-.header{
-flex-wrap: wrap;
-gap:10px;
-}
-
-.right{
-flex-wrap: wrap;
-justify-content: flex-end;
-}
-
-}
-
-/* ===== TELÉFONO ===== */
-
-@media (max-width: 600px) {
-
-.grid{
-grid-template-columns: repeat(auto-fill, minmax(65px, 1fr));
-}
-
-.card{
-height:70px;
-}
-
-.code{
-font-size:13px;
-}
-
-.small{
-font-size:7px;
-}
-
-.zona{
-width:60px;
-font-size:10px;
-}
-
-}
 </style>
 
 </head>
@@ -899,6 +831,7 @@ border:1px solid rgba(0,0,0,.2);
 FUERA SERVICIO
 
 </div>
+
 
 </div>
 <div class="dashboard">
@@ -1748,50 +1681,25 @@ h.style.display='none';
 /* ================= REALTIME ================= */
 
 db
-.channel('realtime-gruas')
-
+.channel('gruas-changes')
 .on(
-'postgres_changes',
-{
-event:'*',
-schema:'public',
-table:'gruas'
-},
-payload=>{
+  'postgres_changes',
+  {
+    event: '*',
+    schema: 'public',
+    table: 'gruas'
+  },
+  (payload) => {
 
-console.log(payload);
+    console.log('CHANGE:', payload);
 
-cargar();
+    cargar(); // temporalmente mantenlo así para confirmar
 
-}
+  }
 )
-
-.subscribe();
-
-/* ================= REALTIME MENSAJES ================= */
-
-db
-.channel('realtime-mensajes')
-
-.on(
-'postgres_changes',
-{
-event:'INSERT',
-schema:'public',
-table:'mensajes_operativos'
-},
-payload=>{
-
-console.log(payload);
-
-cargarMensajeActual();
-
-cargarHistorial();
-
-}
-)
-
-.subscribe();
+.subscribe((status) => {
+  console.log('Realtime status:', status);
+});
 
 /* ================= INIT ================= */
 
@@ -1806,3 +1714,5 @@ cargarHistorial();
 </body>
 
 </html>
+
+
