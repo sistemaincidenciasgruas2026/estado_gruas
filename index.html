@@ -29,30 +29,38 @@ box-sizing:border-box;
 /* ================= ROOT ================= */
 
 :root{
+  --bg:#eef3f8;
+  --panel:#ffffff;
+  --border:#dce4ec;
 
---bg:#eceff1;
+  --primary:#0f4c81;
+  --secondary:#1f6fb2;
 
---panel:#ffffff;
+  --success:#16a34a;
+  --info:#2563eb;
+  --danger:#dc2626;
+  --warning:#92400e;
 
---border:#d6d6d6;
-
+  --text:#1f2937;
+  --muted:#6b7280;
 }
 
 /* ================= BODY ================= */
 
 body{
+  background:
+  linear-gradient(
+    180deg,
+    #eef3f8 0%,
+    #e6edf5 100%
+  );
 
-background:var(--bg);
+  font-family:
+  'Segoe UI',
+  Tahoma,
+  sans-serif;
 
-font-family:
-Arial,
-Helvetica,
-sans-serif;
-
-color:var(--text);
-
-min-height:100vh;
-
+  color:var(--text);
 }
 
 /* ================= HEADER ================= */
@@ -129,77 +137,74 @@ font-weight:700;
 /* ================= KPIS ================= */
 
 .kpis{
-
-display:grid;
-
-grid-template-columns:
-repeat(auto-fit,minmax(220px,1fr));
-
-gap:12px;
-
-padding:16px;
-
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  padding:10px 16px;
 }
 
 .kpi{
+  background:white;
+  border-radius:10px;
+  padding:8px 12px;
+  min-height:65px;
 
-background:var(--panel);
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
 
-border:
-1px solid var(--border);
-
-padding:14px;
-
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
 }
 
+.kpi:hover{
+  transform:translateY(-4px);
+}
 .kpi-title{
-
-font-size:11px;
-
-color:var(--muted);
-
+  font-size:11px;
+  color:#6b7280;
+  font-weight:600;
+  margin-bottom:4px;
 }
 
 .kpi-value{
-
-margin-top:8px;
-
-font-size:28px;
-
-font-weight:700;
-
+  font-size:28px;
+  font-weight:800;
+  line-height:1;
+  color:#0f4c81;
 }
 
 /* ================= DASHBOARD ================= */
 
 .dashboard{
-
-display:grid;
-
-grid-template-columns:
-1fr 340px;
-
-gap:16px;
-
-padding:0 16px 16px;
-
+    display:block;
+    padding:0 16px 16px;
 }
 
 /* ================= YARD ================= */
 
 .yard{
+  background:white;
 
-background:var(--panel);
+  border:none;
 
-border:
-1px solid var(--border);
+  border-radius:16px;
 
-padding:14px;
+  box-shadow:
+  0 8px 25px rgba(0,0,0,.08);
 
-overflow:auto;
-
+  padding:20px;
 }
-
+.yard{
+    width:100%;
+}
+.yard{
+  position:relative;
+}
+.leyenda-corner{
+  position:absolute;
+  top:10px;
+  right:10px;
+}
 .row{
 
 display:flex;
@@ -227,72 +232,94 @@ color:var(--muted);
 /* ================= GRID ================= */
 
 .grid{
-
-display:grid;
-
-grid-template-columns:
-repeat(auto-fit,minmax(70px,1fr));
-
-gap:8px;
-
-width:100%;
-
+  display:grid;
+  grid-template-columns:repeat(11,minmax(90px,1fr));
+  gap:10px;
 }
 
 /* ================= CARD ================= */
 
 .card{
+  position:relative;
 
-width:100%;
+  min-height:110px;
+  border-radius:14px;
 
-min-width:70px;
+  cursor:pointer;
+  transition:.25s;
 
-height:72px;
+  padding:10px 8px 8px;
 
-display:flex;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
 
-flex-direction:column;
-
-justify-content:center;
-align-items:center;
-
-position:relative;
-
-cursor:pointer;
-
-border:
-1px solid rgba(0,0,0,.25);
-
+  overflow:visible; /* evita que se corte el texto */
 }
 
+.code{
+  font-size:22px;
+  font-weight:800;
+  line-height:1;
+  text-align:center;
+
+  margin-top:6px;
+  margin-bottom:8px;
+
+  position:relative;
+  z-index:2;
+}
 .card:hover{
+  transform:
+  translateY(-4px)
+  scale(1.03);
 
-filter:brightness(.96);
-
+  box-shadow:
+  0 12px 25px rgba(0,0,0,.20);
 }
 
 /* ================= ESTADOS ================= */
 
 .operacion{
-  background:#7f9d73;
-  color:#fff;
+ background:#2e7d32;
+ color:white;
 }
 
 .disponible{
-  background:#6e8397;
-  color:#fff;
+ background:#1976d2;
+ color:white;
 }
 
 .falla{
-  background:#9b6d6d;
-  color:#fff;
+ background:#c62828;
+ color:white;
 }
 
-.banio{
-  background:#9f8f63;
-  color:#fff;
+.mtto{
+  background:#8d6e63;
+  color:white;
 }
+.falla{
 
+ animation:blinkFail 1s infinite;
+
+}
+@keyframes blinkFail{
+
+ 0%{
+   box-shadow:0 0 0px red;
+ }
+
+ 50%{
+   box-shadow:0 0 15px red;
+ }
+
+ 100%{
+   box-shadow:0 0 0px red;
+ }
+
+}
 .anclada{
   background:#7f8a95;
   color:#fff;
@@ -337,10 +364,7 @@ border:
 z-index:2;
 
 }
-.sinsenal{
-background:var(--purple-bg);
-color:var(--purple-text);
-}
+
 
 .empty{
 
@@ -352,14 +376,6 @@ border:
 }
 
 /* ================= CARD TEXT ================= */
-
-.code{
-
-font-size:16px;
-
-font-weight:700;
-
-}
 
 .small{
 
@@ -397,26 +413,25 @@ letter-spacing:1px;
 
 .priority-text{
 
-margin-top:4px;
+  margin-top:auto;
 
-font-size:9px;
+  min-height:32px;
 
-font-weight:700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-color:#ffffff;
+  font-size:10px;
+  line-height:1.1;
 
-background:#c62828;
+  text-align:center;
 
-padding:2px 4px;
+  padding:4px 6px;
 
-border-radius:3px;
+  border-radius:6px;
 
-letter-spacing:.5px;
-
-animation:pulseText .9s infinite;
-
+  width:100%;
 }
-
 /* ================= EFECTO TEXTO ================= */
 
 @keyframes pulseText{
@@ -463,19 +478,78 @@ background:#8f2f2f;
 .side{
    width:320px;
 }
-
+.side{
+   width:100%;
+   display:flex;
+   flex-direction:column;
+   gap:12px;
+}
 .panel{
-   background:white;
-   border:1px solid #d7d7d7;
-   border-radius:4px;
-}
 
+  border:none;
+
+  border-radius:16px;
+
+  overflow:hidden;
+
+  box-shadow:
+  0 8px 20px rgba(0,0,0,.08);
+}
+.panel-header,
 .panel-title{
-   color:#6da544;
-   font-size:16px;
-   font-weight:700;
+
+  background:
+  linear-gradient(
+    90deg,
+    #0f4c81,
+    #1f6fb2
+  );
+
+  color:white;
+
+  padding:14px 18px;
+
+  font-weight:700;
+}
+.panel-title{
+
+    color:#6da544;
+
+    font-size:15px;
+
+    font-weight:700;
+
+}
+.panel-title{
+  background:#76a845;
+  color:white;
+  padding:12px;
+  font-size:14px;
+  font-weight:700;
+}
+.leyenda{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:0 16px 16px;
 }
 
+.leyenda-item{
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  background:white;
+
+  border:1px solid #d6d6d6;
+
+  border-radius:6px;
+
+  padding:8px 12px;
+
+  font-size:12px;
+  font-weight:700;
+}
 /* ================= LIST ================= */
 
 .list{
@@ -492,13 +566,14 @@ gap:8px;
 
 .item{
 
-background:#dde4ea;
+    background:#f8fafb;
 
-border:
-1px solid #a8b2bd;
+    border:1px solid #dce3e8;
 
-padding:10px;
+    border-radius:6px;
 
+    padding:12px;
+border-left:5px solid #d32f2f;
 }
 
 .item strong{
@@ -536,45 +611,60 @@ font-size:11px;
 
 .timer{
 
-font-size:16px;
+    font-size:18px;
 
-font-weight:700;
+    font-weight:700;
 
-font-family:monospace;
+    font-family:monospace;
 
-color:#7a1f1f;
+    color:#b71c1c;
 
-background:#f3d6d6;
+    background:#ffebee;
 
-padding:2px 8px;
+    padding:4px 10px;
 
-border-radius:4px;
+    border-radius:5px;
 
-letter-spacing:1px;
+    letter-spacing:1px;
 
-min-width:90px;
+    min-width:100px;
 
-text-align:center;
+    text-align:center;
 
+}
+.messages-bottom{
+    margin:16px;
+    margin-top:20px;
 }
 /* ================= TEXTAREA ================= */
 
 textarea.msg{
 
-width:100%;
+  width:100%;
 
-height:100px;
+  min-height:140px;
 
-border:
-1px solid #8f9aa5;
+  border:1px solid #d8e0e8;
 
-background:#f8fafb;
+  border-radius:12px;
 
-padding:10px;
+  background:#fafcff;
 
-resize:none;
+  padding:16px;
 
-outline:none;
+  font-size:14px;
+
+  resize:vertical;
+
+  transition:.2s;
+}
+
+textarea.msg:focus{
+
+  border-color:#1f6fb2;
+
+  box-shadow:
+    0 0 0 4px rgba(31,111,178,.15);
 
 }
 
@@ -721,18 +811,25 @@ color:#1f2933;
 
   }
 
-  .side{
+.dashboard{
+  display:flex;
+  gap:16px;
+}
 
-    width:100%;
+.yard{
+  flex:1;
+}
 
-  }
+.side{
+  width:350px;
+  flex-shrink:0;
+}
 
-  .grid{
-
-    grid-template-columns:
-    repeat(6,minmax(70px,1fr));
-
-  }
+.grid{
+  display:grid;
+  grid-template-columns:repeat(9,minmax(120px,1fr));
+  gap:10px;
+}
 
 }
 
@@ -793,7 +890,26 @@ color:#1f2933;
     padding:10px;
 
   }
+.yard{
+  position:relative;
+}
+.yard-overlay{
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:10;
+}
+.leyenda{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
 
+  background:rgba(255,255,255,.95);
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid #cfd8dc;
+  box-shadow:0 2px 8px rgba(0,0,0,.15);
+}
   .row{
 
     flex-direction:column;
@@ -802,13 +918,20 @@ color:#1f2933;
 
   }
 
-  .zona{
+.zona{
 
-    width:100%;
+ width:90px;
 
-    padding-top:0;
+ background:#455a64;
+ color:white;
 
-  }
+ border-radius:6px;
+
+ padding:12px;
+
+ text-align:center;
+
+}
 
   .grid{
 
@@ -819,11 +942,19 @@ color:#1f2933;
 
   }
 
-  .card{
+.card{
+  position:relative;
+  min-height:95px;
+  border-radius:10px;
+  padding:10px;
+  box-shadow:0 2px 5px rgba(0,0,0,.12);
 
-    height:64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+}
 
-  }
 
   .code{
 
@@ -837,11 +968,9 @@ color:#1f2933;
 
   }
 
-  .panel{
-
-    padding:10px;
-
-  }
+.panel{
+  min-height:auto;
+}
 
   .modal-content{
 
@@ -906,48 +1035,36 @@ color:#1f2933;
 /* ================= INTRANET ================= */
 
 .topbar{
+  height:70px;
 
-height:60px;
+  background:
+  linear-gradient(
+    90deg,
+    #0f4c81,
+    #1f6fb2
+  );
 
-background:#76a845;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 
-display:flex;
+  padding:0 25px;
 
-justify-content:space-between;
+  color:white;
 
-align-items:center;
+  font-size:24px;
+  font-weight:700;
 
-padding:0 20px;
-
-color:white;
-
-font-size:26px;
-
-font-weight:700;
-
+  box-shadow:
+  0 4px 15px rgba(0,0,0,.15);
 }
 
 .layout{
-
-    display:flex;
-
-    height:calc(100vh - 60px);
-
+  display:flex;
+  min-height:100vh;
 }
 
-.sidebar{
 
-    width:260px;
-
-    background:#f3f5f6;
-
-    border-right:1px solid #ccc;
-
-    padding:20px;
-
-    overflow:auto;
-
-}
 
 .menu-title{
 
@@ -964,13 +1081,21 @@ font-weight:700;
 /* ================= SIDEBAR MODERNA ================= */
 
 .sidebar{
+  width:220px;
+  min-width:220px;
+  max-width:220px;
 
-  width:260px;
-  background:#f3f5f6;
-  border-right:1px solid #d0d7de;
+  background:linear-gradient(180deg,#0f172a,#1e293b);
+  color:white;
+
   padding:16px;
-  overflow:auto;
 
+  overflow-y:auto;
+  overflow-x:hidden;
+
+  flex-shrink:0;
+
+  border-right:1px solid rgba(255,255,255,.08);
 }
 
 /* SEARCH */
@@ -1002,81 +1127,119 @@ font-weight:700;
   box-shadow:0 0 0 2px rgba(118,168,69,.2);
 }
 
-/* TITLE */
 
-.sidebar-title{
-
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:1px;
-
-  color:#6b7a89;
-
-  margin:14px 0 10px;
-
-}
 
 /* BOTONES */
+.sidebar{
+  width:220px;
+  background:linear-gradient(180deg,#0f172a,#1e293b);
+  color:white;
+  padding:16px;
+  overflow:auto;
+  box-shadow:3px 0 20px rgba(0,0,0,.25);
+}
 
+/* TÍTULO */
+.sidebar-title{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:2px;
+  color:#93c5fd;
+  margin:10px 0 14px;
+}
+
+/* BOTÓN MENÚ */
 .menu-btn{
-
   width:100%;
-  height:44px;
+
+  min-height:48px;
+  height:auto;
+
+  padding:12px 14px;
 
   display:flex;
   align-items:center;
-  gap:10px;
 
-  padding:0 12px;
+  text-align:left;
+  line-height:1.2;
 
-  margin-bottom:10px;
+  background:rgba(255,255,255,.04);
 
-  border:1px solid #d8d8d8;
-  background:white;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
 
-  border-radius:6px;
+  color:#fff;
 
   cursor:pointer;
 
-  font-size:13px;
-  font-weight:600;
+  transition:.25s;
 
-  color:#2b3a42;
+  margin-bottom:10px;
 
-  transition:.2s;
-
+  position:relative;
+  overflow:hidden;
 }
 
 .menu-btn span{
-  flex:1;
-  text-align:left;
+  display:block;
+  width:100%;
+  word-break:break-word;
+}
+
+/* EFECTO HOVER LUZ */
+.menu-btn::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-100%;
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);
+  transition:.5s;
+}
+
+.menu-btn:hover::before{
+  left:100%;
 }
 
 .menu-btn:hover{
-  background:#e8f1e0;
-  transform:translateX(3px);
-  border-color:#76a845;
+  background:#2563eb;
+  transform:translateX(4px);
+  box-shadow:0 0 15px rgba(37,99,235,.35);
 }
+
+.menu-btn.active{
+  background:#2563eb;
+  border-color:#3b82f6;
+}
+
+/* TEXTO */
+.menu-btn span{
+  flex:1;
+}
+
+/* ICONO OPCIONAL (si luego agregas) */
+.menu-btn i{
+  width:18px;
+  text-align:center;
+  opacity:.8;
+}
+
+
 
 /* botón activo opcional */
-.menu-btn.active{
-  background:#76a845;
-  color:white;
-  border-color:#76a845;
+
+
+
+.sidebar-title{
+  color:#0f4c81;
+  font-size:12px;
+  font-weight:800;
+  margin-bottom:10px;
 }
-
-.sidebar button:hover{
-
-    background:#e8f1e0;
-
-}
-
 .main-content{
-
-    flex:1;
-
-    overflow:auto;
-
+  flex:1;
+  min-width:0;
 }
 .btn-excel{
 
@@ -1216,29 +1379,641 @@ font-weight:700;
     }
 
 }
-.vista {
-  display: none;
+.vista{
+  display:none;
 }
 
-.vista.activa {
-  display: block;
+.vista.activa{
+  display:block;
+}
+
+.oculto{
+  display:none !important;
 }
 .invisible-slot{
   visibility:hidden;
+}
+.status-panels{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+}
+.dashboard-main{
+    display:grid;
+    grid-template-columns: 1fr 340px;
+    gap:16px;
+    align-items:start;
+}
+.right-panel{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+
+}
+
+.side{
+
+    width:100%;
+
+}
+
+.events-panel{
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+    position:sticky;
+    top:80px;
+}
+.dashboard-panel{
+    max-height:400px;
+    overflow:hidden;
+}
+
+.list{
+    max-height:340px;
+    overflow-y:auto;
+    padding:10px;
+}
+
+.panel-header{
+
+ background:#455a64;
+ color:white;
+
+}
+@media(max-width:1000px){
+
+    .status-panels{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+.leyenda{
+
+ display:flex;
+ gap:20px;
+
+ background:white;
+
+ border-radius:8px;
+
+ padding:12px 20px;
+
+}
+
+.panel-body{
+  max-height:90px;
+  overflow-y:auto;
+}
+.stats{
+  display:grid;
+  grid-template-columns:
+    1fr
+    1fr
+    1fr
+    1fr
+    170px
+    170px;
+
+  gap:8px;
+}
+.top-section{
+  margin-bottom:8px;
+}
+.estado-label{
+  position:absolute;
+
+  top:6px;
+  right:6px;
+
+  font-size:8px;
+  font-weight:700;
+
+  padding:2px 5px;
+
+  border-radius:4px;
+
+  background:rgba(0,0,0,.25);
+
+  color:white;
+
+  text-transform:uppercase;
+
+  z-index:3;
+}
+.corner-badge{
+  position:absolute;
+  top:6px;
+  left:6px;
+  font-size:9px;
+  font-weight:700;
+  padding:2px 5px;
+  border-radius:4px;
+  background:rgba(0,0,0,.35);
+  color:white;
+  z-index:3;
+  text-transform:uppercase;
+}
+.yard-container{
+    min-width:0;
+}
+
+/* barra superior del contenedor */
+.yard-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:8px;
+
+  position: sticky; /* o relative */
+  top:0;
+  z-index:5;
+  background:#fff;
+  padding:8px 10px;
+  border:1px solid #d6d6d6;
+  border-radius:6px;
+}
+
+/* título izquierda */
+.yard-title{
+  font-size:14px;
+  font-weight:700;
+  color:#4b5a67;
+}
+
+/* esquina derecha */
+.yard-actions{
+  display:flex;
+  gap:10px;
+  margin-left:auto; /* 🔥 esto lo empuja a la derecha */
+}
+
+/* botón */
+.yard-btn,
+.btn-excel{
+
+  background:
+  linear-gradient(
+    90deg,
+    #0f4c81,
+    #1f6fb2
+  );
+
+  border:none;
+  border-radius:10px;
+
+  transition:.25s;
+
+  min-width:220px;
+  height:50px;
+
+  padding:0 24px;
+
+  font-size:15px;
+  font-weight:700;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  color:white;
+  cursor:pointer;
+}
+.yard-btn:hover,
+.btn-excel:hover,
+button:hover{
+
+  transform:translateY(-2px);
+
+  box-shadow:
+  0 8px 20px rgba(15,76,129,.35);
+}
+.color{
+  width:16px;
+  height:16px;
+  border-radius:4px;
+  border:1px solid rgba(0,0,0,.15);
+}
+
+.operacion-color{
+  background:#2e7d32; /* Verde */
+}
+
+.disponible-color{
+  background:#1976d2; /* Azul */
+}
+
+.falla-color{
+  background:#c62828; /* Rojo */
+}
+
+.mtto-color{
+  background:#8d6e63; /* Café */
+}
+#vistaMensajes.vista.activa {
+  display: flex;
+  flex-direction: column;
+}
+.messages-top{
+  padding:16px 16px 8px;
+}
+
+.section-title{
+  font-size:18px;
+  font-weight:800;
+  color:#1f2937;
+  margin-bottom:6px;
+}
+
+.sub-title{
+  font-size:13px;
+  font-weight:700;
+  color:#6b7280;
+  margin-bottom:12px;
+}
+#vistaMensajes .panel{
+  width:100%;
+  max-width:1000px;
+  margin:0 auto;
+
+  background:white;
+  border-radius:16px;
+
+  box-shadow:
+    0 8px 25px rgba(0,0,0,.08);
+
+  overflow:hidden;
+}
+.vista{
+  display:none;
+}
+
+.vista.activa{
+  display:block;
+}
+
+#vistaMensajes.vista.activa{
+  display:flex;
+  flex-direction:column;
+}
+.msg-actions{
+
+  display:flex;
+
+  justify-content:flex-end;
+
+  gap:12px;
+
+  margin-top:12px;
+}
+
+.msg-actions button{
+
+  width:auto;
+
+  min-width:180px;
+
+  flex:none;
+}
+.message-box{
+
+  margin-top:16px;
+
+  background:white;
+
+  border-left:5px solid #1f6fb2;
+
+  border-radius:10px;
+
+  padding:16px;
+
+  box-shadow:
+    0 2px 10px rgba(0,0,0,.06);
+
+  font-size:14px;
+}
+#historialMensajes{
+
+  max-height:400px;
+
+  overflow-y:auto;
+
+  padding:8px;
+}
+#historialMensajes .item{
+
+  background:white;
+
+  border:none;
+
+  border-left:4px solid #76a845;
+
+  border-radius:10px;
+
+  margin-bottom:10px;
+
+  padding:14px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.05);
+}
+.messages-header{
+
+  margin-bottom:20px;
+}
+.messages-container{
+
+  width:100%;
+  max-width:900px;
+
+  margin:25px auto;
+
+  padding:0 15px;
+}
+.messages-header h2{
+
+  color:#0f4c81;
+
+  font-size:24px;
+
+  font-weight:800;
+}
+
+.messages-header span{
+
+  color:#6b7280;
+
+  font-size:14px;
+}
+/* ===================================================
+   MENSAJES OPERATIVOS PRO
+=================================================== */
+
+.messages-dashboard{
+
+    display:grid;
+
+    grid-template-columns:
+      1fr
+      420px;
+
+    gap:20px;
+
+    margin-bottom:20px;
+}
+
+.compose-card,
+.live-message,
+.history-card{
+
+    background:#fff;
+
+    border-radius:18px;
+
+    box-shadow:
+    0 10px 25px rgba(0,0,0,.08);
+
+    border:1px solid #dce4ec;
+}
+
+.compose-card{
+
+    padding:25px;
+}
+
+.card-title{
+
+    font-size:18px;
+
+    font-weight:800;
+
+    color:#0f4c81;
+
+    margin-bottom:15px;
+}
+
+.live-message{
+
+    padding:25px;
+
+    position:relative;
+
+    overflow:hidden;
+
+    min-height:260px;
+}
+
+.live-message::before{
+
+    content:"MENSAJE ACTIVO";
+
+    position:absolute;
+
+    top:0;
+    left:0;
+    right:0;
+
+    height:50px;
+
+    background:
+    linear-gradient(
+      90deg,
+      #0f4c81,
+      #1f6fb2
+    );
+
+    color:white;
+
+    display:flex;
+
+    align-items:center;
+
+    padding-left:18px;
+
+    font-weight:800;
+
+    font-size:13px;
+}
+
+.history-card{
+
+    overflow:hidden;
+}
+
+.history-header{
+
+    background:
+    linear-gradient(
+      90deg,
+      #0f4c81,
+      #1f6fb2
+    );
+
+    color:white;
+
+    padding:16px;
+
+    font-weight:800;
+}
+
+#historialMensajes{
+
+    max-height:500px;
+
+    overflow-y:auto;
+
+    padding:15px;
+}
+
+.history-item{
+
+    background:#f8fafc;
+
+    border-left:5px solid #1f6fb2;
+
+    border-radius:12px;
+
+    padding:15px;
+
+    margin-bottom:12px;
+
+    transition:.2s;
+}
+
+.history-item:hover{
+
+    transform:translateX(4px);
+
+    background:white;
+}
+
+.history-date{
+
+    font-size:12px;
+
+    color:#64748b;
+
+    margin-bottom:8px;
+
+    font-weight:700;
+}
+
+.history-text{
+
+    font-size:14px;
+
+    line-height:1.6;
+}
+
+.publish-btn{
+
+    width:100%;
+
+    height:50px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:
+    linear-gradient(
+      90deg,
+      #0f4c81,
+      #1f6fb2
+    );
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:800;
+
+    cursor:pointer;
+}
+
+.publish-btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 10px 25px rgba(31,111,178,.35);
+}
+
+@media(max-width:1000px){
+
+    .messages-dashboard{
+
+        grid-template-columns:1fr;
+    }
+
+}
+.reporte-container{
+  display:flex;
+  justify-content:center;
+  padding:10px 0;
+}
+
+.btn-reporte{
+  width:220px;
+  height:38px;
+  background:#1f6fb2;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.btn-reporte:hover{
+  transform:translateY(-2px);
+  background:#0f4c81;
+}
+.btn-reporte-float{
+  position:absolute;
+  right:18px;
+  bottom:18px;
+
+  width:auto;
+  min-width:160px;
+  height:36px;
+
+  padding:0 14px;
+
+  background:#1f6fb2;
+  color:white;
+
+  border:none;
+  border-radius:8px;
+
+  font-size:11px;
+  font-weight:700;
+
+  cursor:pointer;
+
+  box-shadow:0 4px 12px rgba(0,0,0,.15);
+
+  transition:.2s;
+  z-index:50;
+}
+
+.btn-reporte-float:hover{
+  transform:translateY(-2px);
+  background:#0f4c81;
 }
 </style>
 
 </head>
 
 <body>
-  <div id="vistaOperativo" class="vista"></div>
-<div id="vistaMantenimiento" class="vista"></div>
-<div id="vistaReportes" class="vista"></div>
-<div class="user-box">
 
- <span id="clock"></span>  
 
-</div>
 
 <div class="topbar">
 
@@ -1261,25 +2036,126 @@ font-weight:700;
   <button class="menu-btn" onclick="mostrarVista('operativo')">
     <span>Control Operativo de gruas RTG</span>
   </button>
+  
+<button class="menu-btn" onclick="mostrarVista('mensajes')">
+    <span>Mensajes Operativos</span>
+</button>
 
   <button class="menu-btn" onclick="mostrarVista('mantenimiento')">
     <span>Downtime MTTO Gruas</span>
   </button>
 
-  <button class="menu-btn" onclick="mostrarVista('reportes')">
-    <span>Gestion de Work Task</span>
-  </button>
+<button class="menu-btn" onclick="abrirIFS()">
+  <span>Gestion de Work Task</span>
+</button>
+
+ <button class="menu-btn" onclick="abrirIncidentes()">
+  <span>Incidentes grúas</span>
+</button>
+<div id="vistaReportes" class="vista">
+    <iframe
+        src="https://carrix.ifs.cloud/main/ifsapplications/web/page/WorkTasks/List;path=0.644174039.1121334549.1222308653.1131468548"
+        style="
+            width:100%;
+            height:calc(100vh - 70px);
+            border:none;
+            background:white;
+        ">
+    </iframe>
+</div>
 
 </div>
 
     <div class="main-content">
-<!-- ================= HEADER ================= -->
- 
-<div id="vistaOperativo">
 
-    <div class="right">
-        ...
+    <div id="vistaIncidentes" class="vista">
+  <iframe
+    src="https://sistemaincidenciasgruas2026.github.io/Reporte-Gruas2.0/"
+    style="
+      width:100%;
+      height:calc(100vh - 70px);
+      border:none;
+      background:white;
+    ">
+  </iframe>
+</div>
+<!-- ================= HEADER ================= -->
+<div id="vistaMensajes" class="vista">
+
+  <div class="messages-container">
+
+    <div class="messages-header">
+
+      <h2>Mensajes Operativos OPERACIONES - GRUAS RTG</h2>
+
+      <span>
+        Información en tiempo real para Operaciones y Mantenimiento
+      </span>
+
     </div>
+
+    <div class="messages-dashboard">
+
+      <!-- IZQUIERDA -->
+
+      <div class="compose-card">
+
+        <div class="card-title">
+          NUEVO MENSAJE
+        </div>
+
+        <textarea
+          class="msg"
+          id="mensajeInput"
+          placeholder="Informe acerca de la grua..."
+        ></textarea>
+
+        <div class="msg-actions">
+
+          <button
+            class="publish-btn"
+            onclick="guardarMensaje()">
+
+            PUBLICAR MENSAJE
+
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- DERECHA -->
+
+      <div
+        class="live-message"
+        id="mensajeActual">
+
+        Sin mensajes operativos.
+
+      </div>
+
+    </div>
+
+    <div class="history-card">
+
+      <div class="history-header">
+
+        HISTORIAL OPERATIVO
+
+      </div>
+
+      <div
+        id="historialMensajes">
+
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+<div id="vistaOperativo" class="vista activa">
+
 
     <div class="kpis">
 
@@ -1303,8 +2179,10 @@ font-weight:700;
             <div class="kpi-value" id="k4">0</div>
         </div>
 
+
+
     </div>
-  </div>
+  
 <input
   type="file"
   id="excelFile"
@@ -1313,222 +2191,73 @@ font-weight:700;
   onchange="cargarExcel(event)"
 >
 
-<div class="action-bar">
 
-    <div class="action-title">
-        Actualiza estados de las gruas
+<div class="dashboard-main">
+
+    <!-- IZQUIERDA -->
+    <div class="yard-container">
+
+        <div class="yard-toolbar">
+
+            <div class="yard-title">
+                Control de Grúas
+            </div>
+
+            <div class="yard-actions">
+                <button class="yard-btn"
+                    onclick="document.getElementById('excelFile').click()">
+                    Cargar Excel
+                </button>
+            </div>
+
+        </div>
+
+<div class="yard" style="position:relative;">
+
+  <div class="leyenda-corner"></div>
+
+  <div id="yard"></div>
+
+  <!-- BOTÓN ABAJO DERECHA -->
+  <button class="btn-reporte-float" onclick="reporteOperaciones()">
+    REPORTE OPERACIONES
+  </button>
+
+</div>
+
     </div>
 
-    <div class="action-buttons">
+    <!-- DERECHA -->
+    <div class="events-panel">
 
-        <button
-            class="btn-excel"
-            onclick="document.getElementById('excelFile').click()"
-        >
-           Cargar Excel
-        </button>
+        <div class="panel dashboard-panel">
+            <div class="panel-header">
+                GRÚAS EN FALLA
+            </div>
+
+            <div class="list" id="listaFallas"></div>
+        </div>
+
+        <div class="panel dashboard-panel">
+            <div class="panel-header">
+                PRIORIDAD OPERATIVA
+            </div>
+
+            <div class="list" id="listaPrioridad"></div>
+        </div>
 
     </div>
 
 </div>
-<!-- ================= DASHBOARD ================= -->
-<!-- ================= LEYENDA ESTADOS ================= -->
-
-<div
-style="
-display:flex;
-flex-wrap:wrap;
-gap:10px;
-padding:0 16px 16px;
-"
->
-
-<div
-style="
-display:flex;
-align-items:center;
-gap:8px;
-background:#edf1f4;
-border:1px solid #aab4bf;
-padding:8px 12px;
-font-size:12px;
-font-weight:700;
-"
->
-
-<div
-style="
-width:16px;
-height:16px;
-background:#7f9d73;
-border:1px solid rgba(0,0,0,.2);
-"
-></div>
-
-OPERACIÓN
-
-</div>
-
-<div
-style="
-display:flex;
-align-items:center;
-gap:8px;
-background:#edf1f4;
-border:1px solid #aab4bf;
-padding:8px 12px;
-font-size:12px;
-font-weight:700;
-"
->
-
-<div
-style="
-width:16px;
-height:16px;
-background:#6e8397;
-border:1px solid rgba(0,0,0,.2);
-"
-></div>
-
-DISPONIBLE
-
-</div>
-
-<div
-style="
-display:flex;
-align-items:center;
-gap:8px;
-background:#edf1f4;
-border:1px solid #aab4bf;
-padding:8px 12px;
-font-size:12px;
-font-weight:700;
-"
->
-
-<div
-style="
-width:16px;
-height:16px;
-background:#9b6d6d;
-border:1px solid rgba(0,0,0,.2);
-"
-></div>
-
-FALLA
-
-</div>
-
-<div
-style="
-display:flex;
-align-items:center;
-gap:8px;
-background:#edf1f4;
-border:1px solid #aab4bf;
-padding:8px 12px;
-font-size:12px;
-font-weight:700;
-"
->
-
-<div
-style="
-width:16px;
-height:16px;
-background:#9f8f63;
-border:1px solid rgba(0,0,0,.2);
-"
-></div>
-
-MANTENIMIENTO
-
-</div>
-
-
 
 
 </div>
-<div class="dashboard">
-
-<!-- ================= YARD ================= -->
-
-<div class="yard" id="yard"></div>
-
-<!-- ================= SIDE ================= -->
-
-<div class="side">
-
-<!-- ================= FALLAS ================= -->
-
-<div class="panel">
-
-<div class="panel-title">
-GRÚAS EN FALLA / Tiempo de entrega
 </div>
 
-<div class="list" id="listaFallas"></div>
 
 </div>
 
-<!-- ================= PRIORIDAD ================= -->
-
-<div class="panel">
-
-<div class="panel-title">
-PRIORIDAD OPERATIVA
-</div>
-
-<div class="list" id="listaPrioridad"></div>
-
-</div>
-
-<!-- ================= MENSAJES ================= -->
-
-<div class="panel">
-
-<div class="panel-title">
-MENSAJES OPERATIVOS
-</div>
-
-<textarea
-class="msg"
-id="mensajeInput"
-placeholder="Escribe mensaje operativo..."
-></textarea>
-
-<button onclick="guardarMensaje()">
-PUBLICAR MENSAJE
-</button>
-
-<button onclick="toggleHistorial()">
-VER HISTORIAL
-</button>
-
-<div
-class="message-box"
-id="mensajeActual"
->
-
-Sin mensajes operativos.
-
-</div>
-
-<div
-class="list"
-id="historialMensajes"
-style="
-display:none;
-margin-top:12px;
-"
-></div>
-
-</div>
-
-</div>
-
+  
 </div>
 
 <!-- ================= MODAL ================= -->
@@ -1539,6 +2268,7 @@ margin-top:12px;
 
 <div class="modal-title" id="modalTitle"></div>
 
+<label>Estado de la grua</label>
 <div id="bloqueOperaciones">
 
 <select id="estado">
@@ -1546,13 +2276,13 @@ margin-top:12px;
 <option value="operacion">Operación</option>
 <option value="disponible">Disponible</option>
 <option value="falla">Falla</option>
-<option value="banio">Mantenimiento</option>
+<option value="mtto">Mantenimiento</option>
+<option value="prioridad">Grúa prioridad para operaciones</option>
 
 
 </select>
 
-<label>Prioridad</label>
-
+<label id="labelPrioridad" for="prioridad">Prioridad</label>
 <select id="prioridad">
 
 <option value="0">0</option>
@@ -1561,7 +2291,46 @@ margin-top:12px;
 <option value="3">3</option>
 
 </select>
+<label>Grúa</label>
+<input type="text" id="opGrua" readonly>
 
+<label>Operador</label>
+<input type="text" id="opOperador">
+
+<label>Tipo de Falla</label>
+<select id="opTipoFalla">
+  <option value="">Seleccione</option>
+  <option value="Mecanica">Mecánica</option>
+  <option value="Electrica">Eléctrica</option>
+  <option value="Operacion">Operación</option>
+  <option value="Instrumentacion">Instrumentación</option>
+  <option value="Seguridad">Seguridad</option>
+</select>
+
+<label>Actividad</label>
+<textarea id="opActividad"></textarea>
+
+<label>Monitor RPR Reporta</label>
+<input type="text" id="opMonitorReporta">
+
+<label>Fecha / Hora de Falla</label>
+<input type="datetime-local" id="opFechaFalla">
+
+<label>Monitor RPC Cierre</label>
+<input type="text" id="opMonitorCierre">
+
+<label>Fecha / Hora de Entrega</label>
+<input type="datetime-local" id="opFechaEntrega">
+
+<label>Turno</label>
+<select id="opTurno">
+  <option value="1">1er Turno</option>
+  <option value="2">2do Turno</option>
+  <option value="3">3er Turno</option>
+</select>
+
+<label>Tiempo Muerto (min)</label>
+<input type="number" id="opTiempoMuerto">
 </div>
 
 <!-- BLOQUE MANTENIMIENTO -->
@@ -1819,9 +2588,7 @@ new Date().toLocaleString();
 
 }
 
-setInterval(reloj,1000);
 
-reloj();
 
 /* ================= LAYOUT COMPLETO ================= */
 
@@ -1871,7 +2638,41 @@ gruas:[
 
 ];
 //Especificacion de cada color 
+function abrirIFS() {
+  
+  const url = "https://carrix.ifs.cloud/main/ifsapplications/web/page/WorkTasks/List;path=0.644174039.1121334549.1222308653.1131468548";
 
+  const win = window.open(url, "_blank");
+
+  if (!win) {
+    alert("Permite ventanas emergentes");
+    return;
+  }
+
+  // 🔎 intento de detección de sesión
+  const checkSession = setInterval(() => {
+    try {
+
+      // si la pestaña fue redirigida a login
+      if (win.location.href.includes("login") ||
+          win.location.href.includes("signin")) {
+
+        clearInterval(checkSession);
+        console.log("No hay sesión activa en IFS");
+
+      } else {
+        console.log("Sesión activa o página cargada");
+      }
+
+    } catch (e) {
+      // ❗ Cross-origin bloquea acceso (normal)
+      // esto significa que el navegador NO deja leer la página
+    }
+  }, 2000);
+
+  // stop después de 10 segundos
+  setTimeout(() => clearInterval(checkSession), 10000);
+}
 /* ================= GET ================= */
 
 function getEquipo(id){
@@ -1944,135 +2745,153 @@ render();
 
 }
 
-/* ================= RENDER ================= */
-
 function render(){
 
-let html='';
+  let html = '';
 
-layout.forEach(row=>{
+  layout.forEach(row => {
 
-html+=`
+    html += `
+      <div class="row">
 
-<div class="row">
+        <div class="zona">
+          ZONA ${row.zona}
+        </div>
 
-<div class="zona">
-ZONA ${row.zona}
-</div>
+        <div class="grid">
+    `;
 
-<div class="grid">
+    row.gruas.forEach(id => {
 
-`;
+      // espacio vacío del layout
+      if(!id){
 
-row.gruas.forEach(id=>{
+        html += `
+          <div class="card invisible-slot"></div>
+        `;
 
-let g=getEquipo(id);
+        return;
+      }
 
-if(!g){
+      const g = getEquipo(id);
 
-html+=`
-<div class="card empty"></div>
-`;
+      // si no existe en BD
+      if(!g){
 
-return;
+        html += `
+          <div class="card invisible-slot"></div>
+        `;
 
-}
+        return;
+      }
 
-if(!g || !g.id){
-  html += `<div class="card invisible-slot"></div>`;
-  return;
-}
+      // filtro estado
+      if(
+        filtroEstado !== 'todos' &&
+        g.estado !== filtroEstado
+      ){
 
-if (
-  filtroEstado !== 'todos' &&
-  g.estado !== filtroEstado
-){
-  html += `<div class="card invisible-slot"></div>`;
-  return;
-}
+        html += `
+          <div class="card invisible-slot"></div>
+        `;
 
-if (
-  filtroTexto &&
-  !g.id.toLowerCase().includes(filtroTexto) &&
-  !(g.nombre || '').toLowerCase().includes(filtroTexto)
-){
-  html += `<div class="card invisible-slot"></div>`;
-  return;
-}
+        return;
+      }
 
-html+=`
+      // filtro texto
+      if(
+        filtroTexto &&
+        !g.id.toLowerCase().includes(filtroTexto)
+      ){
 
-<div
-class="card ${g.estado}
-${
-  g.estado === 'falla' &&
-  parseInt(g.prioridad) === 1
-    ? 'priority-blink'
-    : ''
-}"
-onclick="abrirTipo('${g.id}')"
->
+        html += `
+          <div class="card invisible-slot"></div>
+        `;
 
-<div class="signal
-${g.online ? 'online':'offline'}">
-</div>
+        return;
+      }
 
-<div class="code">
-${g.id}
-</div>
+      const prioridadOperativa =
+        g.observacion_extra ===
+        'GRÚA PRIORIDAD PARA OPERACIÓN';
 
-${
-g.estado === 'falla'
-?
+      let tiempoFalla = '00:00:00';
 
-`<div class="timer-card" id="timer-card-${g.id}">
-${
-g.falla_inicio
-? formatearTiempo(
-Math.floor(
-(new Date() - new Date(g.falla_inicio)) / 1000
-)
-)
-: '00:00:00'
-}
-</div>`
+      if(
+        g.estado === 'falla' &&
+        g.falla_inicio
+      ){
 
-:
+        tiempoFalla = formatearTiempo(
+          Math.floor(
+            (
+              new Date() -
+              new Date(g.falla_inicio)
+            ) / 1000
+          )
+        );
+      }
 
-`<div class="small">
-${g.nombre || ''}
-</div>`
-}
+      html += `
+        <div
+          class="card ${g.estado}"
+          onclick="abrirTipo('${g.id}')"
+        >
 
-${
-parseInt(g.prioridad) > 0
-?
+          <div class="code">
+            ${g.id}
+          </div>
 
-`<div class="priority-text">
-PRIORIDAD ${g.prioridad}
-</div>`
+          <div class="estado-label">
+            ${obtenerTextoEstado(g)}
+          </div>
 
-:
+          ${
+            prioridadOperativa
+            ?
+            `
+              <div
+                class="priority-text"
+                style="
+                  background:#2e7d32;
+                  color:white;
+                "
+              >
+                PRIORIDAD OPERATIVA
+              </div>
+            `
+            :
+            ''
+          }
 
-''
+          ${
+            g.estado === 'falla'
+            ?
+            `
+              <div
+                class="timer-card"
+                id="timer-card-${g.id}"
+              >
+                ${tiempoFalla}
+              </div>
+            `
+            :
+            ''
+          }
 
-}
+        </div>
+      `;
 
-</div>
+    });
 
-`;
+    html += `
+        </div>
+      </div>
+    `;
 
-});
+  });
 
-html+=`
-</div>
-</div>
-`;
-
-});
-
-document.getElementById('yard')
-.innerHTML=html;
+  document.getElementById('yard').innerHTML = html;
 
 }
 
@@ -2085,7 +2904,7 @@ function renderKPIs(){
 
   document.getElementById('k2').innerText =
     equipos.filter(g =>
-      g.estado === 'banio' ||
+      g.estado === 'mtto' ||
       g.estado === 'anclada'
     ).length;
 
@@ -2098,8 +2917,76 @@ function renderKPIs(){
 }
 
 /* ================= FALLAS ================= */
+function reporteOperaciones(){
 
-/* ================= FALLAS ================= */
+  let html = `
+  <html>
+  <head>
+    <title>Reporte Operaciones</title>
+    <style>
+      body{font-family:Arial;padding:20px;}
+      table{
+        border-collapse:collapse;
+        width:100%;
+      }
+      th,td{
+        border:1px solid #ccc;
+        padding:6px;
+        text-align:left;
+      }
+      th{
+        background:#003366;
+        color:white;
+      }
+    </style>
+  </head>
+  <body>
+
+  <h2>REPORTE OPERACIONES</h2>
+
+  <table>
+    <tr>
+      <th>Grua</th>
+      <th>Operador</th>
+      <th>Tipo Falla</th>
+      <th>Actividad</th>
+      <th>Monitor Reporta</th>
+      <th>Fecha/Hora Falla</th>
+      <th>Monitor Cierre</th>
+      <th>Fecha/Hora Entrega</th>
+      <th>Turno</th>
+      <th>Tiempo Muerto</th>
+    </tr>
+  `;
+
+  equipos.forEach(g => {
+
+    html += `
+      <tr>
+        <td>${g.id || ''}</td>
+        <td>${g.operador || ''}</td>
+        <td>${g.tipo_falla || ''}</td>
+        <td>${g.actividad || ''}</td>
+        <td>${g.monitor_reporta || ''}</td>
+        <td>${g.fecha_hora_falla || ''}</td>
+        <td>${g.monitor_cierre || ''}</td>
+        <td>${g.fecha_hora_entrega || ''}</td>
+        <td>${g.turno_operacion || ''}</td>
+        <td>${g.tiempo_muerto || ''}</td>
+      </tr>
+    `;
+  });
+
+  html += `
+    </table>
+    </body>
+    </html>
+  `;
+
+  const ventana = window.open('', '_blank');
+  ventana.document.write(html);
+  ventana.document.close();
+}
 
 function renderFallas(){
 
@@ -2286,9 +3173,9 @@ function abrir(id){
   document.getElementById('modal').style.display = 'flex';
   document.getElementById('modalTitle').innerText = id;
 
+  // ================= OPERACIONES =================
   document.getElementById('estado').value = g.estado || 'disponible';
-
-
+  controlarPrioridad();
   document.getElementById('prioridad').value = g.prioridad || 0;
 
   document.getElementById('equipoMantto').value = id;
@@ -2308,8 +3195,40 @@ function abrir(id){
   document.getElementById('descripcionFalla').value = g.descripcion_falla || '';
   document.getElementById('tm').value = g.tm || '';
   document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
-}
 
+  // ================= OPERACIONES DETALLE =================
+  document.getElementById('opGrua').value = id;
+
+  document.getElementById('opOperador').value = g.operador || '';
+  document.getElementById('opTipoFalla').value = g.tipo_falla || '';
+  document.getElementById('opActividad').value = g.actividad || '';
+  document.getElementById('opMonitorReporta').value = g.monitor_reporta || '';
+  document.getElementById('opFechaFalla').value = g.fecha_hora_falla || '';
+  document.getElementById('opMonitorCierre').value = g.monitor_cierre || '';
+  document.getElementById('opFechaEntrega').value = g.fecha_hora_entrega || '';
+  document.getElementById('opTurno').value = g.turno_operacion || '1';
+  document.getElementById('opTiempoMuerto').value = g.tiempo_muerto || '';
+
+  // 🔥 IMPORTANTE: actualizar visibilidad de prioridad al abrir
+  controlarPrioridad();
+}
+document.getElementById('estado').addEventListener('change', controlarPrioridad);
+function controlarPrioridad() {
+
+  const estado = document.getElementById('estado').value;
+
+  const label = document.getElementById('labelPrioridad');
+  const select = document.getElementById('prioridad');
+
+  if (estado === 'falla') {
+    label.style.display = 'block';
+    select.style.display = 'block';
+  } else {
+    label.style.display = 'none';
+    select.style.display = 'none';
+    select.value = 0;
+  }
+}
 
 function cerrarModal(){
 
@@ -2333,7 +3252,29 @@ let estado = document.getElementById('estado').value;
 let prioridad = parseInt(document.getElementById('prioridad').value) || 0;
 
 
+let observacion_extra = equipoActual.observacion_extra || null;
 
+// ================= PRIORIDAD MANUAL =================
+if (prioridad === 1) {
+  observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
+} else if (prioridad === 0) {
+  observacion_extra = null;
+}
+if (estado !== 'priogrua') {
+
+  observacion_extra = null;
+
+}
+
+// ================= PRIORIDAD OPERATIVA MANUAL =================
+if (prioridad === 1) {
+  observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
+}
+
+// si se quita prioridad
+if (prioridad === 0) {
+  observacion_extra = null;
+}
 
 /* ================= MANTENIMIENTO ================= */
 
@@ -2349,6 +3290,15 @@ const descripcionFalla = document.getElementById('descripcionFalla').value;
 const tm = document.getElementById('tm').value;
 const bloqueTramo = document.getElementById('bloqueTramo').value;
 
+const operador = document.getElementById('opOperador').value;
+const tipo_falla = document.getElementById('opTipoFalla').value;
+const actividad = document.getElementById('opActividad').value;
+const monitor_reporta = document.getElementById('opMonitorReporta').value;
+const fecha_hora_falla = document.getElementById('opFechaFalla').value;
+const monitor_cierre = document.getElementById('opMonitorCierre').value;
+const fecha_hora_entrega = document.getElementById('opFechaEntrega').value;
+const turno_operacion = document.getElementById('opTurno').value;
+const tiempo_muerto = document.getElementById('opTiempoMuerto').value;
 /* ================= FALLA ================= */
 
 let falla_inicio = equipoActual.falla_inicio;
@@ -2409,25 +3359,25 @@ if (errorDT) {
 const {error} = await db
 .from('gruas')
 .update({
-  fecha_mantto: fechaMantto,
-  turno_mantto: turnoMantto,
-  area_mantto: areaMantto,
-  supervisor,
-  standby,
-  equipo_mantto: equipoMantto,
-  responsabilidad,
-  codigo_falla: codigoFalla,
-  descripcion_falla: descripcionFalla,
-  tm,
-  bloque_tramo: bloqueTramo,
+
+  operador,
+  tipo_falla,
+  actividad,
+  monitor_reporta,
+  fecha_hora_falla,
+  monitor_cierre,
+  fecha_hora_entrega,
+  turno_operacion,
+  tiempo_muerto,
 
   estado,
   prioridad,
-
+  observacion_extra,
   falla_inicio,
   tiempo_falla,
 
-  updated_at: new Date().toISOString()
+  updated_at:new Date().toISOString()
+
 })
 .eq('id', actual);
 
@@ -2605,18 +3555,35 @@ return;
 let m=data[0];
 
 document.getElementById('mensajeActual')
-.innerHTML=`
+.innerHTML = `
 
-<strong>
+<div style="margin-top:50px;">
 
-${new Date(m.created_at)
-.toLocaleString()}
+  <div
+    style="
+      font-size:12px;
+      color:#64748b;
+      margin-bottom:15px;
+      font-weight:700;
+    ">
 
-</strong>
+    ${new Date(m.created_at).toLocaleString()}
 
-<br><br>
+  </div>
 
-${m.mensaje}
+  <div
+    style="
+      font-size:18px;
+      line-height:1.8;
+      font-weight:600;
+      color:#1f2937;
+    ">
+
+    ${m.mensaje}
+
+  </div>
+
+</div>
 
 `;
 
@@ -2649,22 +3616,23 @@ let html='';
 
 data.forEach(m=>{
 
-html+=`
+html += `
 
-<div class="item">
+<div class="history-item">
 
-<strong>
+    <div class="history-date">
 
-${new Date(m.created_at)
-.toLocaleString()}
+        ${new Date(
+            m.created_at
+        ).toLocaleString()}
 
-</strong>
+    </div>
 
-<span>
+    <div class="history-text">
 
-${m.mensaje}
+        ${m.mensaje}
 
-</span>
+    </div>
 
 </div>
 
@@ -2678,26 +3646,6 @@ html || 'Sin historial';
 
 }
 
-/* ================= TOGGLE ================= */
-
-function toggleHistorial(){
-
-let h =
-document.getElementById(
-'historialMensajes'
-);
-
-if(h.style.display==='none'){
-
-h.style.display='flex';
-
-}else{
-
-h.style.display='none';
-
-}
-
-}
 
 /* ================= REALTIME ================= */
 
@@ -2747,24 +3695,39 @@ cerrarTipo();
 
 }
 /* ================= INIT ================= */
-function mostrarVista(vista){
+function mostrarVista(vista) {
 
-  document.querySelectorAll('.vista')
-    .forEach(v => v.classList.remove('activa'));
+  document.querySelectorAll('.vista').forEach(v => {
+    v.classList.remove('activa');
+    v.style.display = 'none';
+  });
 
-  if(vista === 'operativo'){
-    document.getElementById('vistaOperativo')
-      .classList.add('activa');
+  const vistaSeleccionada = document.getElementById(
+    'vista' + vista.charAt(0).toUpperCase() + vista.slice(1)
+  );
+
+  if (vistaSeleccionada) {
+
+    vistaSeleccionada.classList.add('activa');
+
+    if (vista === 'mensajes') {
+      vistaSeleccionada.style.display = 'flex';
+    } else {
+      vistaSeleccionada.style.display = 'block';
+    }
   }
 
-  if(vista === 'mantenimiento'){
-    document.getElementById('vistaMantenimiento')
-      .classList.add('activa');
-  }
+  // marcar botón activo
+  document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
 
-  if(vista === 'reportes'){
-    document.getElementById('vistaReportes')
-      .classList.add('activa');
+  const botonActivo = document.querySelector(
+    `[onclick="mostrarVista('${vista}')"]`
+  );
+
+  if (botonActivo) {
+    botonActivo.classList.add('active');
   }
 }
 cargar();
@@ -2824,7 +3787,7 @@ function colorAEstado(rgb){
       return 'operacion';
 
     case 'FF0000':
-      return 'banio';
+      return 'mtto';
 
     case '808080':
       return 'anclada';
@@ -2836,76 +3799,76 @@ function colorAEstado(rgb){
 }
 async function procesarHoja(sheet){
 
-  const rango =
-    XLSX.utils.decode_range(sheet['!ref']);
+  const rango = XLSX.utils.decode_range(sheet['!ref']);
 
-  for(
-    let fila=rango.s.r;
-    fila<=rango.e.r;
+  for (
+    let fila = rango.s.r;
+    fila <= rango.e.r;
     fila++
   ){
 
-    const celdaEquipo =
-      sheet['A' + (fila+1)];
+    let observacion_extra = null;
 
+    const celdaEquipo = sheet['A' + (fila + 1)];
     if(!celdaEquipo) continue;
 
-    const id =
-      normalizarGrua(
-        String(celdaEquipo.v)
-      );
-
+    const id = normalizarGrua(String(celdaEquipo.v));
     if(!id) continue;
 
-    const observacion =
-      sheet['F' + (fila+1)]?.v || '';
+    const observacion = sheet['F' + (fila + 1)]?.v || '';
 
-    const texto =
-      String(observacion)
+    const texto = String(observacion)
       .toUpperCase()
       .trim();
 
-    let estado = 'operacion';
+    let estado = 'disponible';
     let prioridad = 0;
 
-    if(texto.includes('PRIORID')){
-      prioridad = 1;
+    // ================= FALLA =================
+    if (texto.includes('FALLA')) {
+      estado = 'falla';
     }
 
-    if(texto.includes('DISPONI')){
-      estado = 'disponible';
-    }
-
-    if(
+    // ================= MANTENIMIENTO (DAYLI) =================
+    else if (
       texto.includes('DAYLI') ||
       texto.includes('MANTTO') ||
       texto.includes('MANTENIMIENTO')
     ){
-      estado = 'banio';
+      estado = 'mtto';
     }
 
-    if(texto.includes('FUERA')){
+    // ================= FUERA DE SERVICIO =================
+    else if (texto.includes('FUERA')) {
       estado = 'anclada';
     }
 
-    if(texto.includes('FALLA')){
-      estado = 'falla';
+    // ================= DISPONIBLE =================
+    else if (
+      texto.includes('DISPONI') ||
+      texto.includes('OPERADOR')
+    ){
+      estado = 'disponible';
     }
 
-    console.log(
-      id,
-      estado,
-      prioridad
-    );
+    // ================= PRIORIDAD (NO CAMBIA ESTADO) =================
+    if (
+      texto.includes('PRIORID') ||
+      texto.includes('PRIORIDAD')
+    ){
+      prioridad = 1;
+      observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
+    }
 
-    const { error } =
-      await db
+    console.log(id, estado, prioridad, observacion_extra);
+
+    const { error } = await db
       .from('gruas')
       .update({
         estado,
         prioridad,
-        updated_at:
-          new Date().toISOString()
+        observacion_extra,
+        updated_at: new Date().toISOString()
       })
       .eq('id', id);
 
@@ -2916,11 +3879,7 @@ async function procesarHoja(sheet){
   }
 
   await cargar();
-
-  alert(
-    'Estados actualizados correctamente'
-  );
-
+  alert('Estados actualizados correctamente');
 }
 function init(){
   mostrarVista('operativo'); // solo muestra uno
@@ -2929,36 +3888,60 @@ function init(){
   cargar();
 }
 
-init();
+document.addEventListener('DOMContentLoaded', () => {
+
+  mostrarVista('operativo');
+
+  cargar();
+  cargarMensajeActual();
+  cargarHistorial();
+
+});
+function obtenerTextoEstado(g){
+
+  if(g.estado === 'operacion')
+    return 'OPERACIÓN';
+
+  if(g.estado === 'disponible')
+    return 'DISPONIBLE';
+
+  if(g.estado === 'falla')
+    return 'FALLA';
+
+  if(g.estado === 'mtto')
+    return 'MANTENIMIENTO';
+
+  return '';
+}
+function abrirIncidentes() {
+
+  document.querySelectorAll('.vista').forEach(v => {
+    v.classList.remove('activa');
+    v.style.display = 'none';
+  });
+
+  const vista = document.getElementById('vistaIncidentes');
+
+  if (vista) {
+    vista.classList.add('activa');
+    vista.style.display = 'block';
+  }
+
+  document.querySelectorAll('.menu-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+
+  const boton = document.querySelector(
+    `[onclick="abrirIncidentes()"]`
+  );
+
+  if (boton) boton.classList.add('active');
+}
 </script>
-</div>
 
-<div
-id="vistaMantenimiento"
-style="display:none;padding:20px;"
->
 
-    <h2>
-        Pedido Grúas Mantenimiento
-    </h2>
-
-    <p>
-        
-    </p>
 
 </div>
-
-<div
-id="vistaReportes"
-style="display:none;padding:20px;"
->
-
-    <h2>Reportes</h2>
-
-    <p>
-        
-    </p>
-
 </div>
 </div>
 </div>
