@@ -176,8 +176,33 @@ font-weight:700;
 /* ================= DASHBOARD ================= */
 
 .dashboard{
-    display:block;
-    padding:0 16px 16px;
+  display:flex;
+  flex-direction:column;
+}
+/* ================= NO SE DEFORME EN TABLET================ */
+img, iframe{
+  max-width:100%;
+}
+
+.tabla-scroll{
+  width:100%;
+  display:flex;
+  justify-content:center; /* centra horizontalmente */
+  overflow-x:auto;
+}
+
+table{
+  border-collapse:collapse;
+  margin:0 auto; /* centra la tabla */
+}
+.tabla-container table{
+  margin: 0 auto;
+}
+.tabla-scroll{
+  width:100%;
+  overflow-x:auto;
+  display:flex;
+  justify-content:center;
 }
 
 /* ================= YARD ================= */
@@ -718,21 +743,16 @@ line-height:1.5;
 /* ================= MODAL ================= */
 
 .modal{
-
-position:fixed;
-
-inset:0;
-
-background:
-rgba(0,0,0,.35);
-
-display:none;
-
-justify-content:center;
-align-items:center;
-
-z-index:9999;
-
+    display:none;
+    position:fixed;
+    left:0;
+    top:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,.5);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
 }
 
 .modal-content{
@@ -805,32 +825,34 @@ color:#1f2933;
 
 @media (max-width: 1100px){
 
-  .dashboard{
-
-    grid-template-columns: 1fr;
-
+  .layout{
+    flex-direction:column;
   }
 
-.dashboard{
-  display:flex;
-  gap:16px;
-}
+  .sidebar{
+    width:100%;
+    max-width:100%;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+  }
 
-.yard{
-  flex:1;
-}
+  .menu-btn{
+    flex:1;
+    min-width:180px;
+  }
 
-.side{
-  width:350px;
-  flex-shrink:0;
-}
+  .dashboard-main{
+    grid-template-columns: 1fr;
+  }
 
-.grid{
-  display:grid;
-  grid-template-columns:repeat(9,minmax(120px,1fr));
-  gap:10px;
-}
+  .events-panel{
+    position:static;
+  }
 
+  .grid{
+    grid-template-columns: repeat(6, minmax(90px, 1fr));
+  }
 }
 
 /* =========================================
@@ -840,146 +862,33 @@ color:#1f2933;
 @media (max-width: 768px){
 
   .header{
-
     flex-direction:column;
-
     align-items:flex-start;
-
-    gap:12px;
-
-  }
-
-  .right{
-
-    width:100%;
-
-    flex-wrap:wrap;
-
-  }
-
-  .search,
-  .filter{
-
-    flex:1;
-
-    min-width:140px;
-
-  }
-
-  .clock{
-
-    width:100%;
-
   }
 
   .kpis{
-
-    grid-template-columns:
-    repeat(2,1fr);
-
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .dashboard{
-
-    padding:0 10px 10px;
-
+  .dashboard-main{
+    padding:0 10px;
   }
-
-  .yard{
-
-    padding:10px;
-
-  }
-.yard{
-  position:relative;
-}
-.yard-overlay{
-  position:absolute;
-  top:10px;
-  right:10px;
-  z-index:10;
-}
-.leyenda{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-
-  background:rgba(255,255,255,.95);
-  padding:10px 12px;
-  border-radius:8px;
-  border:1px solid #cfd8dc;
-  box-shadow:0 2px 8px rgba(0,0,0,.15);
-}
-  .row{
-
-    flex-direction:column;
-
-    gap:8px;
-
-  }
-
-.zona{
-
- width:90px;
-
- background:#455a64;
- color:white;
-
- border-radius:6px;
-
- padding:12px;
-
- text-align:center;
-
-}
 
   .grid{
-
-    grid-template-columns:
-    repeat(4,minmax(65px,1fr));
-
-    gap:6px;
-
+    grid-template-columns: repeat(4, 1fr);
   }
 
-.card{
-  position:relative;
-  min-height:95px;
-  border-radius:10px;
-  padding:10px;
-  box-shadow:0 2px 5px rgba(0,0,0,.12);
-
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-}
-
+  .card{
+    min-height:90px;
+  }
 
   .code{
-
     font-size:14px;
-
   }
 
-  .small{
-
-    font-size:7px;
-
+  .events-panel{
+    width:100%;
   }
-
-.panel{
-  min-height:auto;
-}
-
-  .modal-content{
-
-    width:95%;
-
-    max-width:none;
-
-  }
-
 }
 
 /* =========================================
@@ -988,49 +897,21 @@ color:#1f2933;
 
 @media (max-width: 480px){
 
-  .title{
-
-    font-size:16px;
-
-  }
-
   .kpis{
-
-    grid-template-columns:1fr;
-
+    grid-template-columns: 1fr;
   }
 
   .grid{
-
-    grid-template-columns:
-    repeat(3,minmax(60px,1fr));
-
+    grid-template-columns: repeat(3, 1fr);
   }
 
-  .card{
-
-    height:58px;
-
+  .sidebar{
+    flex-direction:column;
   }
 
-  .code{
-
-    font-size:13px;
-
+  .menu-btn{
+    width:100%;
   }
-
-  .small{
-
-    display:none;
-
-  }
-
-  .zona{
-
-    font-size:11px;
-
-  }
-
 }
 /* ================= INTRANET ================= */
 
@@ -1240,6 +1121,8 @@ color:#1f2933;
 .main-content{
   flex:1;
   min-width:0;
+  display:flex;
+  flex-direction:column;
 }
 .btn-excel{
 
@@ -1399,10 +1282,11 @@ color:#1f2933;
   gap:16px;
 }
 .dashboard-main{
-    display:grid;
-    grid-template-columns: 1fr 340px;
-    gap:16px;
-    align-items:start;
+  display:grid;
+  grid-template-columns: 1fr 340px;
+  gap:16px;
+  padding:0 16px 16px;
+  align-items:start;
 }
 .right-panel{
 
@@ -1952,12 +1836,6 @@ button:hover{
     }
 
 }
-.reporte-container{
-  display:flex;
-  justify-content:center;
-  padding:10px 0;
-}
-
 .btn-reporte{
   width:220px;
   height:38px;
@@ -2007,6 +1885,340 @@ button:hover{
   transform:translateY(-2px);
   background:#0f4c81;
 }
+.tabs{
+  display:flex;
+  background:#0b3a66;
+  padding:6px;
+  gap:6px;
+  border-bottom:3px solid #0a2f4d;
+}
+
+.tabs button{
+  border:none;
+  background:transparent;
+  color:#cfe6ff;
+  padding:12px 20px;
+  cursor:pointer;
+  font-weight:700;
+  border-radius:8px;
+  transition:.2s;
+}
+
+.tabs button:hover{
+  background:#145a96;
+  color:white;
+}
+
+.contenido{
+  padding:20px;
+}
+.tabs button.active{
+  background:#1f6fb2;
+  color:white;
+  box-shadow:0 4px 10px rgba(0,0,0,.25);
+}
+#tab-operaciones table{
+  border-collapse:collapse;
+  width:100%;
+  background:white;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+#tab-operaciones th{
+  background:#145a96;
+  color:white;
+  padding:10px;
+  font-size:12px;
+}
+
+#tab-operaciones td{
+  padding:8px;
+  font-size:12px;
+  border-bottom:1px solid #e5e7eb;
+}
+
+#tab-operaciones tr:nth-child(even){
+  background:#f4f8fc;
+}
+
+#tab-operaciones tr:hover{
+  background:#e8f2ff;
+}
+
+.topbar{
+  background: linear-gradient(90deg,#0b3a66,#145a96);
+  box-shadow: 0 4px 12px rgba(0,0,0,.25);
+  border-bottom: 3px solid #0a2f4d;
+}
+
+/* HEADER DE TABLA */
+.tabla-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px 16px;
+  background:linear-gradient(90deg,#0f4c81,#1f6fb2);
+  color:white;
+}
+
+.tabla-header h3{
+  font-size:14px;
+  font-weight:800;
+  margin:0;
+}
+
+.tabla-header span{
+  font-size:12px;
+  opacity:.9;
+}
+
+/* HOVER */
+.tabla-reporte tbody tr:hover{
+  background:#e8f3ff;
+  transition:.15s;
+}
+
+/* COLUMNAS MÁS IMPORTANTES DESTACADAS */
+.tabla-reporte td:first-child{
+  font-weight:800;
+  color:#0f4c81;
+}
+
+
+.tabla-reporte thead{
+  background:#0f4c81;
+  color:white;
+}
+
+.tabla-reporte th{
+  padding:10px;
+  text-align:left;
+  font-weight:700;
+}
+
+.tabla-reporte td{
+  padding:10px;
+  border-bottom:1px solid #e6e6e6;
+}
+
+
+.tabla-reporte tbody tr:hover{
+  background:#e3f2fd;
+  transition:.2s;
+}
+.leyenda-corner{
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:white;
+  padding:10px;
+  border-radius:10px;
+  box-shadow:0 6px 18px rgba(0,0,0,.15);
+  z-index:10;
+  width:160px;
+}
+
+.legend-mini{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  font-size:11px;
+  font-weight:600;
+  color:#1f2937;
+}
+
+.legend-row{
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.color-box{
+  width:10px;
+  height:10px;
+  border-radius:3px;
+}
+
+/* COLORES */
+.color-box.operacion{ background:#00B050; }
+.color-box.disponible{ background:#1f6fb2; }
+.color-box.falla{ background:#e53935; }
+.color-box.mtto{ background:#ff9800; }
+.color-box.anclada{ background:#808080; }
+.color-box.prioridad{ background:#2e7d32; }
+.estado-indicador{
+  width:100%;
+  padding:10px;
+  border-radius:8px;
+  font-weight:700;
+  margin:10px 0;
+  text-align:center;
+  background:#1e293b;
+  color:#fff;
+}
+.estado-indicador.operacion{
+  background:#16a34a;
+}
+
+.estado-indicador.disponible{
+  background:#2563eb;
+}
+
+.estado-indicador.falla{
+  background:#dc2626;
+}
+
+.estado-indicador.mtto{
+  background:#f59e0b;
+}
+.reporte-container{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.tabla-scroll{
+  width:95%;
+  max-width:1200px;
+  overflow:auto;
+  background:#ffffff;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  border:1px solid #e6eef5;
+}
+
+/* TITULO DE SECCIÓN */
+.contenido h2{
+  margin:10px 0 15px;
+  font-size:18px;
+  font-weight:800;
+  color:#0f2f4a;
+  background:#ffffff;
+  padding:10px 14px;
+  border-left:5px solid #1f6fb2;
+  border-radius:6px;
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
+}
+.reporte-page{
+  display:flex;
+  gap:16px;
+  padding:16px;
+  align-items:flex-start;
+}
+
+/* panel izquierdo */
+.reporte-sidebar{
+  width:220px;
+  min-width:220px;
+  background:#ffffff;
+  border-radius:14px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+  padding:18px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
+.reporte-sidebar h2{
+  font-size:18px;
+  font-weight:800;
+  color:#0f4c81;
+  line-height:1.3;
+}
+
+/* panel derecho */
+.reporte-main{
+  flex:1;
+  min-width:0;
+}
+
+/* header fijo bonito */
+.tabla-reporte thead th{
+  background:#0f4c81;
+  color:white;
+  padding:10px;
+  font-size:11px;
+  text-transform:uppercase;
+  position:sticky;
+  top:0;
+}
+
+/* celdas */
+.tabla-reporte td{
+  padding:8px;
+  border-bottom:1px solid #eee;
+  white-space:nowrap;
+}
+
+/* hover */
+.tabla-reporte tbody tr:hover{
+  background:#e3f2ff;
+}
+.reporte-container{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+.reporte-header{
+  margin:10px 0;
+}
+
+.reporte-title{
+  font-size:18px;
+  font-weight:800;
+  color:#0f4c81;
+  border-left:5px solid #1f6fb2;
+  padding-left:10px;
+}
+
+.tabla-container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
+.tabla-scroll{
+  width:100%;
+  overflow-x:auto;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 8px 20px rgba(0,0,0,.08);
+}
+
+.tabla-reporte{
+  width:100%;
+  border-collapse:collapse;
+  font-size:12px;
+  table-layout:fixed;
+}
+
+.tabla-reporte thead th{
+  background:#145a96;
+  color:white;
+  padding:10px;
+  font-size:11px;
+  text-transform:uppercase;
+}
+
+.tabla-reporte td{
+  padding:8px;
+  border-bottom:1px solid #e6e6e6;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.tabla-reporte tbody tr:nth-child(even){
+  background:#f4f8fc;
+}
+
+.tabla-reporte tbody tr:hover{
+  background:#e8f2ff;
+}
 </style>
 
 </head>
@@ -2041,9 +2253,9 @@ button:hover{
     <span>Mensajes Operativos</span>
 </button>
 
-  <button class="menu-btn" onclick="mostrarVista('mantenimiento')">
-    <span>Downtime MTTO Gruas</span>
-  </button>
+<button class="menu-btn" onclick="abrirDowntimeMTTO()">
+  <span>Downtime gruas operacion</span>
+</button>
 
 <button class="menu-btn" onclick="abrirIFS()">
   <span>Gestion de Work Task</span>
@@ -2067,7 +2279,18 @@ button:hover{
 </div>
 
     <div class="main-content">
+    <div id="vistaReportesOperaciones" class="vista">
 
+
+
+  <div class="contenido">
+
+
+    <div id="tab-gruas"></div>
+
+  </div>
+
+</div>
     <div id="vistaIncidentes" class="vista">
   <iframe
     src="https://sistemaincidenciasgruas2026.github.io/Reporte-Gruas2.0/"
@@ -2214,14 +2437,48 @@ button:hover{
 
 <div class="yard" style="position:relative;">
 
-  <div class="leyenda-corner"></div>
+  <div class="leyenda-corner">
+
+  <div class="legend-mini">
+
+    <div class="legend-row">
+      <span class="color-box operacion"></span>
+      <span>Operación</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="color-box disponible"></span>
+      <span>Disponible</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="color-box falla"></span>
+      <span>Falla</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="color-box mtto"></span>
+      <span>MTTO</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="color-box anclada"></span>
+      <span>Fuera</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="color-box prioridad"></span>
+      <span>Prioridad</span>
+    </div>
+
+  </div>
+
+</div>
 
   <div id="yard"></div>
 
-  <!-- BOTÓN ABAJO DERECHA -->
-  <button class="btn-reporte-float" onclick="reporteOperaciones()">
-    REPORTE OPERACIONES
-  </button>
+  
+
 
 </div>
 
@@ -2265,22 +2522,23 @@ button:hover{
 <div class="modal" id="modal">
 
 <div class="modal-content">
+  <div class="modal-title" id="modalTitle">
+  REGISTRO DE EVENTO
+</div>
+<div class="estado-panel">
 
-<div class="modal-title" id="modalTitle"></div>
+  <label>Estado de la grúa</label>
 
-<label>Estado de la grua</label>
+<select id="estado"
+  onchange="actualizarIndicadorEstado(); manejarCambioEstado()">
+  <option value="operacion">Operación</option>
+  <option value="disponible">Disponible</option>
+  <option value="falla">Falla</option>
+  <option value="mtto">Mantenimiento</option>
+</select>
 <div id="bloqueOperaciones">
 
-<select id="estado">
 
-<option value="operacion">Operación</option>
-<option value="disponible">Disponible</option>
-<option value="falla">Falla</option>
-<option value="mtto">Mantenimiento</option>
-<option value="prioridad">Grúa prioridad para operaciones</option>
-
-
-</select>
 
 <label id="labelPrioridad" for="prioridad">Prioridad</label>
 <select id="prioridad">
@@ -2291,8 +2549,53 @@ button:hover{
 <option value="3">3</option>
 
 </select>
+<label>Registro Falla</label>
+
+<textarea id="registro_falla"></textarea>
+
+<div id="estadoIndicador" class="estado-indicador">
+  Estado actual: —
+</div>
+
+  <button type="button" class="btn-estado" onclick="guardarEstadoRapido()">
+    ACTUALIZAR ESTADO
+  </button>
+
+</div>
+
+<div id="formularioCierreFalla" style="display:none;">
+<label>Tipo de Registro</label>
+
+<select id="tipoRegistro" onchange="cambiarFormulario()">
+  <option value="operaciones">Operaciones</option>
+  <option value="mtto">Mantenimiento</option>
+</select>
+
+
+<label>Turno</label>
+<select id="turnoGeneral">
+  <option value="1">1er Turno</option>
+  <option value="2">2do Turno</option>
+  <option value="3">3er Turno</option>
+</select>
+
 <label>Grúa</label>
-<input type="text" id="opGrua" readonly>
+<input type="text" id="gruaGeneral" readonly>
+
+<label>Bloque / Tramo</label>
+<input type="text" id="bloqueTramo">
+
+<label>Fecha / Hora Reporte Falla</label>
+<input type="datetime-local" id="fechaReporte">
+
+<label>Fecha / Hora Entrega Turno</label>
+<input type="datetime-local" id="fechaEntrega">
+
+<label>Tiempo Muerto</label>
+<input type="number" id="tiempoMuerto">
+
+
+
 
 <label>Operador</label>
 <input type="text" id="opOperador">
@@ -2313,39 +2616,17 @@ button:hover{
 <label>Monitor RPR Reporta</label>
 <input type="text" id="opMonitorReporta">
 
-<label>Fecha / Hora de Falla</label>
-<input type="datetime-local" id="opFechaFalla">
 
 <label>Monitor RPC Cierre</label>
 <input type="text" id="opMonitorCierre">
 
-<label>Fecha / Hora de Entrega</label>
-<input type="datetime-local" id="opFechaEntrega">
 
-<label>Turno</label>
-<select id="opTurno">
-  <option value="1">1er Turno</option>
-  <option value="2">2do Turno</option>
-  <option value="3">3er Turno</option>
-</select>
 
-<label>Tiempo Muerto (min)</label>
-<input type="number" id="opTiempoMuerto">
-</div>
 
 <!-- BLOQUE MANTENIMIENTO -->
 
 <div id="bloqueMantenimiento" style="display:none;">
 
-<label>Fecha</label>
-<input type="date" id="fechaMantto">
-
-<label>Turno</label>
-<select id="turnoMantto">
-  <option value="1">1er Turno</option>
-  <option value="2">2do Turno</option>
-  <option value="3">3er Turno</option>
-</select>
 
 <label>Área</label>
 
@@ -2387,12 +2668,6 @@ Seleccione supervisor
 
 </select>
 
-<label>Equipo</label>
-<input
-type="text"
-id="equipoMantto"
-readonly
->
 
 <label>Responsabilidad</label>
 
@@ -2419,21 +2694,8 @@ id="descripcionFalla"
 placeholder="Describe la falla..."
 ></textarea>
 
-<label>TM</label>
 
-<input
-type="text"
-id="tm"
-placeholder="Tiempo estimado"
->
 
-<label>Bloque / Tramo</label>
-
-<input
-type="text"
-id="bloqueTramo"
-placeholder="Ej: Bloque A / Tramo 3"
->
 
 </div>
 
@@ -2452,34 +2714,80 @@ CERRAR
 </div>
 
 </div>
+</div>
 <!-- ================= MODAL TIPO ================= -->
-
-<div class="modal" id="modalTipo">
+<div class="modal" id="modalCierreFalla">
 
   <div class="modal-content">
 
     <div class="modal-title">
-      SELECCIONAR ÁREA
+      CIERRE DE FALLA
     </div>
 
-    <button onclick="abrirOperaciones()">
-      OPERACIONES
-    </button>
+    <label>Tipo de Registro</label>
+    <select id="c_tipoRegistro">
+      <option value="operaciones">Operaciones</option>
+    </select>
 
-    <button onclick="abrirMantenimiento()">
-      MANTENIMIENTO GRUAS
-    </button>
+    <label>Turno</label>
+    <select id="c_turno">
+      <option value="1">1er Turno</option>
+      <option value="2">2do Turno</option>
+      <option value="3">3er Turno</option>
+    </select>
 
-    <button
-      class="close"
-      onclick="cerrarTipo()"
-    >
-      CERRAR
-    </button>
+    <label>Grúa</label>
+    <input type="text" id="c_grua" readonly>
 
+    <label>Bloque / Tramo</label>
+    <input type="text" id="c_bloque">
+
+    <label>Fecha / Hora Reporte Falla</label>
+    <input type="datetime-local" id="c_fechaFalla">
+
+    <label>Fecha / Hora Entrega Turno</label>
+    <input type="datetime-local" id="c_fechaEntrega">
+
+    <label>Tiempo Muerto</label>
+    <input type="text" id="c_tm">
+
+    <label>Operador</label>
+    <input type="text" id="c_operador">
+
+    <label>Tipo de Falla</label>
+    <select id="c_tipoFalla">
+      <option value="">Seleccione</option>
+      <option>Mecánica</option>
+      <option>Eléctrica</option>
+      <option>Operación</option>
+      <option>Instrumentación</option>
+      <option>Seguridad</option>
+    </select>
+
+    <label>Actividad</label>
+    <textarea id="c_actividad"></textarea>
+
+    <label>Monitor RPR Reporta</label>
+    <input type="text" id="c_monitorRPR">
+
+    <label>Monitor RPC Cierre</label>
+    <input type="text" id="c_monitorRPC">
+
+<div id="accionesCierreFalla" style="display:none;">
+
+  <button onclick="guardarCierreFalla()">
+    GUARDAR CIERRE
+  </button>
+
+  <button onclick="cerrarCierreFalla()">
+    CERRAR
+  </button>
+
+</div>
   </div>
 
 </div>
+
 <script>
 
 /* ================= SUPABASE ================= */
@@ -2578,6 +2886,11 @@ let filtroTexto='';
 
 let filtroEstado='todos';
 
+let estadoAnterior = '';
+
+let reloadTimeout = null;
+let nuevoEstadoTemporal = null;
+
 /* ================= CLOCK ================= */
 
 function reloj(){
@@ -2637,6 +2950,25 @@ gruas:[
 }
 
 ];
+
+function limpiarTexto(d) {
+
+  if (!d) return 'Sin detalle';
+
+  if (typeof d === 'object') {
+    return d.detalle || 'Sin detalle';
+  }
+
+  if (d === '{}' || d === 'null') {
+    return 'Sin detalle';
+  }
+
+  if (typeof d === 'string' && d.trim() === '') {
+    return 'Sin detalle';
+  }
+
+  return d;
+}
 //Especificacion de cada color 
 function abrirIFS() {
   
@@ -2682,46 +3014,118 @@ function getEquipo(id){
 
 function formatearTiempo(segundos){
 
-const h = Math.floor(segundos / 3600);
+  if(segundos < 0){
+    segundos = 0;
+  }
 
-const m = Math.floor((segundos % 3600) / 60);
+  const h = Math.floor(segundos / 3600);
+  const m = Math.floor((segundos % 3600) / 60);
+  const s = segundos % 60;
 
-const s = segundos % 60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function iniciarContadorNuevo(equipo){
 
-return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  if(
+    equipo.estado !== 'falla'
+  ){
 
+    return new Date().toISOString();
+  }
+
+  return equipo.contador_falla_inicio;
+}
+function procesarEstadoFalla(equipo, estadoNuevo){
+
+  let falla_inicio = equipo.falla_inicio;
+  let tiempo_falla = equipo.tiempo_falla || null;
+
+  // Entró a falla
+  if(
+    equipo.estado !== 'falla' &&
+    estadoNuevo === 'falla'
+  ){
+    falla_inicio = new Date().toISOString();
+
+    console.log(
+      'INICIO FALLA:',
+      equipo.id,
+      falla_inicio
+    );
+  }
+
+  // Salió de falla
+  if(
+    equipo.estado === 'falla' &&
+    estadoNuevo !== 'falla'
+  ){
+
+    if(equipo.falla_inicio){
+
+      const segundos =
+        Math.floor(
+          (
+            new Date() -
+            new Date(equipo.falla_inicio)
+          ) / 1000
+        );
+
+      tiempo_falla =
+        formatearTiempo(segundos);
+    }
+
+    falla_inicio = null;
+
+    console.log(
+      'FIN FALLA:',
+      equipo.id
+    );
+  }
+
+  return {
+    falla_inicio,
+    tiempo_falla
+  };
 }
 /* ================= CARGAR ================= */
-
 async function cargar(){
 
-const {data,error} =
-await db
-.from('gruas')
-.select('*')
-.order('id', { ascending: true });
+  const {data,error} =
+    await db.from('gruas')
+    .select('*')
+    .order('id', { ascending: true });
 
-console.log(data);
-console.log(error);
+  if(error){
+    console.log("ERROR SUPABASE:", error);
+    alert(error.message);
+    return;
+  }
 
-if(error){
+  console.log("DATA:", data);
 
-alert(error.message);
+equipos = Array.isArray(data) ? data.map(g => ({
+  ...g,
+  estado: (g.estado || '').toLowerCase().trim(),
+  prioridad: Number(g.prioridad || 0),
 
-return;
+  // 🔥 FIX DETALLE
+  detalle: (typeof g.detalle === 'object') ? '' : (g.detalle || '')
+})) : [];
 
-}
+  console.log("EQUIPOS:", equipos.length);
 
-equipos=data || [];
+  try {
+    render();
+    renderKPIs();
 
-render();
+    requestAnimationFrame(() => {
+      if (typeof renderFallas === "function") renderFallas();
+      if (typeof renderPrioridad === "function") renderPrioridad();
+    });
 
-renderKPIs();
-
-renderFallas();
-
-renderPrioridad();
-
+  } catch(e){
+    console.log("ERROR EN RENDER:", e);
+  }
 }
 
 /* ================= BUSCAR ================= */
@@ -2746,7 +3150,7 @@ render();
 }
 
 function render(){
-
+  
   let html = '';
 
   layout.forEach(row => {
@@ -2775,6 +3179,9 @@ function render(){
 
       const g = getEquipo(id);
 
+if (!g) return;
+
+estadoAnterior = g.estado;
       // si no existe en BD
       if(!g){
 
@@ -2815,27 +3222,12 @@ function render(){
         g.observacion_extra ===
         'GRÚA PRIORIDAD PARA OPERACIÓN';
 
-      let tiempoFalla = '00:00:00';
 
-      if(
-        g.estado === 'falla' &&
-        g.falla_inicio
-      ){
-
-        tiempoFalla = formatearTiempo(
-          Math.floor(
-            (
-              new Date() -
-              new Date(g.falla_inicio)
-            ) / 1000
-          )
-        );
-      }
 
       html += `
         <div
           class="card ${g.estado}"
-          onclick="abrirTipo('${g.id}')"
+          onclick="abrir('${g.id}')"
         >
 
           <div class="code">
@@ -2864,20 +3256,18 @@ function render(){
             ''
           }
 
-          ${
-            g.estado === 'falla'
-            ?
-            `
-              <div
-                class="timer-card"
-                id="timer-card-${g.id}"
-              >
-                ${tiempoFalla}
-              </div>
-            `
-            :
-            ''
-          }
+${
+  g.estado === 'falla'
+  ? `
+    <div
+      class="timer-card"
+      id="timer-card-${g.id}"
+    >
+      00:00:00
+    </div>
+  `
+  : ''
+}
 
         </div>
       `;
@@ -2892,7 +3282,8 @@ function render(){
   });
 
   document.getElementById('yard').innerHTML = html;
-
+   console.log("DETALLE DB:", g.id, g.detalle, typeof g.detalle);
+  
 }
 
 /* ================= KPIS ================= */
@@ -2917,23 +3308,139 @@ function renderKPIs(){
 }
 
 /* ================= FALLAS ================= */
-function reporteOperaciones(){
+async function reporteOperaciones(){
+
+  const { data, error } = await db
+    .from('reportes_operacion')
+    .select('*')
+    .order('id', { ascending:false });
+
+  if(error){
+    alert(error.message);
+    return;
+  }
 
   let html = `
   <html>
   <head>
-    <title>Reporte Operaciones</title>
+  <title>Reporte Operaciones</title>
+
+  <style>
+
+  body{
+    font-family:Arial;
+    padding:20px;
+  }
+
+  table{
+    width:100%;
+    border-collapse:collapse;
+  }
+
+  th,td{
+    border:1px solid #ccc;
+    padding:6px;
+  }
+
+  th{
+    background:#003366;
+    color:white;
+  }
+
+  </style>
+
+  </head>
+  <body>
+
+  <h2>REPORTE OPERACIONES</h2>
+
+  <table>
+
+  <tr>
+    <th>Grúa</th>
+    <th>Turno</th>
+    <th>Bloque</th>
+    <th>Operador</th>
+    <th>Tipo Falla</th>
+    <th>Actividad</th>
+    <th>Monitor Reporta</th>
+    <th>Monitor Cierre</th>
+    <th>TM</th>
+    <th>Fecha Reporte</th>
+  </tr>
+  `;
+
+  data.forEach(r => {
+
+    html += `
+    <tr>
+
+      <td>${r.grua || ''}</td>
+
+      <td>${r.turno || ''}</td>
+
+      <td>${r.bloque_tramo || ''}</td>
+
+      <td>${r.operador || ''}</td>
+
+      <td>${r.tipo_falla || ''}</td>
+
+      <td>${r.actividad || ''}</td>
+
+      <td>${r.monitor_reporta || ''}</td>
+
+      <td>${r.monitor_cierre || ''}</td>
+
+      <td>${r.tiempo_muerto || ''}</td>
+
+      <td>${r.fecha_hora_falla || ''}</td>
+
+    </tr>
+    `;
+
+  });
+
+  html += `
+  </table>
+  </body>
+  </html>
+  `;
+
+  const ventana = window.open('', '_blank');
+
+  ventana.document.open();
+  ventana.document.write(html);
+  ventana.document.close();
+}
+
+function reporteGruas(){
+
+  let html = `
+  <html>
+  <head>
+    <title>Reporte Gruas</title>
     <style>
-      body{font-family:Arial;padding:20px;}
+      body{
+        font-family:Arial;
+        padding:20px;
+      }
+
+      h2{
+        text-align:center;
+        color:#003366;
+      }
+
       table{
         border-collapse:collapse;
         width:100%;
       }
+
       th,td{
         border:1px solid #ccc;
         padding:6px;
         text-align:left;
       }
+
       th{
         background:#003366;
         color:white;
@@ -2942,20 +3449,18 @@ function reporteOperaciones(){
   </head>
   <body>
 
-  <h2>REPORTE OPERACIONES</h2>
+  <h2>REPORTE GRUAS</h2>
 
   <table>
     <tr>
       <th>Grua</th>
-      <th>Operador</th>
-      <th>Tipo Falla</th>
-      <th>Actividad</th>
-      <th>Monitor Reporta</th>
-      <th>Fecha/Hora Falla</th>
-      <th>Monitor Cierre</th>
-      <th>Fecha/Hora Entrega</th>
-      <th>Turno</th>
-      <th>Tiempo Muerto</th>
+      <th>Area</th>
+      <th>Supervisor</th>
+      <th>Standby</th>
+      <th>Responsabilidad</th>
+      <th>Codigo Falla</th>
+      <th>Descripcion Falla</th>
+      <th>TM</th>
     </tr>
   `;
 
@@ -2964,15 +3469,13 @@ function reporteOperaciones(){
     html += `
       <tr>
         <td>${g.id || ''}</td>
-        <td>${g.operador || ''}</td>
-        <td>${g.tipo_falla || ''}</td>
-        <td>${g.actividad || ''}</td>
-        <td>${g.monitor_reporta || ''}</td>
-        <td>${g.fecha_hora_falla || ''}</td>
-        <td>${g.monitor_cierre || ''}</td>
-        <td>${g.fecha_hora_entrega || ''}</td>
-        <td>${g.turno_operacion || ''}</td>
-        <td>${g.tiempo_muerto || ''}</td>
+        <td>${g.area_mantto || ''}</td>
+        <td>${g.supervisor || ''}</td>
+        <td>${g.standby || ''}</td>
+        <td>${g.responsabilidad || ''}</td>
+        <td>${g.codigo_falla || ''}</td>
+        <td>${g.descripcion_falla || ''}</td>
+        <td>${g.tm || ''}</td>
       </tr>
     `;
   });
@@ -2987,203 +3490,151 @@ function reporteOperaciones(){
   ventana.document.write(html);
   ventana.document.close();
 }
-
 function renderFallas(){
 
-let html='';
+  const cont = document.getElementById('listaFallas');
+  if(!cont) return;
 
-equipos
-.filter(g=>g.estado==='falla')
-.forEach(g=>{
+  const fallas = equipos.filter(g =>
+    (g.estado || '').toLowerCase().trim() === 'falla'
+  );
 
-let tiempoVisual = '00:00:00';
+  if(fallas.length === 0){
+    cont.innerHTML = "Sin fallas";
+    return;
+  }
 
-if(g.falla_inicio){
+  let html = '';
 
-const inicio =
-new Date(g.falla_inicio);
+  fallas.forEach(g => {
 
-const ahora =
-new Date();
+    let tiempo = "00:00:00";
 
-const segundos =
-Math.floor(
-(ahora - inicio) / 1000
-);
+    if (g.contador_inicio) {
 
-tiempoVisual =
-formatearTiempo(segundos);
+      const inicio = new Date(g.contador_inicio);
+      const segActivos = Math.floor((Date.now() - inicio) / 1000);
 
-}
+      const total = segActivos + (g.contador_segundos || 0);
 
-html+=`
+      tiempo = formatearTiempo(total);
+    }
 
-<div class="item">
+    html += `
+      <div class="item">
+        <strong>${g.id}</strong>
 
-<strong>
-${g.id}
-</strong>
-
-<span>
-${g.detalle || 'Sin detalle'}
+        <span>
+  ${g.registro_falla || 'Sin detalle'}
 </span>
 
-<span>
+        <span>
+          ${g.codigo_falla || ''} - ${g.descripcion_falla || ''}
+        </span>
 
-<span class="timer-line">
+        <div>⏱ ${tiempo}</div>
+      </div>
+    `;
+  });
 
-Tiempo en falla:
-
-<b class="timer" id="timer-${g.id}">
-${tiempoVisual}
-</b>
-
-</span>
-
-<span>
-Tiempo de entrega:
-${g.eta || 'Sin tiempo estimado'}
-</span>
-
-</div>
-
-`;
-
-});
-
-document.getElementById('listaFallas')
-.innerHTML=
-html || 'Sin fallas';
-
+  cont.innerHTML = html;
 }
 /* ================= TIMER VISUAL ================= */
 
-setInterval(()=>{
+setInterval(() => {
 
   equipos
-  .filter(g => g.estado === 'falla')
-  .forEach(g => {
+    .filter(g => g.estado === 'falla')
+    .forEach(g => {
 
-    if(!g.falla_inicio) return;
+      let segundos = Number(g.contador_segundos || 0);
 
-    const inicio = new Date(g.falla_inicio);
-    if(isNaN(inicio)) return;
+      if (g.contador_estado === 'running' && g.contador_inicio) {
+        const inicio = new Date(g.contador_inicio);
+        segundos += Math.floor((Date.now() - inicio) / 1000);
+      }
 
-    const ahora = new Date();
-    const segundos = Math.floor((ahora - inicio) / 1000);
+      const el = document.getElementById(`timer-card-${g.id}`);
+      if (el) {
+        el.innerText = formatearTiempo(segundos);
+      }
 
-    const tiempo = formatearTiempo(segundos);
+    });
 
-    const el = document.getElementById(`timer-${g.id}`);
-    if(el) el.innerText = tiempo;
-
-    const card = document.getElementById(`timer-card-${g.id}`);
-    if(card) card.innerText = tiempo;
-
-  });
-
-},1000);
+}, 1000);
 /* ================= PRIORIDAD ================= */
 
 /* ================= PRIORIDAD OPERATIVA ================= */
 
 function renderPrioridad(){
 
-let html='';
+  const cont = document.getElementById('listaPrioridad');
+  if(!cont) return;
 
-/*
-SOLO MOSTRAR:
+const list = equipos
+  .filter(g =>
+    (g.prioridad || 0) > 0 &&
+    !['disponible','operacion'].includes((g.estado || '').toLowerCase().trim())
+  )
+    .sort((a,b) => a.prioridad - b.prioridad);
 
-- prioridad > 0
-- NO disponibles
-- NO operación normal
-- SI falla / mantto / fuera servicio / sin señal
-*/
+  if(list.length === 0){
+    cont.innerHTML = 'Sin prioridades operativas';
+    return;
+  }
 
-equipos
-
-.filter(g=>
-
-parseInt(g.prioridad) > 0 &&
-
-g.estado !== 'disponible' &&
-
-g.estado !== 'operacion'
-
-)
-
-.sort((a,b)=>
-
-parseInt(a.prioridad) -
-parseInt(b.prioridad)
-
-)
-
-.forEach(g=>{
-
-html+=`
-
-<div class="item">
-
-<strong>
-${g.id}
-</strong>
-
-<span>
-Estado:
-${g.estado}
-</span>
-
-<span>
-Prioridad:
-${g.prioridad}
-</span>
-
-<span>
-${g.detalle || ''}
-</span>
-
-</div>
-
-`;
-
-});
-
-document.getElementById('listaPrioridad')
-.innerHTML =
-
-html ||
-
-'Sin prioridades operativas';
-
+  cont.innerHTML = list.map(g => `
+    <div class="item">
+      <strong>${g.id}</strong>
+      <span>${g.estado}</span>
+      <span>Prioridad: ${g.prioridad}</span>
+    </div>
+  `).join('');
 }
 /* ================= MODAL ================= */
 
 function abrir(id){
-
+  
   actual = id;
 
-  const g = getEquipo(id);
+const g = getEquipo(id);
 
-  if(!g){
-    alert("Equipo no encontrado");
-    return;
-  }
+if (!g) {
+  html += `<div class="card invisible-slot"></div>`;
+  return;
+}
 
+  document.getElementById('modalTitle').innerText =
+`GRÚA ${id}`;
   document.getElementById('modal').style.display = 'flex';
-  document.getElementById('modalTitle').innerText = id;
+  document.getElementById('gruaGeneral').value=id;
+document.getElementById('bloqueTramo').value =
+g.bloque_tramo || '';
+
+document.getElementById('fechaReporte').value =
+g.fecha_hora_falla || '';
+
+document.getElementById('fechaEntrega').value =
+g.fecha_hora_entrega || '';
+
+document.getElementById('tiempoMuerto').value = g.tiempo_muerto || '';
+document.getElementById('turnoGeneral').value = g.turno_operacion || '1';
+document.getElementById('tipoRegistro').value='operaciones';
+document.getElementById('registro_falla').value = g.registro_falla || '';
+
+cambiarFormulario();
 
   // ================= OPERACIONES =================
   document.getElementById('estado').value = g.estado || 'disponible';
   controlarPrioridad();
   document.getElementById('prioridad').value = g.prioridad || 0;
 
-  document.getElementById('equipoMantto').value = id;
+ // document.getElementById('equipoMantto').value = id;
 
-  document.getElementById('fechaMantto').value =
+ // document.getElementById('fechaMantto').value =
     g.fecha_mantto || new Date().toISOString().split('T')[0];
 
-  document.getElementById('turnoMantto').value = g.turno_mantto || 'DIA';
+  //document.getElementById('turnoMantto').value = g.turno_mantto || 'DIA';
   document.getElementById('areaMantto').value = g.area_mantto || 'STS';
   document.getElementById('supervisor').value = g.supervisor || '';
 
@@ -3192,44 +3643,90 @@ function abrir(id){
   document.getElementById('standby').value = g.standby || '';
   document.getElementById('responsabilidad').value = g.responsabilidad || 'MECANICA';
   document.getElementById('codigoFalla').value = g.codigo_falla || '';
-  document.getElementById('descripcionFalla').value = g.descripcion_falla || '';
-  document.getElementById('tm').value = g.tm || '';
+  document.querySelector('#descripcionFalla').value = g.descripcion_falla || '';
+  //document.getElementById('tm').value = g.tm || '';
   document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
 
   // ================= OPERACIONES DETALLE =================
-  document.getElementById('opGrua').value = id;
+
 
   document.getElementById('opOperador').value = g.operador || '';
   document.getElementById('opTipoFalla').value = g.tipo_falla || '';
   document.getElementById('opActividad').value = g.actividad || '';
   document.getElementById('opMonitorReporta').value = g.monitor_reporta || '';
-  document.getElementById('opFechaFalla').value = g.fecha_hora_falla || '';
   document.getElementById('opMonitorCierre').value = g.monitor_cierre || '';
-  document.getElementById('opFechaEntrega').value = g.fecha_hora_entrega || '';
-  document.getElementById('opTurno').value = g.turno_operacion || '1';
-  document.getElementById('opTiempoMuerto').value = g.tiempo_muerto || '';
+
 
   // 🔥 IMPORTANTE: actualizar visibilidad de prioridad al abrir
   controlarPrioridad();
+  const indicador =
+  document.getElementById('estadoIndicador');
+
+if(indicador && g){
+  indicador.innerText = `Estado actual: ${obtenerTextoEstado(g)}`;
+
+  indicador.className = 'estado-indicador ' + g.estado;
+}
+actualizarIndicadorEstado();
+
+document.getElementById('registro_falla').value = g.registro_falla || '';
+const esFalla = (g.estado === 'falla');
+
+document.getElementById('labelDetalle').style.display = esFalla ? 'block' : 'none';
+document.getElementById('detalle').style.display = esFalla ? 'block' : 'none';
 }
 document.getElementById('estado').addEventListener('change', controlarPrioridad);
+document.getElementById('estado').addEventListener('change', manejarCambioEstado);
+// 👇 AQUI AGREGAS EL NUEVO
+
+function abrirFormularioTransicion(){
+  const el = document.getElementById('accionesCierreFalla');
+
+  if(!el) return;
+
+  el.style.display = 'flex'; // mejor que block en botones
+}
 function controlarPrioridad() {
 
-  const estado = document.getElementById('estado').value;
+  const estado =
+    document.getElementById('estado').value;
 
-  const label = document.getElementById('labelPrioridad');
-  const select = document.getElementById('prioridad');
+  const label =
+    document.getElementById('labelPrioridad');
 
-  if (estado === 'falla') {
-    label.style.display = 'block';
-    select.style.display = 'block';
-  } else {
-    label.style.display = 'none';
-    select.style.display = 'none';
-    select.value = 0;
-  }
+  const select =
+    document.getElementById('prioridad');
+
+
+const labelDesc =
+  document.getElementById('labelDetalle');
+
+const txtDesc =
+  document.getElementById('detalle');
+
+if (estado === 'falla') {
+
+  labelDesc.style.display = 'block';
+  txtDesc.style.display = 'block';
+
+} else {
+
+  labelDesc.style.display = 'none';
+  txtDesc.style.display = 'none';
 }
+}
+function ocultarCierreFalla(){
 
+  const el = document.getElementById('accionesCierreFalla');
+
+  if(el){
+    el.style.display = 'none';
+    el.style.visibility = 'hidden';
+    el.style.height = '0px';
+    el.style.overflow = 'hidden';
+  }
+
+}
 function cerrarModal(){
 
 document.getElementById('modal')
@@ -3237,203 +3734,233 @@ document.getElementById('modal')
 
 }
 
+function cambiarFormulario(){
+
+  const tipo =
+    document.getElementById('tipoRegistro').value;
+
+  document.getElementById('bloqueOperaciones')
+    .style.display =
+      tipo === 'operaciones'
+      ? 'block'
+      : 'none';
+
+  document.getElementById('bloqueMantenimiento')
+    .style.display =
+      tipo === 'mtto'
+      ? 'block'
+      : 'none';
+}
 /* ================= GUARDAR ================= */
 
-/* ================= GUARDAR ================= */
+async function guardar() {
 
-async function guardar(){
+const registro_falla =
+document.getElementById('registro_falla').value || '';
 
+const estadoNuevo = document.getElementById('estado').value;
 const equipoActual = getEquipo(actual);
 
-/* ================= OPERACIONES (DEL FORMULARIO) ================= */
+const estadoAnterior = equipoActual.estado;
 
-let estado = document.getElementById('estado').value;
+const salioDeFalla =
+estadoAnterior === 'falla' &&
+estadoNuevo !== 'falla';
 
-let prioridad = parseInt(document.getElementById('prioridad').value) || 0;
+const entroAFalla =
+estadoAnterior !== 'falla' &&
+estadoNuevo === 'falla';
 
+let estado = estadoNuevo;
 
-let observacion_extra = equipoActual.observacion_extra || null;
+let prioridad =
+parseInt(document.getElementById('prioridad').value) || 0;
 
-// ================= PRIORIDAD MANUAL =================
-if (prioridad === 1) {
-  observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
-} else if (prioridad === 0) {
-  observacion_extra = null;
-}
-if (estado !== 'priogrua') {
+let observacion_extra =
+equipoActual.observacion_extra || null;
 
-  observacion_extra = null;
-
-}
-
-// ================= PRIORIDAD OPERATIVA MANUAL =================
-if (prioridad === 1) {
-  observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
+if (prioridad > 0) {
+observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
+} else {
+observacion_extra = null;
 }
 
-// si se quita prioridad
-if (prioridad === 0) {
-  observacion_extra = null;
-}
+/* ================= CAMPOS ================= */
 
-/* ================= MANTENIMIENTO ================= */
-
-const fechaMantto = document.getElementById('fechaMantto').value;
-const turnoMantto = document.getElementById('turnoMantto').value;
-const areaMantto = document.getElementById('areaMantto').value;
-const supervisor = document.getElementById('supervisor').value;
-const standby = document.getElementById('standby').value;
-const equipoMantto = document.getElementById('equipoMantto').value;
-const responsabilidad = document.getElementById('responsabilidad').value;
-const codigoFalla = document.getElementById('codigoFalla').value;
-const descripcionFalla = document.getElementById('descripcionFalla').value;
-const tm = document.getElementById('tm').value;
-const bloqueTramo = document.getElementById('bloqueTramo').value;
-
+const bloque_tramo = document.getElementById('bloqueTramo').value;
 const operador = document.getElementById('opOperador').value;
 const tipo_falla = document.getElementById('opTipoFalla').value;
 const actividad = document.getElementById('opActividad').value;
 const monitor_reporta = document.getElementById('opMonitorReporta').value;
-const fecha_hora_falla = document.getElementById('opFechaFalla').value;
 const monitor_cierre = document.getElementById('opMonitorCierre').value;
-const fecha_hora_entrega = document.getElementById('opFechaEntrega').value;
-const turno_operacion = document.getElementById('opTurno').value;
-const tiempo_muerto = document.getElementById('opTiempoMuerto').value;
-/* ================= FALLA ================= */
+
+const fecha_hora_falla = document.getElementById('fechaReporte').value;
+const fecha_hora_entrega = document.getElementById('fechaEntrega').value;
+const turno_operacion = document.getElementById('turnoGeneral').value;
+const tiempo_muerto = document.getElementById('tiempoMuerto').value;
+
+const grua = document.getElementById('gruaGeneral').value;
+
+const tipoRegistro = document.getElementById('tipoRegistro').value;
+
+const area_mantto = document.getElementById('areaMantto').value;
+const supervisor = document.getElementById('supervisor').value;
+const standby = document.getElementById('standby').value;
+const responsabilidad = document.getElementById('responsabilidad').value;
+const codigo_falla = document.getElementById('codigoFalla').value;
+const descripcion_falla = document.querySelector('#descripcionFalla').value;
+
+/* ================= CONTROL FALLA ================= */
 
 let falla_inicio = equipoActual.falla_inicio;
 let tiempo_falla = equipoActual.tiempo_falla;
 
-/* reset prioridad si disponible u operacion */
-if(estado === 'disponible' || estado === 'operacion'){
-  prioridad = 0;
+// 🔵 ENTRA A FALLA
+if (estadoNuevo === 'falla' && !equipoActual.falla_inicio) {
+falla_inicio = new Date().toISOString();
+equipoActual.falla_inicio = falla_inicio;
 }
 
-/* inicio falla */
-if(estado === 'falla' && equipoActual.estado !== 'falla'){
-  falla_inicio = new Date().toISOString();
+// 🔴 SALE DE FALLA
+if (salioDeFalla && equipoActual.falla_inicio) {
+
+const inicio = new Date(equipoActual.falla_inicio);
+const fin = new Date();
+
+const segundos = Math.floor((fin - inicio) / 1000);
+
+tiempo_falla = formatearTiempo(segundos);
+
+falla_inicio = null;
+equipoActual.falla_inicio = null;
+equipoActual.estado = estadoNuevo;
 }
 
-/* fin falla */
-if(estado !== 'falla' && equipoActual.estado === 'falla'){
-
-  if(equipoActual.falla_inicio){
-
-    const inicio = new Date(equipoActual.falla_inicio);
-    const fin = new Date();
-
-    const segundos = Math.floor((fin - inicio) / 1000);
-
-    tiempo_falla = formatearTiempo(segundos);
-  }
-
-  falla_inicio = null;
+// reset prioridad
+if (estado === 'disponible' || estado === 'operacion') {
+prioridad = 0;
 }
 
-/* ================= UPDATE ================= */
-/* ================= GUARDAR EN DT ================= */
+/* ================= HISTORIAL ================= */
 
-/* ================= GUARDAR EN DT ================= */
+let response;
 
-const { error: errorDT } = await db
-.from('DT')
+if (tipoRegistro === 'operaciones') {
+
+response = await db
+.from('reportes_operacion')
 .insert([{
-    FECHA: fechaMantto,
-    TURNO: parseInt(turnoMantto),
-    AREA: areaMantto,
-    SUPERVISOR: supervisor,
-    STANDBY: standby || null,
-    EQUIPO: equipoMantto || null,
-    RESPONSABILIDAD: responsabilidad || null,
-    TM: tm || null,
-    CODIGO_FALLA: codigoFalla || null,
-    DESCRIPCION_DE_FALLAS: descripcionFalla || null,
-    BLOQUE_TRAMO: bloqueTramo || null
+grua,
+turno: parseInt(turno_operacion),
+bloque_tramo,
+fecha_hora_falla,
+fecha_hora_entrega,
+tiempo_muerto,
+operador,
+tipo_falla,
+actividad,
+monitor_reporta,
+monitor_cierre
 }]);
 
-if (errorDT) {
-    console.log(errorDT);
-    alert(errorDT.message);
-    return;
+} else {
+
+response = await db
+.from('reportes_mantenimiento')
+.insert([{
+grua,
+turno: parseInt(turno_operacion),
+bloque_tramo,
+fecha_hora_falla,
+fecha_hora_entrega,
+tiempo_muerto,
+area_mantto,
+supervisor,
+standby,
+responsabilidad,
+codigo_falla,
+descripcion_falla
+}]);
 }
-const {error} = await db
+
+if (response.error) {
+alert('Error reporte: ' + response.error.message);
+return;
+}
+
+/* ================= UPDATE GRÚA ================= */
+
+const { error } = await db
 .from('gruas')
 .update({
 
-  operador,
-  tipo_falla,
-  actividad,
-  monitor_reporta,
-  fecha_hora_falla,
-  monitor_cierre,
-  fecha_hora_entrega,
-  turno_operacion,
-  tiempo_muerto,
+operador,
+tipo_falla,
+actividad,
+monitor_reporta,
+monitor_cierre,
 
-  estado,
-  prioridad,
-  observacion_extra,
-  falla_inicio,
-  tiempo_falla,
+registro_falla,
 
-  updated_at:new Date().toISOString()
+fecha_hora_falla,
+fecha_hora_entrega,
+turno_operacion,
+tiempo_muerto,
+bloque_tramo,
+
+eta,
+estado,
+prioridad,
+observacion_extra,
+
+falla_inicio,
+tiempo_falla,
+
+area_mantto,
+supervisor,
+standby,
+responsabilidad,
+codigo_falla,
+
+registro_falla: document.getElementById('registro_falla').value || '',
+updated_at: new Date().toISOString()
 
 })
 .eq('id', actual);
 
-if(error){
-  alert(error.message);
-  console.log(error);
-  return;
+if (error) {
+alert('Error gruas: ' + error.message);
+return;
 }
+
+/* ================= UI ================= */
+
+if (entroAFalla) {
+render();
+renderFallas();
+renderKPIs();
+}
+
+if (salioDeFalla) {
+cerrarModal();
+
+setTimeout(() => {
+abrirModalCierreFalla(equipoActual);
+}, 200);
+
+return;
+}
+
+alert('Guardado correctamente');
 
 cerrarModal();
-cargar(); // refrescar UI
+cargar();
 }
-
-/* ================= TIPO ================= */
-
-function abrirTipo(id){
-
-  actual = id;
-
-  document.getElementById('modalTipo')
-  .style.display='flex';
-
+if (estado === 'falla') {
+  renderFallas();
+  renderKPIs();
+  actualizarCardGrua(actual);
 }
-
-function cerrarTipo(){
-
-  document.getElementById('modalTipo')
-  .style.display='none';
-
-}
-
-/* ================= OPERACIONES ================= */
-
-function abrirOperaciones(){
-
-  cerrarTipo();
-
-  document.getElementById('bloqueOperaciones').style.display = 'block';
-  document.getElementById('bloqueMantenimiento').style.display = 'none';
-
-  if(actual) abrir(actual);
-
-}
-
-function abrirMantenimiento(){
-
-  cerrarTipo();
-
-  document.getElementById('bloqueOperaciones').style.display = 'none';
-  document.getElementById('bloqueMantenimiento').style.display = 'block';
-
-  if(actual) abrir(actual);
-
-}
-
-
 
 /* ================= STANDBY ================= */
 
@@ -3662,9 +4189,13 @@ db
 
     clearTimeout(reloadTimeout);
 
-    reloadTimeout = setTimeout(() => {
-      cargar();
-    }, 400);
+reloadTimeout = setTimeout(() => {
+  cargar().then(() => {
+    renderFallas();
+    renderPrioridad();
+    renderKPIs();
+  });
+}, 400);
 
   }
 )
@@ -3881,12 +4412,7 @@ async function procesarHoja(sheet){
   await cargar();
   alert('Estados actualizados correctamente');
 }
-function init(){
-  mostrarVista('operativo'); // solo muestra uno
-  cargarMensajeActual();
-  cargarHistorial();
-  cargar();
-}
+
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -3937,9 +4463,615 @@ function abrirIncidentes() {
 
   if (boton) boton.classList.add('active');
 }
+function abrirReporteOperacionesVista(){
+
+  document.querySelectorAll('.vista').forEach(v=>{
+    v.classList.remove('activa');
+    v.style.display='none';
+  });
+
+  const vista = document.getElementById('vistaReportesOperaciones');
+  vista.classList.add('activa');
+  vista.style.display='block';
+
+  cambiarTab('operaciones'); // default
+}
+function cambiarTab(){
+  const gruas = document.getElementById('tab-gruas');
+
+  if(gruas){
+    gruas.style.display = 'block';
+  }
+
+  cargarReporteGruas();
+}
+async function cargarReporteGeneral(){
+
+  const { data } = await db
+    .from('gruas')
+    .select('*')
+    .order('id',{ascending:true});
+
+  let html = `
+    <div class="messages-header">
+      <h2>REPORTE GENERAL DEL SISTEMA</h2>
+      <span>Vista completa de grúas + estados + mantenimiento + operación</span>
+    </div>
+
+    <div class="tabla-container">
+
+      <div class="tabla-scroll">
+
+        <table class="tabla-reporte">
+
+          <thead>
+            <tr>
+              <th>Grúa</th>
+              <th>Estado</th>
+              <th>Prioridad</th>
+              <th>Operador</th>
+              <th>Falla</th>
+              <th>Descripción</th>
+              <th>Supervisor</th>
+              <th>StandBy</th>
+              <th>Área</th>
+              <th>Última Act.</th>
+            </tr>
+          </thead>
+
+          <tbody>
+  `;
+
+  if(data && data.length){
+
+    data.forEach(g => {
+
+      html += `
+        <tr>
+          <td>${g.id || ''}</td>
+          <td>${obtenerTextoEstado(g)}</td>
+          <td>${g.prioridad || 0}</td>
+          <td>${g.operador || ''}</td>
+          <td>${g.codigo_falla || ''}</td>
+          <td>${g.descripcion_falla || ''}</td>
+          <td>${g.supervisor || ''}</td>
+          <td>${g.standby || ''}</td>
+          <td>${g.area_mantto || ''}</td>
+          <td>${g.updated_at ? new Date(g.updated_at).toLocaleString() : ''}</td>
+        </tr>
+      `;
+    });
+
+  } else {
+
+    html += `
+      <tr>
+        <td colspan="10" style="text-align:center;padding:20px;">
+          Sin datos disponibles
+        </td>
+      </tr>
+    `;
+  }
+
+  html += `
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+  `;
+
+  document.getElementById('tab-general').innerHTML = html;
+}
+async function cargarReporteOperaciones(){
+
+  const { data } = await db
+    .from('reportes_operacion')
+    .select('*')
+    .order('id',{ascending:false});
+
+  let html = `
+    <div class="messages-header">
+      <h2>REPORTE OPERACIONES - DOWNTIME MTTO</h2>
+
+    </div>
+
+    <div class="tabla-container">
+
+      <table class="tabla-reporte">
+
+        <thead>
+          <tr>
+            <th>Grúa</th>
+            <th>Turno</th>
+            <th>Bloque</th>
+            <th>Operador</th>
+            <th>Tipo Falla</th>
+            <th>Actividad</th>
+            <th>Monitor Reporta</th>
+            <th>Monitor Cierre</th>
+            <th>Tiempo Muerto</th>
+            <th>Fecha Falla</th>
+          </tr>
+        </thead>
+
+        <tbody>
+  `;
+
+  if (data && data.length > 0) {
+
+    data.forEach(r => {
+      html += `
+        <tr>
+          <td>${r.grua || ''}</td>
+          <td>${r.turno || ''}</td>
+          <td>${r.bloque_tramo || ''}</td>
+          <td>${r.operador || ''}</td>
+          <td>${r.tipo_falla || ''}</td>
+          <td>${r.actividad || ''}</td>
+          <td>${r.monitor_reporta || ''}</td>
+          <td>${r.monitor_cierre || ''}</td>
+          <td>${r.tiempo_muerto || ''}</td>
+          <td>${r.fecha_hora_falla || ''}</td>
+        </tr>
+      `;
+    });
+
+  } else {
+
+    html += `
+      <tr>
+        <td colspan="10" style="text-align:center; padding:20px;">
+          Sin registros disponibles
+        </td>
+      </tr>
+    `;
+  }
+
+  html += `
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+
+  document.getElementById('tab-operaciones').innerHTML = html;
+}
+//Tiempo muerto
+async function cargarReporteGruas() {
+
+  const { data, error } = await db
+    .from('reportes_mantenimiento')
+    .select('*')
+    .order('id', { ascending: false });
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  let html = `
+  <div class="reporte-container">
+
+    <div class="reporte-header">
+      <h2 class="reporte-title">REPORTE GRÚAS</h2>
+    </div>
+
+    <div class="tabla-container">
+      <div class="tabla-scroll">
+
+        <table class="tabla-reporte">
+
+          <thead>
+            <tr>
+              <th>FECHA/HORA REPORTE</th>
+              <th>FECHA/HORA ENTREGA</th>
+              <th>TURNO</th>
+              <th>SUPERVISOR</th>
+              <th>STANDBY</th>
+              <th>GRÚA</th>
+              <th>ÁREA</th>
+              <th>RESPONSABILIDAD</th>
+              <th>BLOQUE</th>
+              <th>FALLA</th>
+              <th>DESCRIPCIÓN</th>
+              <th>TIEMPO MUERTO</th>
+            </tr>
+          </thead>
+
+          <tbody>
+  `;
+
+  if (data && data.length > 0) {
+    data.forEach(r => {
+      html += `
+        <tr>
+          <td>${r.fecha_hora_falla ?? ''}</td>
+          <td>${r.fecha_hora_entrega ?? ''}</td>
+          <td>${r.turno ?? ''}</td>
+          <td>${r.supervisor ?? ''}</td>
+          <td>${r.standby ?? ''}</td>
+          <td>${r.grua ?? ''}</td>
+          <td>${r.area_mantto ?? ''}</td>
+          <td>${r.responsabilidad ?? ''}</td>
+          <td>${r.bloque_tramo ?? ''}</td>
+          <td>${r.codigo_falla ?? ''}</td>
+          <td>${r.descripcion_falla ?? ''}</td>
+          <td>${r.tiempo_muerto ?? ''}</td>
+        </tr>
+      `;
+    });
+  } else {
+    html += `
+      <tr>
+        <td colspan="12" style="text-align:center;padding:20px;">
+          Sin registros
+        </td>
+      </tr>
+    `;
+  }
+
+  html += `
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+  `;
+
+  document.getElementById('tab-gruas').innerHTML = html;
+}
+function abrirDowntimeMTTO(){
+
+  // ocultar vistas
+  document.querySelectorAll('.vista').forEach(v=>{
+    v.classList.remove('activa');
+    v.style.display='none';
+  });
+
+  // mostrar reporte operaciones (tu dashboard)
+  const vista = document.getElementById('vistaReportesOperaciones');
+
+  if(vista){
+    vista.classList.add('activa');
+    vista.style.display='block';
+  }
+
+  // activar tab de operaciones automáticamente
+  cambiarTab('operaciones');
+
+  // marcar botón activo
+  document.querySelectorAll('.menu-btn').forEach(btn=>{
+    btn.classList.remove('active');
+  });
+
+  const btn = document.querySelector(
+    `[onclick="abrirDowntimeMTTO()"]`
+  );
+
+  if(btn) btn.classList.add('active');
+}
+function actualizarIndicadorEstado(){
+
+  const estado =
+    document.getElementById('estado').value;
+
+  const indicador =
+    document.getElementById('estadoIndicador');
+
+  if(!indicador) return;
+
+  let texto = '';
+
+  if(estado === 'operacion') texto = 'Estado actual: OPERACIÓN';
+  if(estado === 'disponible') texto = 'Estado actual: DISPONIBLE';
+  if(estado === 'falla') texto = 'Estado actual: FALLA';
+  if(estado === 'mtto') texto = 'Estado actual: MANTENIMIENTO';
+
+  indicador.innerText = texto;
+
+  indicador.className = 'estado-indicador ' + estado;
+}
+async function guardarEstadoRapido() {
+
+  if (!actual) {
+    alert("No hay grúa seleccionada");
+    return;
+  }
+  
+  const estado = document.getElementById('estado').value;
+  const g = getEquipo(actual);
+  if (!g) return;
+
+  let prioridad = 0;
+
+  if (estado === 'falla') {
+    prioridad = parseInt(document.getElementById('prioridad').value || 0);
+  }
+
+  let contador_estado = g.contador_estado || 'stopped';
+  let contador_inicio = g.contador_inicio || null;
+  let contador_segundos = g.contador_segundos || 0;
+
+ if (estado === 'falla') {
+
+  if (contador_estado !== 'running') {
+    contador_estado = 'running';
+    contador_inicio = new Date().toISOString();
+
+    // reiniciar contador
+    contador_segundos = 0;
+  }
+
+} else {
+
+contador_estado = 'stopped';
+contador_inicio = null;
+contador_segundos = 0;
+  }
+
+  
+
+  const { error } = await db
+    .from('gruas')
+.update({
+  estado,
+  prioridad,
+
+  registro_falla: document.getElementById('registro_falla')?.value || '',
+
+  contador_estado,
+  contador_inicio,
+  contador_segundos,
+
+  updated_at: new Date().toISOString()
+})
+    .eq('id', actual);
+
+  if (error) {
+    alert(error.message);
+    return;
+  }
+
+  // actualizar memoria local
+  g.estado = estado;
+  g.prioridad = prioridad;
+
+
+  g.contador_estado = contador_estado;
+  g.contador_inicio = contador_inicio;
+  g.contador_segundos = contador_segundos;
+
+  render();
+  renderFallas();
+  renderPrioridad();
+  renderKPIs();
+
+  alert("Estado actualizado correctamente");
+}
+function actualizarCardGrua(id){
+
+  const g = getEquipo(id);
+  if(!g) return;
+
+  const card = document.querySelector(
+    `.card[onclick="abrir('${id}')"]`
+  );
+
+  if(!card) return;
+
+  card.className = `card ${g.estado}`;
+
+  const estadoLabel =
+    card.querySelector('.estado-label');
+
+  if(estadoLabel){
+    estadoLabel.innerText = obtenerTextoEstado(g);
+  }
+
+  const prioridadBox =
+    card.querySelector('.priority-text');
+
+  if(g.observacion_extra === 'GRÚA PRIORIDAD PARA OPERACIÓN'){
+    if(!prioridadBox){
+      const div = document.createElement('div');
+      div.className = 'priority-text';
+      div.innerText = 'PRIORIDAD OPERATIVA';
+      card.appendChild(div);
+    }
+  } else {
+    if(prioridadBox){
+      prioridadBox.remove();
+    }
+  }
+
+  let timer =
+    card.querySelector('.timer-card');
+
+  if(g.estado === 'falla'){
+
+    if(!timer){
+      timer = document.createElement('div');
+      timer.className = 'timer-card';
+      timer.id = `timer-card-${g.id}`;
+      timer.innerText = '00:00:00';
+      card.appendChild(timer);
+    }
+
+  } else {
+
+    if(timer){
+      timer.remove();
+    }
+  }
+}
+function abrirModalCierreFalla(g){
+
+  if (!g) {
+    console.error("No hay datos de grúa");
+    return;
+  }
+
+  document.getElementById('modalCierreFalla').style.display = 'flex';
+
+  console.log("Abriendo modal cierre", g);
+
+  // 🔵 helper para datetime-local
+  const formatDateTime = (dt) => {
+    if (!dt) return '';
+    return new Date(dt).toISOString().slice(0,16);
+  };
+
+  document.getElementById('c_grua').value = g.id || '';
+  document.getElementById('c_bloque').value = g.bloque_tramo || '';
+  document.getElementById('c_fechaFalla').value = formatDateTime(g.fecha_hora_falla);
+  document.getElementById('c_fechaEntrega').value = new Date().toISOString().slice(0,16);
+  document.getElementById('c_tm').value = g.tiempo_muerto || '';
+  document.getElementById('c_operador').value = g.operador || '';
+  document.getElementById('c_tipoFalla').value = g.tipo_falla || '';
+  document.getElementById('c_actividad').value = g.actividad || '';
+  document.getElementById('c_monitorRPR').value = g.monitor_reporta || '';
+  document.getElementById('c_monitorRPC').value = g.monitor_cierre || '';
+}
+async function guardarCierreFalla(){
+  
+  const grua = document.getElementById('c_grua').value;
+
+  // 1. GUARDAR HISTORIAL
+  const { error } = await db
+    .from('reportes_operacion')
+    .insert([{
+      grua,
+      turno: document.getElementById('c_turno').value,
+      bloque_tramo: document.getElementById('c_bloque').value,
+      fecha_hora_falla: document.getElementById('c_fechaFalla').value,
+      fecha_hora_entrega: document.getElementById('c_fechaEntrega').value,
+      tiempo_muerto: document.getElementById('c_tm').value,
+      operador: document.getElementById('c_operador').value,
+      tipo_falla: document.getElementById('c_tipoFalla').value,
+      actividad: document.getElementById('c_actividad').value,
+      monitor_reporta: document.getElementById('c_monitorRPR').value,
+      monitor_cierre: document.getElementById('c_monitorRPC').value
+    }]);
+
+  if(error){
+    alert(error.message);
+    return;
+  }
+
+  // 2. ACTUALIZAR GRÚA (ESTO ES LO QUE TE FALTABA)
+  const { error: errorUpdate } = await db
+    .from('gruas')
+.update({
+      estado: 'disponible',
+      prioridad: 0,
+      falla_inicio,
+
+      contador_falla_inicio,
+
+      updated_at: new Date().toISOString()
+})
+    .eq('id', grua);
+
+  if(errorUpdate){
+    alert(errorUpdate.message);
+    return;
+  }
+
+  // 3. CERRAR MODAL
+  document.getElementById('modalCierreFalla')
+    .style.display = 'none';
+
+  alert("Cierre guardado correctamente");
+
+  // 4. RECARGAR SISTEMA
+  cargar();
+}
+function cerrarCierreFalla(){
+
+  document.getElementById('formularioCierreFalla').style.display = 'none';
+
+  actual = null;
+
+  cargar();
+}
+function manejarCambioEstado() {
+
+  const nuevoEstado = document.getElementById('estado').value;
+  const equipo = getEquipo(actual);
+
+  if (!equipo) return;
+
+  const veniaDeFalla = equipo.estado === 'falla';
+  const ahoraNoEsFalla = nuevoEstado !== 'falla';
+
+  // 🚨 SOLO AQUÍ SE ABRE EL FORMULARIO
+  if (veniaDeFalla && ahoraNoEsFalla) {
+
+    const confirmar = confirm(
+      "Se cerrará la falla y se generará el reporte. ¿Continuar?"
+    );
+
+    if (!confirmar) {
+      document.getElementById('estado').value = 'falla';
+      return;
+    }
+
+    abrirFormularioCierreFalla(equipo);
+  }
+}
+function abrirFormularioCierreFalla(equipo) {
+
+  const form = document.getElementById('formularioCierreFalla');
+
+  if (!form) return;
+
+  // SOLO mostrar formulario
+  form.style.display = 'block';
+
+  // cargar datos
+  document.getElementById('c_grua').value = equipo.id || '';
+  document.getElementById('c_bloque').value = equipo.bloque_tramo || '';
+  document.getElementById('c_fechaFalla').value = equipo.falla_inicio || '';
+  document.getElementById('c_fechaEntrega').value =
+    new Date().toISOString().slice(0,16);
+}
+function iniciarContadorNuevo(g) {
+  if (!g) return;
+
+  if (g.contador_estado === 'running') return;
+
+  g.contador_estado = 'running';
+  g.contador_inicio = new Date().toISOString();
+}
+function detenerContadorNuevo(g) {
+  if (!g || !g.contador_inicio) return;
+
+  const inicio = new Date(g.contador_inicio);
+  const fin = new Date();
+
+  const seg = Math.floor((fin - inicio) / 1000);
+
+  g.contador_segundos = (g.contador_segundos || 0) + seg;
+
+  g.contador_estado = 'stopped';
+  g.contador_inicio = null;
+}
+function getDescripcionActividad(g) {
+  return (
+    g.descripcion_falla ||
+    g.actividad ||
+    g.detalle ||
+    g.detalle_falla ||
+    ''
+  );
+}
 </script>
-
-
 
 </div>
 </div>
