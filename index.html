@@ -16,6 +16,8 @@ CONTROL OPERATIVO GRÚAS
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
 <style>
 
 /* ================= RESET ================= */
@@ -252,13 +254,17 @@ font-weight:700;
 
 color:var(--muted);
 
+
+margin-right: 15px;
+
+
 }
 
 /* ================= GRID ================= */
 
 .grid{
   display:grid;
-  grid-template-columns:repeat(11,minmax(90px,1fr));
+  grid-template-columns: repeat(11, minmax(110px, 120px));
   gap:10px;
 }
 
@@ -1998,6 +2004,7 @@ button:hover{
   font-weight:700;
 }
 
+
 .tabla-reporte td{
   padding:10px;
   border-bottom:1px solid #e6e6e6;
@@ -2190,10 +2197,11 @@ button:hover{
 }
 
 .tabla-reporte{
-  width:100%;
+  width:max-content;
+  min-width:100%;
   border-collapse:collapse;
   font-size:12px;
-  table-layout:fixed;
+  table-layout:auto;
 }
 
 .tabla-reporte thead th{
@@ -2219,6 +2227,17 @@ button:hover{
 .tabla-reporte tbody tr:hover{
   background:#e8f2ff;
 }
+.btn-excel{
+  background:#1f7a1f;
+  color:white;
+  border:none;
+  padding:8px 12px;
+  margin:10px auto;
+  display:block;
+  cursor:pointer;
+  border-radius:6px;
+}
+
 </style>
 
 </head>
@@ -2563,14 +2582,8 @@ button:hover{
 
 </div>
 
-<div id="formularioCierreFalla" style="display:none;">
-<label>Tipo de Registro</label>
-
-<select id="tipoRegistro" onchange="cambiarFormulario()">
-  <option value="operaciones">Operaciones</option>
-  <option value="mtto">Mantenimiento</option>
-</select>
-
+<label>Grúa</label>
+<input type="text" id="gruaGeneral" readonly>
 
 <label>Turno</label>
 <select id="turnoGeneral">
@@ -2578,9 +2591,6 @@ button:hover{
   <option value="2">2do Turno</option>
   <option value="3">3er Turno</option>
 </select>
-
-<label>Grúa</label>
-<input type="text" id="gruaGeneral" readonly>
 
 <label>Bloque / Tramo</label>
 <input type="text" id="bloqueTramo">
@@ -2594,40 +2604,6 @@ button:hover{
 <label>Tiempo Muerto</label>
 <input type="number" id="tiempoMuerto">
 
-
-
-
-<label>Operador</label>
-<input type="text" id="opOperador">
-
-<label>Tipo de Falla</label>
-<select id="opTipoFalla">
-  <option value="">Seleccione</option>
-  <option value="Mecanica">Mecánica</option>
-  <option value="Electrica">Eléctrica</option>
-  <option value="Operacion">Operación</option>
-  <option value="Instrumentacion">Instrumentación</option>
-  <option value="Seguridad">Seguridad</option>
-</select>
-
-<label>Actividad</label>
-<textarea id="opActividad"></textarea>
-
-<label>Monitor RPR Reporta</label>
-<input type="text" id="opMonitorReporta">
-
-
-<label>Monitor RPC Cierre</label>
-<input type="text" id="opMonitorCierre">
-
-
-
-
-<!-- BLOQUE MANTENIMIENTO -->
-
-<div id="bloqueMantenimiento" style="display:none;">
-
-
 <label>Área</label>
 
 <select id="areaMantto">
@@ -2640,7 +2616,6 @@ button:hover{
 </select>
 
 <label>Supervisor</label>
-
 <select id="supervisor" onchange="cargarStandby()">
 
 <option value="">
@@ -2665,7 +2640,6 @@ Seleccione
 <option value="">
 Seleccione supervisor
 </option>
-
 </select>
 
 
@@ -2673,10 +2647,12 @@ Seleccione supervisor
 
 <select id="responsabilidad">
 
-<option value="MECANICA">MECÁNICA</option>
-<option value="ELECTRICA">ELÉCTRICA</option>
-<option value="OPERACIONES">OPERACIONES</option>
-<option value="INSTRUMENTACION">INSTRUMENTACIÓN</option>
+<option value="AA">AA</option>
+<option value="CELDAS DE CARGA">Celdas de carga</option>
+<option value="CABLE REEL">Cable reel</option>
+<option value="FALLAS DE GANTRY">Fallas de gantry</option>
+<option value="SPREADER">Fallas de spreader</option>
+<option value="TROLLEY">Fallas de trolley</option>
 
 </select>
 
@@ -2694,9 +2670,6 @@ id="descripcionFalla"
 placeholder="Describe la falla..."
 ></textarea>
 
-
-
-
 </div>
 
 
@@ -2711,82 +2684,11 @@ onclick="cerrarModal()"
 CERRAR
 </button>
 
-</div>
+
 
 </div>
 </div>
-<!-- ================= MODAL TIPO ================= -->
-<div class="modal" id="modalCierreFalla">
 
-  <div class="modal-content">
-
-    <div class="modal-title">
-      CIERRE DE FALLA
-    </div>
-
-    <label>Tipo de Registro</label>
-    <select id="c_tipoRegistro">
-      <option value="operaciones">Operaciones</option>
-    </select>
-
-    <label>Turno</label>
-    <select id="c_turno">
-      <option value="1">1er Turno</option>
-      <option value="2">2do Turno</option>
-      <option value="3">3er Turno</option>
-    </select>
-
-    <label>Grúa</label>
-    <input type="text" id="c_grua" readonly>
-
-    <label>Bloque / Tramo</label>
-    <input type="text" id="c_bloque">
-
-    <label>Fecha / Hora Reporte Falla</label>
-    <input type="datetime-local" id="c_fechaFalla">
-
-    <label>Fecha / Hora Entrega Turno</label>
-    <input type="datetime-local" id="c_fechaEntrega">
-
-    <label>Tiempo Muerto</label>
-    <input type="text" id="c_tm">
-
-    <label>Operador</label>
-    <input type="text" id="c_operador">
-
-    <label>Tipo de Falla</label>
-    <select id="c_tipoFalla">
-      <option value="">Seleccione</option>
-      <option>Mecánica</option>
-      <option>Eléctrica</option>
-      <option>Operación</option>
-      <option>Instrumentación</option>
-      <option>Seguridad</option>
-    </select>
-
-    <label>Actividad</label>
-    <textarea id="c_actividad"></textarea>
-
-    <label>Monitor RPR Reporta</label>
-    <input type="text" id="c_monitorRPR">
-
-    <label>Monitor RPC Cierre</label>
-    <input type="text" id="c_monitorRPC">
-
-<div id="accionesCierreFalla" style="display:none;">
-
-  <button onclick="guardarCierreFalla()">
-    GUARDAR CIERRE
-  </button>
-
-  <button onclick="cerrarCierreFalla()">
-    CERRAR
-  </button>
-
-</div>
-  </div>
-
-</div>
 
 <script>
 
@@ -2945,9 +2847,17 @@ gruas:[
 {
 zona:'F',
 gruas:[
-'K11','K16','K34','Z40','Z41','Z39','K08','K07','K06','K05'
+'K11','K16','K34','Z40','Z41','Z39'
 ]
+},
+{
+  zona:'I',
+  gruas:['K08','K07','K06','K05']
 }
+
+
+
+
 
 ];
 
@@ -3162,7 +3072,7 @@ function render(){
           ZONA ${row.zona}
         </div>
 
-        <div class="grid">
+        <div class="grid ${row.zona === 'I' ? 'grid-tren' : ''}">
     `;
 
     row.gruas.forEach(id => {
@@ -3447,7 +3357,9 @@ function reporteGruas(){
     </style>
   </head>
   <body>
+  
 
+    
   <h2>REPORTE GRUAS</h2>
 
   <table>
@@ -3488,7 +3400,9 @@ function reporteGruas(){
   const ventana = window.open('', '_blank');
   ventana.document.write(html);
   ventana.document.close();
+  
 }
+
 function renderFallas(){
 
   const cont = document.getElementById('listaFallas');
@@ -3605,17 +3519,11 @@ if (!g) {
 
   document.getElementById('modalTitle').innerText =
 `GRÚA ${id}`;
-  document.getElementById('modal').style.display = 'flex';
-  document.getElementById('gruaGeneral').value=id;
-document.getElementById('bloqueTramo').value =
-g.bloque_tramo || '';
-
-document.getElementById('fechaReporte').value =
-g.fecha_hora_falla || '';
-
-document.getElementById('fechaEntrega').value =
-g.fecha_hora_entrega || '';
-
+document.getElementById('modal').style.display = 'flex';
+document.getElementById('gruaGeneral').value=id;
+document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
+document.getElementById('fechaReporte').value = g.fecha_hora_falla || '';
+document.getElementById('fechaEntrega').value = g.fecha_hora_entrega || '';
 document.getElementById('tiempoMuerto').value = g.tiempo_muerto || '';
 document.getElementById('turnoGeneral').value = g.turno_operacion || '1';
 document.getElementById('tipoRegistro').value='operaciones';
@@ -3687,21 +3595,11 @@ function abrirFormularioTransicion(){
 }
 function controlarPrioridad() {
 
-  const estado =
-    document.getElementById('estado').value;
-
-  const label =
-    document.getElementById('labelPrioridad');
-
-  const select =
-    document.getElementById('prioridad');
-
-
-const labelDesc =
-  document.getElementById('labelDetalle');
-
-const txtDesc =
-  document.getElementById('detalle');
+  const estado = document.getElementById('estado').value;
+  const label = document.getElementById('labelPrioridad');
+  const select = document.getElementById('prioridad');
+  const labelDesc = document.getElementById('labelDetalle');
+  const txtDesc = document.getElementById('detalle');
 
 if (estado === 'falla') {
 
@@ -3754,121 +3652,73 @@ function cambiarFormulario(){
 
 async function guardar() {
 
-const registro_falla =
-document.getElementById('registro_falla').value || '';
-
 const estadoNuevo = document.getElementById('estado').value;
 const equipoActual = getEquipo(actual);
 
-const estadoAnterior = equipoActual.estado;
-
-const salioDeFalla =
-estadoAnterior === 'falla' &&
-estadoNuevo !== 'falla';
-
-const entroAFalla =
-estadoAnterior !== 'falla' &&
-estadoNuevo === 'falla';
-
-let estado = estadoNuevo;
-
-let prioridad =
-parseInt(document.getElementById('prioridad').value) || 0;
-
-let observacion_extra =
-equipoActual.observacion_extra || null;
-
-if (prioridad > 0) {
-observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
-} else {
-observacion_extra = null;
+if (!equipoActual) {
+alert("No se encontró la grúa actual");
+return;
 }
+
+const estadoAnterior = equipoActual.estado || 'operacion';
+
+const salioDeFalla = estadoAnterior === 'falla' && estadoNuevo !== 'falla';
+const entroAFalla = estadoAnterior !== 'falla' && estadoNuevo === 'falla';
+
+let prioridad = parseInt(document.getElementById('prioridad').value) || 0;
+
+let observacion_extra = prioridad > 0
+? 'GRÚA PRIORIDAD PARA OPERACIÓN'
+: null;
 
 /* ================= CAMPOS ================= */
 
+const grua = document.getElementById('gruaGeneral').value;
+const turno = parseInt(document.getElementById('turnoGeneral').value);
 const bloque_tramo = document.getElementById('bloqueTramo').value;
-const operador = document.getElementById('opOperador').value;
-const tipo_falla = document.getElementById('opTipoFalla').value;
-const actividad = document.getElementById('opActividad').value;
-const monitor_reporta = document.getElementById('opMonitorReporta').value;
-const monitor_cierre = document.getElementById('opMonitorCierre').value;
-
 const fecha_hora_falla = document.getElementById('fechaReporte').value;
 const fecha_hora_entrega = document.getElementById('fechaEntrega').value;
-const turno_operacion = document.getElementById('turnoGeneral').value;
 const tiempo_muerto = document.getElementById('tiempoMuerto').value;
-
-const grua = document.getElementById('gruaGeneral').value;
-
-const tipoRegistro = document.getElementById('tipoRegistro').value;
 
 const area_mantto = document.getElementById('areaMantto').value;
 const supervisor = document.getElementById('supervisor').value;
 const standby = document.getElementById('standby').value;
 const responsabilidad = document.getElementById('responsabilidad').value;
 const codigo_falla = document.getElementById('codigoFalla').value;
-const descripcion_falla = document.querySelector('#descripcionFalla').value;
+const descripcion_falla = document.getElementById('descripcionFalla').value;
+const registro_falla = document.getElementById('registro_falla').value || '';
 
 /* ================= CONTROL FALLA ================= */
 
-let falla_inicio = equipoActual.falla_inicio;
-let tiempo_falla = equipoActual.tiempo_falla;
+let falla_inicio = equipoActual.falla_inicio || null;
+let tiempo_falla = equipoActual.tiempo_falla || null;
 
-// 🔵 ENTRA A FALLA
-if (estadoNuevo === 'falla' && !equipoActual.falla_inicio) {
+// ENTRA A FALLA
+if (entroAFalla) {
 falla_inicio = new Date().toISOString();
 equipoActual.falla_inicio = falla_inicio;
 }
 
-// 🔴 SALE DE FALLA
+// SALE DE FALLA
 if (salioDeFalla && equipoActual.falla_inicio) {
 
 const inicio = new Date(equipoActual.falla_inicio);
 const fin = new Date();
 
 const segundos = Math.floor((fin - inicio) / 1000);
-
 tiempo_falla = formatearTiempo(segundos);
 
 falla_inicio = null;
 equipoActual.falla_inicio = null;
-equipoActual.estado = estadoNuevo;
 }
 
-// reset prioridad
-if (estado === 'disponible' || estado === 'operacion') {
-prioridad = 0;
-}
+/* ================= INSERT HISTORIAL ================= */
 
-/* ================= HISTORIAL ================= */
-
-let response;
-
-if (tipoRegistro === 'operaciones') {
-
-response = await db
-.from('reportes_operacion')
-.insert([{
-grua,
-turno: parseInt(turno_operacion),
-bloque_tramo,
-fecha_hora_falla,
-fecha_hora_entrega,
-tiempo_muerto,
-operador,
-tipo_falla,
-actividad,
-monitor_reporta,
-monitor_cierre
-}]);
-
-} else {
-
-response = await db
+const { error: errorInsert } = await db
 .from('reportes_mantenimiento')
 .insert([{
 grua,
-turno: parseInt(turno_operacion),
+turno,
 bloque_tramo,
 fecha_hora_falla,
 fecha_hora_entrega,
@@ -3880,10 +3730,9 @@ responsabilidad,
 codigo_falla,
 descripcion_falla
 }]);
-}
 
-if (response.error) {
-alert('Error reporte: ' + response.error.message);
+if (errorInsert) {
+alert('Error reporte: ' + errorInsert.message);
 return;
 }
 
@@ -3892,28 +3741,16 @@ return;
 const { error } = await db
 .from('gruas')
 .update({
-
-operador,
-tipo_falla,
-actividad,
-monitor_reporta,
-monitor_cierre,
-
-registro_falla,
-
-fecha_hora_falla,
-fecha_hora_entrega,
-turno_operacion,
-tiempo_muerto,
-bloque_tramo,
-
-eta,
-estado,
+estado: estadoNuevo,
 prioridad,
 observacion_extra,
 
-falla_inicio,
-tiempo_falla,
+registro_falla,
+bloque_tramo,
+fecha_hora_falla,
+fecha_hora_entrega,
+turno,
+tiempo_muerto,
 
 area_mantto,
 supervisor,
@@ -3921,14 +3758,15 @@ standby,
 responsabilidad,
 codigo_falla,
 
-registro_falla: document.getElementById('registro_falla').value || '',
-updated_at: new Date().toISOString()
+falla_inicio,
+tiempo_falla,
 
+updated_at: new Date().toISOString()
 })
 .eq('id', actual);
 
 if (error) {
-alert('Error gruas: ' + error.message);
+alert('Error grúas: ' + error.message);
 return;
 }
 
@@ -3942,11 +3780,7 @@ renderKPIs();
 
 if (salioDeFalla) {
 cerrarModal();
-
-setTimeout(() => {
-abrirModalCierreFalla(equipoActual);
-}, 200);
-
+setTimeout(() => abrirModalCierreFalla(equipoActual), 200);
 return;
 }
 
@@ -4361,7 +4195,7 @@ async function procesarHoja(sheet){
 
     // ================= MANTENIMIENTO (DAYLI) =================
     else if (
-      texto.includes('DAYLI') ||
+      texto.includes('DAILY') ||
       texto.includes('MANTTO') ||
       texto.includes('MANTENIMIENTO')
     ){
@@ -4655,7 +4489,11 @@ async function cargarReporteGruas() {
   <div class="reporte-container">
 
     <div class="reporte-header">
+
       <h2 class="reporte-title">REPORTE GRÚAS</h2>
+              <button onclick="descargarExcel()" class="btn-excel">
+    Descargar Excel
+  </button>
     </div>
 
     <div class="tabla-container">
@@ -4674,9 +4512,10 @@ async function cargarReporteGruas() {
               <th>ÁREA</th>
               <th>RESPONSABILIDAD</th>
               <th>BLOQUE</th>
-              <th>FALLA</th>
+              <th>CODIGO DE FALLA</th>
               <th>DESCRIPCIÓN</th>
-              <th>TIEMPO MUERTO</th>
+              <th>TIEMPO MUERTO (REPORTE)</th>
+              <th>TIEMPO MUERTO(REAL DE FALLA)</th>
             </tr>
           </thead>
 
@@ -4698,6 +4537,7 @@ async function cargarReporteGruas() {
           <td>${r.bloque_tramo ?? ''}</td>
           <td>${r.codigo_falla ?? ''}</td>
           <td>${r.descripcion_falla ?? ''}</td>
+          <td>${r.tiempo_reporte ?? ''}</td>
           <td>${r.tiempo_muerto ?? ''}</td>
         </tr>
       `;
@@ -4990,10 +4830,19 @@ async function guardarCierreFalla(){
 
   // 4. RECARGAR SISTEMA
   cargar();
+  document.getElementById(
+  'formularioCierreFalla'
+).style.display = 'none';
+
+mostrarControlesEstado();
 }
 function cerrarCierreFalla(){
 
-  document.getElementById('formularioCierreFalla').style.display = 'none';
+  document.getElementById(
+    'formularioCierreFalla'
+  ).style.display = 'none';
+
+  mostrarControlesEstado();
 
   actual = null;
 
@@ -5026,17 +4875,24 @@ function manejarCambioEstado() {
 }
 function abrirFormularioCierreFalla(equipo) {
 
-  const form = document.getElementById('formularioCierreFalla');
+  ocultarControlesEstado();
+
+  const form =
+    document.getElementById('formularioCierreFalla');
 
   if (!form) return;
 
-  // SOLO mostrar formulario
   form.style.display = 'block';
 
-  // cargar datos
-  document.getElementById('c_grua').value = equipo.id || '';
-  document.getElementById('c_bloque').value = equipo.bloque_tramo || '';
-  document.getElementById('c_fechaFalla').value = equipo.falla_inicio || '';
+  document.getElementById('c_grua').value =
+    equipo.id || '';
+
+  document.getElementById('c_bloque').value =
+    equipo.bloque_tramo || '';
+
+  document.getElementById('c_fechaFalla').value =
+    equipo.falla_inicio || '';
+
   document.getElementById('c_fechaEntrega').value =
     new Date().toISOString().slice(0,16);
 }
@@ -5069,6 +4925,32 @@ function getDescripcionActividad(g) {
     g.detalle_falla ||
     ''
   );
+}
+function ocultarControlesEstado() {
+
+  document.getElementById('grupoEstado').style.display = 'none';
+  document.getElementById('grupoPrioridad').style.display = 'none';
+  document.getElementById('grupoRegistroFalla').style.display = 'none';
+  document.getElementById('btnEstadoRapido').style.display = 'none';
+
+}
+function mostrarControlesEstado() {
+
+  document.getElementById('grupoEstado').style.display = 'block';
+  document.getElementById('grupoPrioridad').style.display = 'block';
+  document.getElementById('grupoRegistroFalla').style.display = 'block';
+  document.getElementById('btnEstadoRapido').style.display = 'block';
+
+}
+function descargarExcel() {
+
+  const tabla = document.querySelector("table");
+
+  const wb = XLSX.utils.table_to_book(tabla, {
+    sheet: "REPORTE GRÚAS"
+  });
+
+  XLSX.writeFile(wb, "reporte_gruas.xlsx");
 }
 </script>
 
