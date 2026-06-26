@@ -327,14 +327,23 @@ margin-right: 15px;
  color:white;
 }
 
-.mtto{
-  background:#8d6e63;
+.dayli{
+  background:#141212;
   color:white;
 }
 .falla{
 
  animation:blinkFail 1s infinite;
 
+}
+.baño{
+  background:#F5B427;
+  color:white;
+}
+
+.anclada{
+  background:#806237;
+  color:white;
 }
 @keyframes blinkFail{
 
@@ -350,10 +359,6 @@ margin-right: 15px;
    box-shadow:0 0 0px red;
  }
 
-}
-.anclada{
-  background:#7f8a95;
-  color:#fff;
 }
 
 .sinsenal{
@@ -1502,7 +1507,7 @@ button:hover{
   background:#c62828; /* Rojo */
 }
 
-.mtto-color{
+.dayli-color{
   background:#8d6e63; /* Café */
 }
 #vistaMensajes.vista.activa {
@@ -2049,12 +2054,13 @@ button:hover{
 }
 
 /* COLORES */
-.color-box.operacion{ background:#00B050; }
+.color-box.operacion{ background:#00E83E; }
 .color-box.disponible{ background:#1f6fb2; }
 .color-box.falla{ background:#e53935; }
-.color-box.mtto{ background:#ff9800; }
-.color-box.anclada{ background:#808080; }
-.color-box.prioridad{ background:#2e7d32; }
+.color-box.dayli{ background:#141212; }
+.color-box.anclada{ background:#806237; }
+.color-box.baño{ background:#F5B427; }
+
 .estado-indicador{
   width:100%;
   padding:10px;
@@ -2066,19 +2072,25 @@ button:hover{
   color:#fff;
 }
 .estado-indicador.operacion{
-  background:#16a34a;
+  background:#00E83E;
 }
 
 .estado-indicador.disponible{
-  background:#2563eb;
+  background:#1f6fb2;
 }
 
 .estado-indicador.falla{
-  background:#dc2626;
+  background:#e53935;
 }
 
-.estado-indicador.mtto{
-  background:#f59e0b;
+.estado-indicador.dayli{
+  background:#141212;
+}
+.estado-indicador.baño{
+  background:#F5B427;
+}
+.estado-indicador.anclada{
+  background:#806237;
 }
 .reporte-container{
   width:100%;
@@ -2472,21 +2484,21 @@ button:hover{
 
     <div class="legend-row">
       <span class="color-box falla"></span>
-      <span>Falla</span>
+      <span>Falla en turno</span>
     </div>
 
     <div class="legend-row">
-      <span class="color-box mtto"></span>
-      <span>MTTO</span>
+      <span class="color-box dayli"></span>
+      <span>Dayli</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="color-box baño"></span>
+      <span>Baño</span>
     </div>
 
     <div class="legend-row">
       <span class="color-box anclada"></span>
-      <span>Fuera</span>
-    </div>
-
-    <div class="legend-row">
-      <span class="color-box prioridad"></span>
       <span>Prioridad</span>
     </div>
 
@@ -2550,10 +2562,12 @@ button:hover{
 
 <select id="estado"
   onchange="actualizarIndicadorEstado(); manejarCambioEstado()">
-  <option value="operacion">Operación</option>
-  <option value="disponible">Disponible</option>
-  <option value="falla">Falla</option>
-  <option value="mtto">Mantenimiento</option>
+  <option value="operacion">OPERACION</option>
+  <option value="disponible">DISPONIBLE</option>
+  <option value="falla">FALLA EN TURNO</option>
+  <option value="dayli">DAYLI</option>
+  <option value="baño">BAÑO</option>
+  <option value="anclada">ANCLADA</option>
 </select>
 <div id="bloqueOperaciones">
 
@@ -4199,7 +4213,7 @@ async function procesarHoja(sheet){
       texto.includes('MANTTO') ||
       texto.includes('MANTENIMIENTO')
     ){
-      estado = 'mtto';
+      estado = 'dayli';
     }
 
     // ================= FUERA DE SERVICIO =================
@@ -4265,10 +4279,17 @@ function obtenerTextoEstado(g){
     return 'DISPONIBLE';
 
   if(g.estado === 'falla')
-    return 'FALLA';
+    return 'FALLA EN TURNO';
 
-  if(g.estado === 'mtto')
-    return 'MANTENIMIENTO';
+  if(g.estado === 'dayli')
+    return 'DAYLI';
+  
+  if(g.estado === 'baño')
+    return 'BAÑO';  
+  
+  if(g.estado === 'anclada')
+    return 'ANCLADA';
+
 
   return '';
 }
@@ -4609,8 +4630,10 @@ function actualizarIndicadorEstado(){
 
   if(estado === 'operacion') texto = 'Estado actual: OPERACIÓN';
   if(estado === 'disponible') texto = 'Estado actual: DISPONIBLE';
-  if(estado === 'falla') texto = 'Estado actual: FALLA';
-  if(estado === 'mtto') texto = 'Estado actual: MANTENIMIENTO';
+  if(estado === 'falla') texto = 'Estado actual: FALLA EN TURNO';
+  if(estado === 'dayli') texto = 'Estado actual: DAYLI';
+  if(estado === 'baño') texto = 'Estado actual: BAÑO';
+  if(estado === 'anclada') texto = 'Estado actual: ANCLADA';
 
   indicador.innerText = texto;
 
