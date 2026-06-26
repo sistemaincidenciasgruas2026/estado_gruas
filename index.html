@@ -313,7 +313,7 @@ margin-right: 15px;
 /* ================= ESTADOS ================= */
 
 .operacion{
- background:#2e7d32;
+ background:#00E83E;
  color:white;
 }
 
@@ -1496,7 +1496,7 @@ button:hover{
 }
 
 .operacion-color{
-  background:#2e7d32; /* Verde */
+  background:#00E83E; /* Verde */
 }
 
 .disponible-color{
@@ -2499,7 +2499,7 @@ button:hover{
 
     <div class="legend-row">
       <span class="color-box anclada"></span>
-      <span>Prioridad</span>
+      <span>Anclado</span>
     </div>
 
   </div>
@@ -2558,6 +2558,7 @@ button:hover{
 </div>
 <div class="estado-panel">
 
+  <div id="panelEstado">
   <label>Estado de la grúa</label>
 
 <select id="estado"
@@ -2573,7 +2574,7 @@ button:hover{
 
 
 
-<label id="labelPrioridad" for="prioridad">Prioridad</label>
+<label id="labelPrioridad" for="prioridad">¿Que prioridad tiene?</label>
 <select id="prioridad">
 
 <option value="0">0</option>
@@ -2582,9 +2583,14 @@ button:hover{
 <option value="3">3</option>
 
 </select>
-<label>Registro Falla</label>
+<label id="labelRegistroFalla" style="display:none;">
+    ¿Que falla reporta?
+</label>
 
-<textarea id="registro_falla"></textarea>
+<textarea
+    id="registro_falla"
+    style="display:none;">
+</textarea>
 
 <div id="estadoIndicador" class="estado-indicador">
   Estado actual: —
@@ -2593,9 +2599,13 @@ button:hover{
   <button type="button" class="btn-estado" onclick="guardarEstadoRapido()">
     ACTUALIZAR ESTADO
   </button>
-
+</div>
 </div>
 
+<div id="formularioCierre" style="display:none;">
+  <center>
+  <h3>Formulario para Downtime</h3>
+  </center>
 <label>Grúa</label>
 <input type="text" id="gruaGeneral" readonly>
 
@@ -2684,7 +2694,7 @@ id="descripcionFalla"
 placeholder="Describe la falla..."
 ></textarea>
 
-</div>
+
 
 
 <button onclick="guardar()">
@@ -2697,9 +2707,9 @@ onclick="cerrarModal()"
 >
 CERRAR
 </button>
+</div>
 
-
-
+</div>
 </div>
 </div>
 
@@ -3523,6 +3533,7 @@ const list = equipos
 function abrir(id){
   
   actual = id;
+  mostrarPanelEstado();
 
 const g = getEquipo(id);
 
@@ -3595,6 +3606,9 @@ const esFalla = (g.estado === 'falla');
 
 document.getElementById('labelDetalle').style.display = esFalla ? 'block' : 'none';
 document.getElementById('detalle').style.display = esFalla ? 'block' : 'none';
+
+
+ mostrarPanelEstado();
 }
 document.getElementById('estado').addEventListener('change', controlarPrioridad);
 document.getElementById('estado').addEventListener('change', manejarCambioEstado);
@@ -3610,21 +3624,33 @@ function abrirFormularioTransicion(){
 function controlarPrioridad() {
 
   const estado = document.getElementById('estado').value;
-  const label = document.getElementById('labelPrioridad');
-  const select = document.getElementById('prioridad');
-  const labelDesc = document.getElementById('labelDetalle');
-  const txtDesc = document.getElementById('detalle');
 
-if (estado === 'falla') {
+  const labelDetalle = document.getElementById('labelDetalle');
+  const txtDetalle = document.getElementById('detalle');
 
-  labelDesc.style.display = 'block';
-  txtDesc.style.display = 'block';
+  const labelRegistro = document.getElementById('labelRegistroFalla');
+  const txtRegistro = document.getElementById('registro_falla');
 
-} else {
+  if (estado === 'falla') {
 
-  labelDesc.style.display = 'none';
-  txtDesc.style.display = 'none';
-}
+    // Mostrar Registro Falla
+    labelRegistro.style.display = 'block';
+    txtRegistro.style.display = 'block';
+
+    // Mostrar Detalle (si lo utilizas)
+    if(labelDetalle) labelDetalle.style.display = 'block';
+    if(txtDetalle) txtDetalle.style.display = 'block';
+
+  } else {
+
+    // Ocultar Registro Falla
+    labelRegistro.style.display = 'none';
+    txtRegistro.style.display = 'none';
+
+    // Ocultar Detalle
+    if(labelDetalle) labelDetalle.style.display = 'none';
+    if(txtDetalle) txtDetalle.style.display = 'none';
+  }
 }
 function ocultarCierreFalla(){
 
@@ -4699,7 +4725,18 @@ contador_segundos = 0;
     alert(error.message);
     return;
   }
+const estadoAnterior = g.estado;
+const estadoNuevo = estado;
 
+if (
+    estadoAnterior === "falla" &&
+    estadoNuevo === "disponible"
+){
+
+    mostrarFormularioCierre();
+
+    return;
+}
   // actualizar memoria local
   g.estado = estado;
   g.prioridad = prioridad;
@@ -4974,6 +5011,20 @@ function descargarExcel() {
   });
 
   XLSX.writeFile(wb, "reporte_gruas.xlsx");
+}
+function mostrarFormularioCierre(){
+
+    document.getElementById("panelEstado").style.display="none";
+
+    document.getElementById("formularioCierre").style.display="block";
+
+}
+function mostrarPanelEstado(){
+
+    document.getElementById("panelEstado").style.display="block";
+
+    document.getElementById("formularioCierre").style.display="none";
+
 }
 </script>
 
