@@ -140,36 +140,41 @@ font-weight:700;
 
 .kpis{
   display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  padding:10px 16px;
+  grid-template-columns:repeat(4, minmax(120px, 1fr));
+  gap:8px;
+  padding:6px 12px;
 }
 
 .kpi{
   background:white;
   border-radius:10px;
-  padding:8px 12px;
-  min-height:65px;
 
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  padding:6px 10px;
+  min-height:50px;
+
+  box-shadow:0 2px 6px rgba(0,0,0,.06);
 
   display:flex;
   flex-direction:column;
   justify-content:center;
+  align-items:flex-start;
+
+  transition:.2s;
 }
 
 .kpi:hover{
-  transform:translateY(-4px);
+  transform:translateY(-2px);
+  box-shadow:0 4px 10px rgba(0,0,0,.08);
 }
 .kpi-title{
-  font-size:11px;
+  font-size:10px;
   color:#6b7280;
   font-weight:600;
-  margin-bottom:4px;
+  margin-bottom:2px;
 }
 
 .kpi-value{
-  font-size:28px;
+  font-size:20px;
   font-weight:800;
   line-height:1;
   color:#0f4c81;
@@ -186,25 +191,22 @@ img, iframe{
   max-width:100%;
 }
 
-.tabla-scroll{
-  width:100%;
-  display:flex;
-  justify-content:center; /* centra horizontalmente */
-  overflow-x:auto;
-}
 
 table{
   border-collapse:collapse;
   margin:0 auto; /* centra la tabla */
 }
-.tabla-container table{
-  margin: 0 auto;
+.tabla-reporte{
+    width:max-content;
+    min-width:1900px;
+    border-collapse:collapse;
+    white-space:nowrap;
 }
+
 .tabla-scroll{
-  width:100%;
-  overflow-x:auto;
-  display:flex;
-  justify-content:center;
+    width:max-content;
+    min-width:100%;
+    display:block;
 }
 
 /* ================= YARD ================= */
@@ -231,6 +233,12 @@ table{
   position:absolute;
   top:10px;
   right:10px;
+
+  width:170px;        /* 👈 CLAVE: evita que se expanda */
+  max-height:260px;   /* 👈 evita que crezca infinito */
+
+  overflow:hidden;    /* 👈 evita que “se salga” */
+  z-index:10;
 }
 .row{
 
@@ -331,10 +339,16 @@ margin-right: 15px;
   background:#141212;
   color:white;
 }
+.fmenor{
+  background:#ED7158;
+  color:white;
+}
+.fseñal{
+  background:#969696;
+  color:white;
+}
 .falla{
-
  animation:blinkFail 1s infinite;
-
 }
 .baño{
   background:#F5B427;
@@ -848,10 +862,6 @@ color:#1f2933;
     gap:10px;
   }
 
-  .menu-btn{
-    flex:1;
-    min-width:180px;
-  }
 
   .dashboard-main{
     grid-template-columns: 1fr;
@@ -920,9 +930,6 @@ color:#1f2933;
     flex-direction:column;
   }
 
-  .menu-btn{
-    width:100%;
-  }
 }
 /* ================= INTRANET ================= */
 
@@ -1040,42 +1047,43 @@ color:#1f2933;
   margin:10px 0 14px;
 }
 
-/* BOTÓN MENÚ */
 .menu-btn{
   width:100%;
-
   min-height:48px;
-  height:auto;
 
   padding:12px 14px;
 
   display:flex;
   align-items:center;
+  justify-content:flex-start;
 
-  text-align:left;
-  line-height:1.2;
+  gap:8px;
 
-  background:rgba(255,255,255,.04);
+  position:relative;
 
-  border:1px solid rgba(255,255,255,.08);
+  overflow:visible; /* clave para badge */
   border-radius:10px;
 
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
   color:#fff;
 
   cursor:pointer;
-
   transition:.25s;
 
   margin-bottom:10px;
-
-  position:relative;
-  overflow:hidden;
 }
-
 .menu-btn span{
-  display:block;
-  width:100%;
-  word-break:break-word;
+  flex:1;
+  min-width:0;
+}
+.menu-btn span{
+  flex: 1;
+  min-width: 0;
+
+  display: block;
+
+  word-break: break-word;
 }
 
 /* EFECTO HOVER LUZ */
@@ -1105,10 +1113,6 @@ color:#1f2933;
   border-color:#3b82f6;
 }
 
-/* TEXTO */
-.menu-btn span{
-  flex:1;
-}
 
 /* ICONO OPCIONAL (si luego agregas) */
 .menu-btn i{
@@ -1506,10 +1510,17 @@ button:hover{
 .falla-color{
   background:#c62828; /* Rojo */
 }
+.fseñal-color{
+  background:#969696; /* Rojo */
+}
 
 .dayli-color{
   background:#8d6e63; /* Café */
 }
+.fmenor-color{
+  background:#ED7158; /* Café */
+}
+
 #vistaMensajes.vista.activa {
   display: flex;
   flex-direction: column;
@@ -1543,13 +1554,6 @@ button:hover{
     0 8px 25px rgba(0,0,0,.08);
 
   overflow:hidden;
-}
-.vista{
-  display:none;
-}
-
-.vista.activa{
-  display:block;
 }
 
 #vistaMensajes.vista.activa{
@@ -2035,22 +2039,22 @@ button:hover{
 .legend-mini{
   display:flex;
   flex-direction:column;
-  gap:6px;
+  gap:4px;
   font-size:11px;
-  font-weight:600;
-  color:#1f2937;
 }
 
 .legend-row{
   display:flex;
   align-items:center;
   gap:6px;
+  line-height:1;
 }
 
 .color-box{
   width:10px;
   height:10px;
   border-radius:3px;
+  flex-shrink:0;
 }
 
 /* COLORES */
@@ -2060,6 +2064,8 @@ button:hover{
 .color-box.dayli{ background:#141212; }
 .color-box.anclada{ background:#806237; }
 .color-box.baño{ background:#F5B427; }
+.color-box.fmenor{ background:#ED7158; }
+.color-box.fseñal{ background:#969696; }
 
 .estado-indicador{
   width:100%;
@@ -2086,6 +2092,9 @@ button:hover{
 .estado-indicador.dayli{
   background:#141212;
 }
+.estado-indicador.fseñal{
+  background:#969696;
+}
 .estado-indicador.baño{
   background:#F5B427;
 }
@@ -2093,20 +2102,12 @@ button:hover{
   background:#806237;
 }
 .reporte-container{
-  width:100%;
-  max-width:1200px;
-  margin:0 auto;
+    width:100%;
+    max-width:none;
+    margin:0;
+    padding:0;
 }
 
-.tabla-scroll{
-  width:95%;
-  max-width:1200px;
-  overflow:auto;
-  background:#ffffff;
-  border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-  border:1px solid #e6eef5;
-}
 
 /* TITULO DE SECCIÓN */
 .contenido h2{
@@ -2176,11 +2177,6 @@ button:hover{
 .tabla-reporte tbody tr:hover{
   background:#e3f2ff;
 }
-.reporte-container{
-  width:100%;
-  max-width:1200px;
-  margin:0 auto;
-}
 
 .reporte-header{
   margin:10px 0;
@@ -2195,25 +2191,10 @@ button:hover{
 }
 
 .tabla-container{
-  width:100%;
-  display:flex;
-  justify-content:center;
-}
-
-.tabla-scroll{
-  width:100%;
-  overflow-x:auto;
-  background:#fff;
-  border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,.08);
-}
-
-.tabla-reporte{
-  width:max-content;
-  min-width:100%;
-  border-collapse:collapse;
-  font-size:12px;
-  table-layout:auto;
+    width:100vw;
+    max-width:100%;
+    overflow-x:auto;
+    box-sizing:border-box;
 }
 
 .tabla-reporte thead th{
@@ -2249,7 +2230,93 @@ button:hover{
   cursor:pointer;
   border-radius:6px;
 }
+.yard{
+    position:relative;
+}
 
+.yard-panel{
+
+    position:absolute;
+
+    right:30px;
+    bottom:30px;
+
+    width:180px;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:15px;
+
+    z-index:50;
+}
+
+.yard-panel .yard-title{
+
+    font-weight:bold;
+    color:#234;
+
+    font-size:18px;
+}
+
+.yard-panel .yard-btn{
+
+    width:170px;
+}
+.mensaje-activo{
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  background:#fff3cd;
+  color:#856404;
+  font-weight:600;
+  font-size:13px;
+  border:1px solid #ffeeba;
+}
+.msg-badge{
+  position: absolute;
+  top: 6px;
+  right: 10px;
+
+  width: 16px;
+  height: 16px;
+
+  background: red;
+  color: white;
+
+  border-radius: 50%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 10px;
+  font-weight: 700;
+
+  line-height: 1; /* 🔥 clave */
+
+  padding: 0;     /* 🔥 evita descentrado */
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+.btn-wrapper{
+  position: relative;
+  display: inline-block;
+}
+.msg-badge{
+  text-indent: 0;
+  letter-spacing: 0;
+}
+body{
+    overflow-x:hidden;
+}
 </style>
 
 </head>
@@ -2281,7 +2348,8 @@ button:hover{
   </button>
   
 <button class="menu-btn" onclick="mostrarVista('mensajes')">
-    <span>Mensajes Operativos</span>
+  Mensajes Operativos
+  <span id="msgBadge" class="msg-badge">1</span>
 </button>
 
 <button class="menu-btn" onclick="abrirDowntimeMTTO()">
@@ -2378,15 +2446,7 @@ button:hover{
 
       </div>
 
-      <!-- DERECHA -->
 
-      <div
-        class="live-message"
-        id="mensajeActual">
-
-        Sin mensajes operativos.
-
-      </div>
 
     </div>
 
@@ -2451,20 +2511,6 @@ button:hover{
     <!-- IZQUIERDA -->
     <div class="yard-container">
 
-        <div class="yard-toolbar">
-
-            <div class="yard-title">
-                Control de Grúas
-            </div>
-
-            <div class="yard-actions">
-                <button class="yard-btn"
-                    onclick="document.getElementById('excelFile').click()">
-                    Cargar Excel
-                </button>
-            </div>
-
-        </div>
 
 <div class="yard" style="position:relative;">
 
@@ -2502,10 +2548,32 @@ button:hover{
       <span>Anclado</span>
     </div>
 
+    <div class="legend-row">
+      <span class="color-box fmenor"></span>
+      <span>Falla menor</span>
+    </div>
+
+    <div class="legend-row">
+      <span class="color-box fseñal"></span>
+      <span>Falla de señal</span>
+    </div>
+
   </div>
 
 </div>
+<div class="yard-panel">
 
+    <div class="yard-title">
+        Control de Grúas
+    </div>
+
+    <button
+        class="yard-btn"
+        onclick="document.getElementById('excelFile').click()">
+        Cargar Excel
+    </button>
+
+</div>
   <div id="yard"></div>
 
   
@@ -2532,6 +2600,19 @@ button:hover{
             </div>
 
             <div class="list" id="listaPrioridad"></div>
+
+            
+<div class="panel dashboard-panel">
+
+    <div class="panel-header">
+        MENSAJE ACTIVO
+    </div>
+
+    <div class="list" id="mensajeActivo">
+        Cargando mensaje...
+    </div>
+<span id="msgBadge" class="msg-badge" style="display:none;">1</span>
+</div>
         </div>
 
     </div>
@@ -2569,20 +2650,26 @@ button:hover{
   <option value="dayli">DAYLI</option>
   <option value="baño">BAÑO</option>
   <option value="anclada">ANCLADA</option>
+  <option value="fmenor">FALLA MENOR</option>
+  <option value="fseñal">FALLA DE SEÑAL</option>
 </select>
 <div id="bloqueOperaciones">
 
+<div id="grupoQuienReporto" style="display:none;">
 
+  <label for="quienReporto">
+    Quién reportó
+  </label>
 
-<label id="labelPrioridad" for="prioridad">¿Que prioridad tiene?</label>
-<select id="prioridad">
+  <textarea id="quienReporto"></textarea>
 
-<option value="0">0</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
+</div>
 
-</select>
+<div id="grupoActividad" style="display:none;">
+  <label for="actividad">Actividad que realizaba</label>
+  <input id="actividad" type="text">
+</div>
+
 <label id="labelRegistroFalla" style="display:none;">
     ¿Que falla reporta?
 </label>
@@ -2591,6 +2678,25 @@ button:hover{
     id="registro_falla"
     style="display:none;">
 </textarea>
+
+<div id="grupoPrioridad" style="display:none">
+
+  <label id="labelPrioridad" for="prioridad">
+    ¿Qué prioridad tiene?
+  </label>
+
+  <select id="prioridad">
+    <option value="0">0</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+  </select>
+
+</div>
+</select>
+
+
+</div>
 
 <div id="estadoIndicador" class="estado-indicador">
   Estado actual: —
@@ -3228,8 +3334,8 @@ function renderKPIs(){
 
   document.getElementById('k2').innerText =
     equipos.filter(g =>
-      g.estado === 'mtto' ||
-      g.estado === 'anclada'
+      g.estado === 'dayli'
+      
     ).length;
 
   document.getElementById('k3').innerText =
@@ -3533,40 +3639,37 @@ const list = equipos
 function abrir(id){
   
   actual = id;
+
+  const g = getEquipo(id);
+
+  if (!g) {
+    alert("No se encontró la grúa");
+    return;
+  }
+
   mostrarPanelEstado();
 
-const g = getEquipo(id);
+  document.getElementById('modalTitle').innerText = `GRÚA ${id}`;
+  document.getElementById('modal').style.display = 'flex';
 
-if (!g) {
-  html += `<div class="card invisible-slot"></div>`;
-  return;
-}
+  document.getElementById('gruaGeneral').value = id;
+  document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
+  document.getElementById('fechaReporte').value = g.fecha_hora_falla || '';
+  document.getElementById('fechaEntrega').value = g.fecha_hora_entrega || '';
+  document.getElementById('tiempoMuerto').value = g.tiempo_muerto || '';
+  document.getElementById('turnoGeneral').value = g.turno_operacion || '1';
+  document.getElementById('tipoRegistro').value = 'operaciones';
 
-  document.getElementById('modalTitle').innerText =
-`GRÚA ${id}`;
-document.getElementById('modal').style.display = 'flex';
-document.getElementById('gruaGeneral').value=id;
-document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
-document.getElementById('fechaReporte').value = g.fecha_hora_falla || '';
-document.getElementById('fechaEntrega').value = g.fecha_hora_entrega || '';
-document.getElementById('tiempoMuerto').value = g.tiempo_muerto || '';
-document.getElementById('turnoGeneral').value = g.turno_operacion || '1';
-document.getElementById('tipoRegistro').value='operaciones';
-document.getElementById('registro_falla').value = g.registro_falla || '';
-
-cambiarFormulario();
+  document.getElementById('registro_falla').value = g.registro_falla || '';
+  document.getElementById('quienReporto').value = g.quien_reporto || '';
+  document.getElementById('actividad').value = g.actividad || '';
 
   // ================= OPERACIONES =================
+  cambiarFormulario();
+
   document.getElementById('estado').value = g.estado || 'disponible';
-  controlarPrioridad();
   document.getElementById('prioridad').value = g.prioridad || 0;
 
- // document.getElementById('equipoMantto').value = id;
-
- // document.getElementById('fechaMantto').value =
-    g.fecha_mantto || new Date().toISOString().split('T')[0];
-
-  //document.getElementById('turnoMantto').value = g.turno_mantto || 'DIA';
   document.getElementById('areaMantto').value = g.area_mantto || 'STS';
   document.getElementById('supervisor').value = g.supervisor || '';
 
@@ -3576,11 +3679,6 @@ cambiarFormulario();
   document.getElementById('responsabilidad').value = g.responsabilidad || 'MECANICA';
   document.getElementById('codigoFalla').value = g.codigo_falla || '';
   document.querySelector('#descripcionFalla').value = g.descripcion_falla || '';
-  //document.getElementById('tm').value = g.tm || '';
-  document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
-
-  // ================= OPERACIONES DETALLE =================
-
 
   document.getElementById('opOperador').value = g.operador || '';
   document.getElementById('opTipoFalla').value = g.tipo_falla || '';
@@ -3588,31 +3686,19 @@ cambiarFormulario();
   document.getElementById('opMonitorReporta').value = g.monitor_reporta || '';
   document.getElementById('opMonitorCierre').value = g.monitor_cierre || '';
 
+  // ================= INDICADOR =================
+  const indicador = document.getElementById('estadoIndicador');
 
-  // 🔥 IMPORTANTE: actualizar visibilidad de prioridad al abrir
-  controlarPrioridad();
-  const indicador =
-  document.getElementById('estadoIndicador');
+  if (indicador) {
+    indicador.innerText = `Estado actual: ${obtenerTextoEstado(g)}`;
+    indicador.className = 'estado-indicador ' + g.estado;
+  }
 
-if(indicador && g){
-  indicador.innerText = `Estado actual: ${obtenerTextoEstado(g)}`;
-
-  indicador.className = 'estado-indicador ' + g.estado;
+  // ================= UI STATE (IMPORTANTE ORDEN) =================
+  actualizarUIEstado();        // 👈 primero campos dinámicos (quién reportó)
+  controlarPrioridad();        // 👈 luego prioridad
+  actualizarIndicadorEstado(); // 👈 indicador final
 }
-actualizarIndicadorEstado();
-
-document.getElementById('registro_falla').value = g.registro_falla || '';
-const esFalla = (g.estado === 'falla');
-
-document.getElementById('labelDetalle').style.display = esFalla ? 'block' : 'none';
-document.getElementById('detalle').style.display = esFalla ? 'block' : 'none';
-
-
- mostrarPanelEstado();
-}
-document.getElementById('estado').addEventListener('change', controlarPrioridad);
-document.getElementById('estado').addEventListener('change', manejarCambioEstado);
-// 👇 AQUI AGREGAS EL NUEVO
 
 function abrirFormularioTransicion(){
   const el = document.getElementById('accionesCierreFalla');
@@ -3624,34 +3710,37 @@ function abrirFormularioTransicion(){
 function controlarPrioridad() {
 
   const estado = document.getElementById('estado').value;
+  const esFalla = estado === 'falla';
 
-  const labelDetalle = document.getElementById('labelDetalle');
-  const txtDetalle = document.getElementById('detalle');
+  const grupoPrioridad = document.getElementById('grupoPrioridad');
 
   const labelRegistro = document.getElementById('labelRegistroFalla');
   const txtRegistro = document.getElementById('registro_falla');
 
-  if (estado === 'falla') {
+  const labelQuien = document.getElementById('labelQuienReporto');
+  const txtQuien = document.getElementById('quienReporto');
 
-    // Mostrar Registro Falla
-    labelRegistro.style.display = 'block';
-    txtRegistro.style.display = 'block';
+  const grupo = document.getElementById('grupoQuienReporto');
+  const grupoAct = document.getElementById('grupoActividad');
 
-    // Mostrar Detalle (si lo utilizas)
-    if(labelDetalle) labelDetalle.style.display = 'block';
-    if(txtDetalle) txtDetalle.style.display = 'block';
-
-  } else {
-
-    // Ocultar Registro Falla
-    labelRegistro.style.display = 'none';
-    txtRegistro.style.display = 'none';
-
-    // Ocultar Detalle
-    if(labelDetalle) labelDetalle.style.display = 'none';
-    if(txtDetalle) txtDetalle.style.display = 'none';
+  if (grupo) {
+  grupo.style.display = esFalla ? 'block' : 'none';
   }
+  if (grupoPrioridad) {
+    grupoPrioridad.style.display = esFalla ? 'block' : 'none';
+  }
+
+  if (labelRegistro) labelRegistro.style.display = esFalla ? 'block' : 'none';
+  if (txtRegistro) txtRegistro.style.display = esFalla ? 'block' : 'none';
+
+  if (labelQuien) labelQuien.style.display = esFalla ? 'block' : 'none';
+  if (txtQuien) txtQuien.style.display = esFalla ? 'block' : 'none';
+
+  if (grupoAct) {
+  grupoAct.style.display = esFalla ? 'block' : 'none';
 }
+}
+
 function ocultarCierreFalla(){
 
   const el = document.getElementById('accionesCierreFalla');
@@ -3694,14 +3783,18 @@ async function guardar() {
 
 const estadoNuevo = document.getElementById('estado').value;
 const equipoActual = getEquipo(actual);
-
+const g = equipoActual;
+const falla_inicio_db = g?.falla_inicio;
+let falla_inicio_update = falla_inicio_db;
+console.log("Equipo antes de guardar:", equipoActual);
 if (!equipoActual) {
 alert("No se encontró la grúa actual");
 return;
 }
 
 const estadoAnterior = equipoActual.estado || 'operacion';
-
+console.log("Estado anterior:", estadoAnterior);
+console.log("Estado nuevo:", estadoNuevo);
 const salioDeFalla = estadoAnterior === 'falla' && estadoNuevo !== 'falla';
 const entroAFalla = estadoAnterior !== 'falla' && estadoNuevo === 'falla';
 
@@ -3719,7 +3812,8 @@ const bloque_tramo = document.getElementById('bloqueTramo').value;
 const fecha_hora_falla = document.getElementById('fechaReporte').value;
 const fecha_hora_entrega = document.getElementById('fechaEntrega').value;
 const tiempo_muerto = document.getElementById('tiempoMuerto').value;
-
+const quien_reporto = document.getElementById('quienReporto').value;
+const actividad = document.getElementById('actividad').value;
 const area_mantto = document.getElementById('areaMantto').value;
 const supervisor = document.getElementById('supervisor').value;
 const standby = document.getElementById('standby').value;
@@ -3728,6 +3822,14 @@ const codigo_falla = document.getElementById('codigoFalla').value;
 const descripcion_falla = document.getElementById('descripcionFalla').value;
 const registro_falla = document.getElementById('registro_falla').value || '';
 
+
+console.log("🧨 DEBUG COMPLETO FALLA:", {
+  estadoAnterior,
+  estadoNuevo,
+  falla_inicio_RAW: equipoActual.falla_inicio,
+  falla_inicio_PARSEADO: new Date(equipoActual.falla_inicio),
+  esValido: !isNaN(new Date(equipoActual.falla_inicio))
+});
 /* ================= CONTROL FALLA ================= */
 
 let falla_inicio = equipoActual.falla_inicio || null;
@@ -3735,21 +3837,25 @@ let tiempo_falla = equipoActual.tiempo_falla || null;
 
 // ENTRA A FALLA
 if (entroAFalla) {
-falla_inicio = new Date().toISOString();
-equipoActual.falla_inicio = falla_inicio;
+  equipoActual.falla_inicio = new Date().toISOString();
+  equipoActual.contador_segundos = 0;
 }
 
-// SALE DE FALLA
-if (salioDeFalla && equipoActual.falla_inicio) {
+let tiempo_muerto_real = "00:00:00";
 
-const inicio = new Date(equipoActual.falla_inicio);
-const fin = new Date();
+if (salioDeFalla && falla_inicio_db) {
 
-const segundos = Math.floor((fin - inicio) / 1000);
-tiempo_falla = formatearTiempo(segundos);
+  const inicio = new Date(falla_inicio_db).getTime();
+  const fin = Date.now();
 
-falla_inicio = null;
-equipoActual.falla_inicio = null;
+  if (!isNaN(inicio)) {
+
+    const segundos = Math.floor((fin - inicio) / 1000);
+
+    console.log("⏱ Tiempo calculado en segundos:", segundos);
+
+    tiempo_muerto_real = formatearTiempo(segundos);
+  }
 }
 
 /* ================= INSERT HISTORIAL ================= */
@@ -3757,18 +3863,24 @@ equipoActual.falla_inicio = null;
 const { error: errorInsert } = await db
 .from('reportes_mantenimiento')
 .insert([{
-grua,
-turno,
-bloque_tramo,
-fecha_hora_falla,
-fecha_hora_entrega,
-tiempo_muerto,
-area_mantto,
-supervisor,
-standby,
-responsabilidad,
-codigo_falla,
-descripcion_falla
+  grua,
+  turno,
+  bloque_tramo,
+  fecha_hora_falla,
+  fecha_hora_entrega,
+
+  tiempo_muerto,
+  tiempo_muerto_real,
+
+  area_mantto,
+  supervisor,
+  standby,
+  responsabilidad,
+  codigo_falla,
+  descripcion_falla,
+
+  quien_reporto,
+  actividad
 }]);
 
 if (errorInsert) {
@@ -3781,27 +3893,26 @@ return;
 const { error } = await db
 .from('gruas')
 .update({
-estado: estadoNuevo,
-prioridad,
-observacion_extra,
+  estado: estadoNuevo,
+  prioridad,
+  observacion_extra,
 
-registro_falla,
-bloque_tramo,
-fecha_hora_falla,
-fecha_hora_entrega,
-turno,
-tiempo_muerto,
+  registro_falla,
+  bloque_tramo,
+  fecha_hora_falla,
+  fecha_hora_entrega,
+  turno,
+  tiempo_muerto,
 
-area_mantto,
-supervisor,
-standby,
-responsabilidad,
-codigo_falla,
+  area_mantto,
+  supervisor,
+  standby,
+  responsabilidad,
+  codigo_falla,
 
-falla_inicio,
-tiempo_falla,
-
-updated_at: new Date().toISOString()
+  falla_inicio,
+  tiempo_falla: tiempo_muerto_real, // 👈 AQUÍ ES EL FIX IMPORTANTE
+  updated_at: new Date().toISOString()
 })
 .eq('id', actual);
 
@@ -3919,131 +4030,126 @@ cargarHistorial();
 
 /* ================= MENSAJE ACTUAL ================= */
 
-async function cargarMensajeActual(){
+async function cargarMensajeActual() {
 
-const {data,error} =
-await db
+  const ultimoIdGuardado = localStorage.getItem('ultimoMensajeId');
 
-.from('mensajes_operativos')
+  const { data, error } = await db
+    .from('mensajes_operativos')
+    .select('*')
+    .order('created_at', { ascending: false })
+    .limit(1);
 
-.select('*')
+  if (error) {
+    console.log(error);
+    return;
+  }
 
-.order('created_at',{
-ascending:false
-})
+  const cont = document.getElementById('mensajeActivo');
+  const badge = document.getElementById('msgBadge');
 
-.limit(1);
+  if (!cont) return;
 
-if(error){
+  if (!data || !data.length) {
+    cont.innerHTML = 'Sin mensajes operativos.';
+    if (badge) badge.style.display = 'none';
+    return;
+  }
 
-console.log(error);
+  const m = data[0];
 
-return;
+  // ================= BADGE (CORRECTO) =================
+  if (badge) {
+    if (ultimoIdGuardado != m.id) {
+      badge.style.display = 'block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
 
-}
+  localStorage.setItem('ultimoMensajeId', m.id);
 
-if(!data || !data.length){
+  // ================= FECHA =================
+  const fecha = new Date(m.created_at + 'Z');
 
-document.getElementById('mensajeActual')
-.innerHTML=
-'Sin mensajes operativos.';
+  const fechaFormateada = fecha.toLocaleString('es-MX', {
+    timeZone: 'America/Mexico_City',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
 
-return;
+  // ================= RENDER =================
+  cont.innerHTML = `
+    <div class="item">
 
-}
+      <div style="font-size:12px; color:#64748b; margin-bottom:8px; font-weight:700;">
+        ${fechaFormateada}
+      </div>
 
-let m=data[0];
+      <div style="font-size:14px; line-height:1.5; font-weight:600; color:#1f2937;">
+        ${m.mensaje}
+      </div>
 
-document.getElementById('mensajeActual')
-.innerHTML = `
-
-<div style="margin-top:50px;">
-
-  <div
-    style="
-      font-size:12px;
-      color:#64748b;
-      margin-bottom:15px;
-      font-weight:700;
-    ">
-
-    ${new Date(m.created_at).toLocaleString()}
-
-  </div>
-
-  <div
-    style="
-      font-size:18px;
-      line-height:1.8;
-      font-weight:600;
-      color:#1f2937;
-    ">
-
-    ${m.mensaje}
-
-  </div>
-
-</div>
-
-`;
-
+    </div>
+  `;
 }
 
 /* ================= HISTORIAL ================= */
 
 async function cargarHistorial(){
 
-const {data,error} =
-await db
+  const {data,error} =
+  await db
+    .from('mensajes_operativos')
+    .select('*')
+    .order('created_at',{
+      ascending:false
+    });
 
-.from('mensajes_operativos')
+  if(error){
+    console.log(error);
+    return;
+  }
 
-.select('*')
+  let html='';
 
-.order('created_at',{
-ascending:false
-});
+  data.forEach(m=>{
 
-if(error){
+    // 🔥 FIX DE FECHA (México + UTC seguro)
+    const fecha = new Date(m.created_at + 'Z');
 
-console.log(error);
+    const fechaFormateada = fecha.toLocaleString('es-MX', {
+      timeZone: 'America/Mexico_City',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false
+    });
 
-return;
+    html += `
+      <div class="history-item">
 
-}
+          <div class="history-date">
+              ${fechaFormateada}
+          </div>
 
-let html='';
+          <div class="history-text">
+              ${m.mensaje}
+          </div>
 
-data.forEach(m=>{
+      </div>
+    `;
 
-html += `
+  });
 
-<div class="history-item">
-
-    <div class="history-date">
-
-        ${new Date(
-            m.created_at
-        ).toLocaleString()}
-
-    </div>
-
-    <div class="history-text">
-
-        ${m.mensaje}
-
-    </div>
-
-</div>
-
-`;
-
-});
-
-document.getElementById('historialMensajes')
-.innerHTML=
-html || 'Sin historial';
-
+  document.getElementById('historialMensajes').innerHTML =
+    html || 'Sin historial';
 }
 
 
@@ -4295,6 +4401,15 @@ document.addEventListener('DOMContentLoaded', () => {
   cargarMensajeActual();
   cargarHistorial();
 
+  document.getElementById('estado').addEventListener(
+    'change',
+    controlarPrioridad
+  );
+    document.getElementById('estado')
+    .addEventListener('change', actualizarIndicadorEstado);
+
+      document.getElementById('estado')
+    .addEventListener('change', actualizarUIEstado);
 });
 function obtenerTextoEstado(g){
 
@@ -4316,6 +4431,11 @@ function obtenerTextoEstado(g){
   if(g.estado === 'anclada')
     return 'ANCLADA';
 
+  if(g.estado === 'fmenor')
+    return 'FALLA MENOR';
+
+  if(g.estado === 'fseñal')
+    return 'FALLA DE SEÑAL';
 
   return '';
 }
@@ -4492,7 +4612,7 @@ async function cargarReporteOperaciones(){
           <td>${r.actividad || ''}</td>
           <td>${r.monitor_reporta || ''}</td>
           <td>${r.monitor_cierre || ''}</td>
-          <td>${r.tiempo_muerto || ''}</td>
+          <td>${r.tiempo_muerto_real || ''}</td>
           <td>${r.fecha_hora_falla || ''}</td>
         </tr>
       `;
@@ -4559,6 +4679,8 @@ async function cargarReporteGruas() {
               <th>ÁREA</th>
               <th>RESPONSABILIDAD</th>
               <th>BLOQUE</th>
+              <th>QUIÉN REPORTÓ</th>
+              <th>ACTIVIDAD REALIZABA OPERADOR</th>
               <th>CODIGO DE FALLA</th>
               <th>DESCRIPCIÓN</th>
               <th>TIEMPO MUERTO (REPORTE)</th>
@@ -4582,10 +4704,12 @@ async function cargarReporteGruas() {
           <td>${r.area_mantto ?? ''}</td>
           <td>${r.responsabilidad ?? ''}</td>
           <td>${r.bloque_tramo ?? ''}</td>
+          <td>${r.quien_reporto || ''}</td>
+          <td>${r.actividad || ''}</td>
           <td>${r.codigo_falla ?? ''}</td>
           <td>${r.descripcion_falla ?? ''}</td>
-          <td>${r.tiempo_reporte ?? ''}</td>
-          <td>${r.tiempo_muerto ?? ''}</td>
+          <td>${r.tiempo_muerto || ''}</td>
+          <td>${r.tiempo_muerto_real || '00:00:00'}</td>
         </tr>
       `;
     });
@@ -4660,7 +4784,8 @@ function actualizarIndicadorEstado(){
   if(estado === 'dayli') texto = 'Estado actual: DAYLI';
   if(estado === 'baño') texto = 'Estado actual: BAÑO';
   if(estado === 'anclada') texto = 'Estado actual: ANCLADA';
-
+  if(estado === 'fmenor') texto = 'Estado actual: FALLA MENOR';
+  if(estado === 'fseñal') texto = 'Estado actual: FALLA DE SEÑAL';
   indicador.innerText = texto;
 
   indicador.className = 'estado-indicador ' + estado;
@@ -4675,33 +4800,27 @@ async function guardarEstadoRapido() {
   const estado = document.getElementById('estado').value;
   const g = getEquipo(actual);
   if (!g) return;
-
+let contador_estado = g.contador_estado || 'stopped';
+let contador_inicio = g.contador_inicio || null;
+let contador_segundos = g.contador_segundos || 0;
   let prioridad = 0;
 
-  if (estado === 'falla') {
-    prioridad = parseInt(document.getElementById('prioridad').value || 0);
-  }
+let falla_inicio = g.falla_inicio;
 
-  let contador_estado = g.contador_estado || 'stopped';
-  let contador_inicio = g.contador_inicio || null;
-  let contador_segundos = g.contador_segundos || 0;
-
- if (estado === 'falla') {
+if (estado === 'falla') {
 
   if (contador_estado !== 'running') {
     contador_estado = 'running';
     contador_inicio = new Date().toISOString();
-
-    // reiniciar contador
     contador_segundos = 0;
   }
 
 } else {
 
-contador_estado = 'stopped';
-contador_inicio = null;
-contador_segundos = 0;
-  }
+  contador_estado = 'stopped';
+  contador_inicio = null;
+  contador_segundos = 0;
+}
 
   
 
@@ -4716,6 +4835,8 @@ contador_segundos = 0;
   contador_estado,
   contador_inicio,
   contador_segundos,
+
+  falla_inicio,
 
   updated_at: new Date().toISOString()
 })
@@ -5025,6 +5146,10 @@ function mostrarPanelEstado(){
 
     document.getElementById("formularioCierre").style.display="none";
 
+}
+function actualizarUIEstado() {
+  controlarPrioridad();
+  actualizarIndicadorEstado();
 }
 </script>
 
