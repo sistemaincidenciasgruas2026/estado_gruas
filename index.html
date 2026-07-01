@@ -71,8 +71,7 @@ body{
 
 background:#b8c2cc;
 
-border-bottom:
-2px solid #8d98a3;
+border-bottom:2px solid #8d98a3;
 
 display:flex;
 
@@ -80,7 +79,7 @@ justify-content:space-between;
 
 align-items:center;
 
-padding:14px 18px;
+padding:8px 18px;   /* antes 14px */
 
 position:sticky;
 
@@ -92,11 +91,15 @@ z-index:1000;
 
 .title{
 
-font-size:20px;
+font-size:18px;      /* antes 20px */
 
 font-weight:700;
 
-letter-spacing:1px;
+letter-spacing:0.5px;
+
+margin:0;            /* importante */
+
+line-height:1.2;
 
 }
 
@@ -140,44 +143,33 @@ font-weight:700;
 
 .kpis{
   display:grid;
-  grid-template-columns:repeat(4, minmax(120px, 1fr));
-  gap:8px;
-  padding:6px 12px;
+  grid-template-columns:repeat(4, minmax(120px,1fr));
+  gap:6px;
+  padding:4px 10px;
 }
 
 .kpi{
   background:white;
-  border-radius:10px;
+  border-radius:8px;
 
-  padding:6px 10px;
-  min-height:50px;
+  padding:4px 8px;
+  min-height:40px;
 
-  box-shadow:0 2px 6px rgba(0,0,0,.06);
+  box-shadow:0 2px 4px rgba(0,0,0,.05);
 
   display:flex;
   flex-direction:column;
   justify-content:center;
-  align-items:flex-start;
-
-  transition:.2s;
 }
 
-.kpi:hover{
-  transform:translateY(-2px);
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
-}
 .kpi-title{
-  font-size:10px;
-  color:#6b7280;
-  font-weight:600;
-  margin-bottom:2px;
+  font-size:9px;
+  margin-bottom:1px;
 }
 
 .kpi-value{
-  font-size:20px;
-  font-weight:800;
+  font-size:16px;
   line-height:1;
-  color:#0f4c81;
 }
 
 /* ================= DASHBOARD ================= */
@@ -239,6 +231,14 @@ table{
 
   overflow:hidden;    /* 👈 evita que “se salga” */
   z-index:10;
+}
+.yard{
+    position: relative;
+
+    transform: scale(.92);
+    transform-origin: top left;
+
+    width: 109%; /* compensa el scale */
 }
 .row{
 
@@ -321,7 +321,8 @@ margin-right: 15px;
 /* ================= ESTADOS ================= */
 
 .operacion{
- background:#00E83E;
+ background:
+#35A643;
  color:white;
 }
 
@@ -516,7 +517,7 @@ right:5px;
 }
 
 .online{
-background:#2f7d32;
+background:#35A643
 }
 
 .offline{
@@ -934,7 +935,7 @@ color:#1f2933;
 /* ================= INTRANET ================= */
 
 .topbar{
-  height:70px;
+  height:40px;              /* antes 70px */
 
   background:
   linear-gradient(
@@ -947,11 +948,11 @@ color:#1f2933;
   justify-content:space-between;
   align-items:center;
 
-  padding:0 25px;
+  padding:0 16px;           /* antes 25px */
 
   color:white;
 
-  font-size:24px;
+  font-size:20px;           /* antes 24px */
   font-weight:700;
 
   box-shadow:
@@ -2028,37 +2029,37 @@ button:hover{
   position:absolute;
   top:10px;
   right:10px;
-  background:white;
-  padding:10px;
-  border-radius:10px;
+  background:#fff;
+  padding:14px;
+  border-radius:12px;
   box-shadow:0 6px 18px rgba(0,0,0,.15);
   z-index:10;
-  width:160px;
+  width:190px;
 }
 
 .legend-mini{
   display:flex;
   flex-direction:column;
-  gap:4px;
-  font-size:11px;
+  gap:6px;
+  font-size:13px;
 }
 
 .legend-row{
   display:flex;
   align-items:center;
-  gap:6px;
-  line-height:1;
+  gap:8px;
+  line-height:1.2;
 }
 
 .color-box{
-  width:10px;
-  height:10px;
-  border-radius:3px;
+  width:14px;
+  height:14px;
+  border-radius:4px;
   flex-shrink:0;
 }
 
 /* COLORES */
-.color-box.operacion{ background:#00E83E; }
+.color-box.operacion{ background:#35A643; }
 .color-box.disponible{ background:#1f6fb2; }
 .color-box.falla{ background:#e53935; }
 .color-box.dayli{ background:#141212; }
@@ -2078,7 +2079,7 @@ button:hover{
   color:#fff;
 }
 .estado-indicador.operacion{
-  background:#00E83E;
+  background:#35A643;
 }
 
 .estado-indicador.disponible{
@@ -2479,7 +2480,7 @@ body{
         </div>
 
         <div class="kpi">
-            <div class="kpi-title">MANTTO / F.S.</div>
+            <div class="kpi-title">DAYLI</div>
             <div class="kpi-value" id="k2">0</div>
         </div>
 
@@ -2564,7 +2565,7 @@ body{
 <div class="yard-panel">
 
     <div class="yard-title">
-        Control de Grúas
+      CARGAR ESTADOS DE HOJA DE EQUIPO
     </div>
 
     <button
@@ -2575,9 +2576,6 @@ body{
 
 </div>
   <div id="yard"></div>
-
-  
-
 
 </div>
 
@@ -2667,7 +2665,20 @@ body{
 
 <div id="grupoActividad" style="display:none;">
   <label for="actividad">Actividad que realizaba</label>
-  <input id="actividad" type="text">
+
+  <select id="actividad">
+    <option value="0">Buque-(Descarga/Carga)</option>
+    <option value="1">CFS-(Programacion/Retirada)</option>
+    <option value="2">Cuadrillas-(Mantto.Patio)</option>
+    <option value="3">Garita-(Entrega/Recepcion)</option>
+    <option value="4">Liberaciones-(Remanejos)</option>
+    <option value="5">Otros-Ir al baño</option>
+    <option value="6">Servicios Internos-(Escaneos,Pesajes,Transf.)</option>
+    <option value="7">Traslados(Entrega/Recepcion)</option>
+    <option value="8">Tren-(Carga/Descarga)</option>
+  </select>
+
+
 </div>
 
 <label id="labelRegistroFalla" style="display:none;">
@@ -2738,9 +2749,8 @@ body{
 
 <select id="areaMantto">
 
-<option value="STS">STS</option>
+
 <option value="RTG">RTG</option>
-<option value="OFFDOCK">OFFDOCK</option>
 <option value="TREN">TREN</option>
 
 </select>
@@ -2752,10 +2762,7 @@ body{
 Seleccione
 </option>
 
-<option value="Chiquito">Chiquito</option>
-<option value="Gonzalo">Gonzalo</option>
-<option value="Manzano">Manzano</option>
-<option value="Alfredo">Alfredo</option>
+
 <option value="Leon">Leon</option>
 <option value="German">German</option>
 <option value="Alain">Alain</option>
@@ -2839,32 +2846,10 @@ SUPABASE_KEY
 
 const personalPorSupervisor = {
 
-  Chiquito:[
-    'Murillo',
-    'Carlos',
-    'Claudio'
-  ],
-
-  Gonzalo:[
-    'Landiz',
-    'Aaron'
-  ],
-
-  Alfredo:[
-    'Bonilla',
-    'Saul'
-  ],
-
-  Manzano:[
-    'Claudio',
-    'Arturo',
-    'Denilson'
-  ],
 
   Leon:[
     'Azahel',
     'Felipe',
-    'Denilson',
     'Axel',
     'Mateo',
     'Leon'
@@ -2874,9 +2859,9 @@ const personalPorSupervisor = {
     'Vega',
     'Veronica',
     'Oscar L.',
-    'Fabian',
     'Armando',
-    'Alain'
+    'Alain',
+    'Yair'
   ],
 
   Larios:[
@@ -2900,11 +2885,11 @@ const personalPorSupervisor = {
   ],
 
   German:[
-    'Yair',
     'Cynthia',
     'Magallon',
     'Banton',
-    'German'
+    'German',
+    'Fabian'
   ]
 
 };
@@ -2942,47 +2927,47 @@ const layout=[
 {
 zona:'A',
 gruas:[
-'N59','N57','N55','K23','K19','K12','','','','',''
+'N-59','N-57','N-55','K-23','K-19','K-12','','','','',''
 ]
 },
 
 {
 zona:'B',
 gruas:[
-'Z32','Z28','N58','Z44','Z43','Z42','N53','N54','K22','',''
+'Z-32','Z-28','N-58','Z-44','Z-43','Z-42','N-53','N-54','K-22','',''
 ]
 },
 
 {
 zona:'C',
 gruas:[
-'Z26','Z45','Z46','Z29','Z50','K35','Z25','Z47','','',''
+'Z-26','Z-45','Z-46','Z-29','Z-50','K-35','Z-25','Z-47','','',''
 ]
 },
 
 {
 zona:'D',
 gruas:[
-'K09','K10','K20','Z52','Z51','Z48','K36','N56','','',''
+'K-09','K-10','K-20','Z-52','Z-51','Z-48','K-36','N-56','','',''
 ]
 },
 
 {
 zona:'E',
 gruas:[
-'K15','Z30','K33','Z27','Z31','Z49','K24','K21','','',''
+'K-15','Z-30','K-33','Z-27','Z-31','Z-49','K-24','K-21','','',''
 ]
 },
 
 {
 zona:'F',
 gruas:[
-'K11','K16','K34','Z40','Z41','Z39'
+'K-11','K-16','K-34','Z-40','Z-41','Z-39'
 ]
 },
 {
   zona:'I',
-  gruas:['K08','K07','K06','K05']
+  gruas:['K-08','K-07','K-06','K-05']
 }
 
 
@@ -3639,7 +3624,20 @@ const list = equipos
 function abrir(id){
   
   actual = id;
+  
+  setTimeout(() => {
+  const area = detectarArea(id);
 
+  const select = document.getElementById('areaMantto');
+
+  if (select) {
+    select.value = area;
+
+    // 🔥 fuerza actualización visual en algunos browsers
+    select.dispatchEvent(new Event('change'));
+  }
+
+}, 0);
   const g = getEquipo(id);
 
   if (!g) {
@@ -3670,7 +3668,7 @@ function abrir(id){
   document.getElementById('estado').value = g.estado || 'disponible';
   document.getElementById('prioridad').value = g.prioridad || 0;
 
-  document.getElementById('areaMantto').value = g.area_mantto || 'STS';
+  document.getElementById('areaMantto').value = detectarArea(g.id);
   document.getElementById('supervisor').value = g.supervisor || '';
 
   cargarStandby();
@@ -3685,7 +3683,7 @@ function abrir(id){
   document.getElementById('opActividad').value = g.actividad || '';
   document.getElementById('opMonitorReporta').value = g.monitor_reporta || '';
   document.getElementById('opMonitorCierre').value = g.monitor_cierre || '';
-
+  document.getElementById('gruaGeneral').value = grupoTREN[0];
   // ================= INDICADOR =================
   const indicador = document.getElementById('estadoIndicador');
 
@@ -3778,10 +3776,81 @@ function cambiarFormulario(){
       : 'none';
 }
 /* ================= GUARDAR ================= */
+function validarCamposDisponibilidad() {
 
+  const campos = [
+    'gruaGeneral',
+    'turnoGeneral',
+    'bloqueTramo',
+    'fechaReporte',
+    'fechaEntrega',
+    'tiempoMuerto',
+    'areaMantto',
+    'supervisor',
+    'standby',
+    'responsabilidad',
+    'codigoFalla',
+    'descripcionFalla'
+  ];
+
+  let errores = [];
+
+  campos.forEach(id => {
+
+    const el = document.getElementById(id);
+
+    if (!el || !el.value || el.value.trim() === '') {
+
+      errores.push(id);
+
+      if (el) {
+        el.style.border = "2px solid red";
+      }
+    }
+
+  });
+
+  return errores;
+}
+function limpiarErroresDisponibilidad() {
+
+  [
+    'gruaGeneral',
+    'turnoGeneral',
+    'bloqueTramo',
+    'fechaReporte',
+    'fechaEntrega',
+    'tiempoMuerto',
+    'areaMantto',
+    'supervisor',
+    'standby',
+    'responsabilidad',
+    'codigoFalla',
+    'descripcionFalla'
+  ].forEach(id => {
+
+    const el = document.getElementById(id);
+    if (el) el.style.border = '';
+
+  });
+
+}
 async function guardar() {
 
 const estadoNuevo = document.getElementById('estado').value;
+const estado = document.getElementById('estado').value;
+
+if (estado === 'disponible') {
+
+  const errores = validarCamposDisponibilidad();
+
+  if (errores.length > 0) {
+
+    alert("Faltan campos obligatorios para DISPONIBLE");
+
+    return; // 🚫 BLOQUEA GUARDADO
+  }
+}
 const equipoActual = getEquipo(actual);
 const g = equipoActual;
 const falla_inicio_db = g?.falla_inicio;
@@ -3915,6 +3984,7 @@ const { error } = await db
   updated_at: new Date().toISOString()
 })
 .eq('id', actual);
+
 
 if (error) {
 alert('Error grúas: ' + error.message);
@@ -4267,24 +4337,21 @@ async function cargarExcel(event){
 }
 function normalizarGrua(texto){
 
-  texto =
-    texto.toUpperCase().trim();
+  texto = texto.toUpperCase().trim();
 
-  const numero =
-    texto.match(/\d+/);
-
+  const numero = texto.match(/\d+/);
   if(!numero) return null;
 
   if(texto.includes('KONE')){
-    return 'K' + numero[0];
+    return 'K-' + numero[0].padStart(2,'0');
   }
 
   if(texto.includes('NOEL')){
-    return 'N' + numero[0];
+    return 'N-' + numero[0].padStart(2,'0');
   }
 
   if(texto.includes('ZPMC')){
-    return 'Z' + numero[0];
+    return 'Z-' + numero[0].padStart(2,'0');
   }
 
   return null;
@@ -4326,7 +4393,7 @@ async function procesarHoja(sheet){
     if(!id) continue;
 
     const observacion = sheet['F' + (fila + 1)]?.v || '';
-
+    
     const texto = String(observacion)
       .toUpperCase()
       .trim();
@@ -4342,6 +4409,7 @@ async function procesarHoja(sheet){
     // ================= MANTENIMIENTO (DAYLI) =================
     else if (
       texto.includes('DAILY') ||
+      texto.includes('DAYLI') ||
       texto.includes('MANTTO') ||
       texto.includes('MANTENIMIENTO')
     ){
@@ -4369,6 +4437,7 @@ async function procesarHoja(sheet){
       prioridad = 1;
       observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
     }
+  
 
     console.log(id, estado, prioridad, observacion_extra);
 
@@ -4410,6 +4479,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       document.getElementById('estado')
     .addEventListener('change', actualizarUIEstado);
+
+    document.getElementById('areaMantto').addEventListener('change', function () {
+  actualizarGruaPorArea(this.value);
+});
 });
 function obtenerTextoEstado(g){
 
@@ -4792,18 +4865,49 @@ function actualizarIndicadorEstado(){
 }
 async function guardarEstadoRapido() {
 
+ const estado = document.getElementById('estado').value;
+
+  if (estado === 'falla') {
+
+    const quien = document.getElementById('quienReporto').value.trim();
+    const actividad = document.getElementById('actividad').value.trim();
+    const registro = document.getElementById('registro_falla').value.trim();
+
+    let errores = [];
+
+    if (!quien) {
+      errores.push("Quién reportó");
+      document.getElementById('quienReporto').style.border = "2px solid red";
+    }
+
+    if (!actividad) {
+      errores.push("Actividad que realizaba");
+      document.getElementById('actividad').style.border = "2px solid red";
+    }
+
+    if (!registro) {
+      errores.push("¿Qué falla reporta?");
+      document.getElementById('registro_falla').style.border = "2px solid red";
+    }
+
+    if (errores.length > 0) {
+      alert("Faltan campos obligatorios:\n\n- " + errores.join("\n- "));
+      return; // 🚫 BLOQUEA TODO
+    }
+  }
+
   if (!actual) {
     alert("No hay grúa seleccionada");
     return;
   }
   
-  const estado = document.getElementById('estado').value;
+  //const estado = document.getElementById('estado').value;
   const g = getEquipo(actual);
   if (!g) return;
 let contador_estado = g.contador_estado || 'stopped';
 let contador_inicio = g.contador_inicio || null;
 let contador_segundos = g.contador_segundos || 0;
-  let prioridad = 0;
+  let prioridad = parseInt(document.getElementById('prioridad')?.value || 0);
 
 let falla_inicio = g.falla_inicio;
 
@@ -4877,6 +4981,7 @@ if (
 function actualizarCardGrua(id){
 
   const g = getEquipo(id);
+  limpiarErroresDisponibilidad();
   if(!g) return;
 
   const card = document.querySelector(
@@ -5150,6 +5255,40 @@ function mostrarPanelEstado(){
 function actualizarUIEstado() {
   controlarPrioridad();
   actualizarIndicadorEstado();
+}
+function detectarArea(id){
+
+  const tren = ['K08','K07','K06','K05'];
+
+  const normal = (id || '')
+    .toUpperCase()
+    .replace('-', '')
+    .trim();
+
+  return tren.includes(normal) ? 'TREN' : 'RTG';
+}
+function actualizarGruaPorArea(area) {
+
+  const grupoTREN = ['K-08','K-07','K-06','K-05'];
+
+  if (area === 'TREN') {
+
+    // aquí puedes auto-seleccionar una grúa o asignar lógica
+    console.log('Área TREN seleccionada:', grupoTREN);
+
+    // EJEMPLO: si tienes un input de grúa
+    // document.getElementById('gruaGeneral').value = grupoTREN[0];
+
+  } else if (area === 'RTG') {
+
+    console.log('Área RTG seleccionada');
+
+    // aquí tu lógica de RTG si aplica
+  }
+}
+function obtenerPrioridad(){
+  const val = document.getElementById('prioridad')?.value;
+  return Number(val) || 0;
 }
 </script>
 
