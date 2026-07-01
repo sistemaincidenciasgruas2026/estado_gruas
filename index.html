@@ -2385,8 +2385,35 @@ body{
 
   <div class="contenido">
 
+<div class="menu-reportes">
 
+    <button 
+      class="btn-reporte activo"
+      onclick="cambiarReporte('gruas')">
+      REPORTE GRÚAS
+    </button>
+
+    <button 
+      class="btn-reporte"
+      onclick="cambiarReporte('operadores')">
+      REPORTE OPERADORES
+    </button>
+
+</div>
+
+
+<div id="contenedorReporteGruas">
+
+</div>
+
+
+<div id="contenedorReporteOperadores"
+style="display:none;">
+
+</div>
     <div id="tab-gruas"></div>
+
+<div id="tab-operadores"></div>
 
   </div>
 
@@ -2641,6 +2668,7 @@ body{
   <label>Estado de la grúa</label>
 
 <select id="estado"
+
   onchange="actualizarIndicadorEstado(); manejarCambioEstado()">
   <option value="operacion">OPERACION</option>
   <option value="disponible">DISPONIBLE</option>
@@ -3282,16 +3310,15 @@ estadoAnterior = g.estado;
           }
 
 ${
-  g.estado === 'falla'
-  ? `
-    <div
-      class="timer-card"
-      id="timer-card-${g.id}"
-    >
-      00:00:00
-    </div>
-  `
-  : ''
+    g.estado === 'falla' || g.estado === 'baño'
+    ? `
+        <div
+            class="timer-card"
+            id="timer-card-${g.id}">
+            00:00:00
+        </div>
+    `
+    : ''
 }
 
         </div>
@@ -3571,23 +3598,55 @@ function renderFallas(){
 
 setInterval(() => {
 
-  equipos
-    .filter(g => g.estado === 'falla')
-    .forEach(g => {
+equipos
+.filter(g =>
+    g.estado === 'falla' ||
+    g.estado === 'baño'
+)
+.forEach(g => {
 
-      let segundos = Number(g.contador_segundos || 0);
+    let segundos = 0;
 
-      if (g.contador_estado === 'running' && g.contador_inicio) {
-        const inicio = new Date(g.contador_inicio);
-        segundos += Math.floor((Date.now() - inicio) / 1000);
-      }
+    // FALLA
+    if (g.estado === 'falla') {
 
-      const el = document.getElementById(`timer-card-${g.id}`);
-      if (el) {
+        segundos = Number(g.contador_segundos || 0);
+
+        if (g.contador_estado === 'running' && g.contador_inicio) {
+            const inicio = new Date(g.contador_inicio);
+            segundos += Math.floor((Date.now() - inicio) / 1000);
+        }
+
+    }
+
+   
+// BAÑO
+if (g.estado === 'baño') {
+
+    segundos = Number(g.contador_bano_segundos || 0);
+
+    if (
+      g.contador_bano_estado === 'running' &&
+      g.contador_bano_inicio
+    ) {
+
+        const inicio = new Date(g.contador_bano_inicio);
+
+        segundos += Math.floor(
+          (Date.now() - inicio) / 1000
+        );
+
+    }
+
+}
+
+    const el = document.getElementById(`timer-card-${g.id}`);
+
+    if (el) {
         el.innerText = formatearTiempo(segundos);
-      }
+    }
 
-    });
+});
 
 }, 1000);
 /* ================= PRIORIDAD ================= */
@@ -3949,7 +4008,8 @@ const { error: errorInsert } = await db
   descripcion_falla,
 
   quien_reporto,
-  actividad
+  actividad,
+  //tiempo_bano: tiempo_bano_real
 }]);
 
 if (errorInsert) {
@@ -4867,6 +4927,7 @@ async function guardarEstadoRapido() {
 
  const estado = document.getElementById('estado').value;
 
+//PARA FALLA
   if (estado === 'falla') {
 
     const quien = document.getElementById('quienReporto').value.trim();
@@ -4926,8 +4987,100 @@ if (estado === 'falla') {
   contador_segundos = 0;
 }
 
-  
+// ================= BAÑO =================
 
+let contador_bano_estado = g.contador_bano_estado || 'stopped';
+let contador_bano_inicio = g.contador_bano_inicio || null;
+let contador_bano_segundos = g.contador_bano_segundos || 0;
+
+if (estado === 'baño') {
+
+  if (contador_bano_estado !== 'running') {
+    contador_bano_estado = 'running';
+    contador_bano_inicio = new Date().toISOString();
+    contador_bano_segundos = 0;
+  }
+
+} else {
+
+  if (
+    contador_bano_estado === 'running' &&
+    contador_bano_inicio
+  ){
+
+    const inicioBano = new Date(contador_bano_inicio);
+    const finBano = new Date();
+
+    const segundosBano = Math.floor(
+      (finBano - inicioBano) / 1000
+    );
+
+    contador_bano_segundos += segundosBano;
+
+  }
+
+  contador_bano_estado = 'stopped';
+  contador_bano_inicio = null;
+
+}
+
+// ================= CALCULAR TIEMPO BAÑO =================
+
+let tiempo_bano_real = "00:00:00";
+
+if (
+  g.estado === 'baño' &&
+  estado !== 'baño' &&
+  g.contador_bano_inicio
+){
+
+  const inicio = new Date(g.contador_bano_inicio);
+  const fin = new Date();
+
+  const segundos = Math.floor(
+    (fin - inicio) / 1000
+  );
+
+  tiempo_bano_real = formatearTiempo(segundos);
+
+}
+// ================= GUARDAR REPORTE OPERADOR BAÑO =================
+
+if (
+  g.estado === 'baño' &&
+  estado !== 'baño' &&
+  g.contador_bano_inicio
+){
+
+  const finBano = new Date();
+
+  const { error: errorBano } = await db
+    .from('reportes_operadores_bano')
+    .insert([{
+
+      grua: g.id,
+
+      operador: document.getElementById('opOperador')?.value || g.operador || '',
+
+      fecha_inicio: g.contador_bano_inicio,
+
+      fecha_fin: finBano.toISOString(),
+
+      tiempo_bano: tiempo_bano_real
+
+    }]);
+
+
+  if(errorBano){
+
+    console.log(
+      "ERROR GUARDANDO BAÑO:",
+      errorBano
+    );
+
+  }
+
+}
   const { error } = await db
     .from('gruas')
 .update({
@@ -4941,6 +5094,10 @@ if (estado === 'falla') {
   contador_segundos,
 
   falla_inicio,
+  
+  contador_bano_estado,
+  contador_bano_inicio,
+  contador_bano_segundos,
 
   updated_at: new Date().toISOString()
 })
@@ -4970,6 +5127,10 @@ if (
   g.contador_estado = contador_estado;
   g.contador_inicio = contador_inicio;
   g.contador_segundos = contador_segundos;
+
+g.contador_bano_estado = contador_bano_estado;
+g.contador_bano_inicio = contador_bano_inicio;
+g.contador_bano_segundos = contador_bano_segundos;
 
   render();
   renderFallas();
@@ -5162,9 +5323,8 @@ function manejarCambioEstado() {
 function abrirFormularioCierreFalla(equipo) {
 
   ocultarControlesEstado();
-
   const form =
-    document.getElementById('formularioCierreFalla');
+  document.getElementById('formularioCierreFalla');
 
   if (!form) return;
 
@@ -5289,6 +5449,204 @@ function actualizarGruaPorArea(area) {
 function obtenerPrioridad(){
   const val = document.getElementById('prioridad')?.value;
   return Number(val) || 0;
+}
+function mostrarReporte(tipo){
+
+const gruas =
+document.getElementById('reporteGruas');
+
+const operadores =
+document.getElementById('reporteOperadores');
+
+
+if(tipo === 'gruas'){
+
+gruas.style.display='block';
+operadores.style.display='none';
+
+cargarReporteGruas();
+
+}
+
+
+if(tipo === 'operadores'){
+
+gruas.style.display='none';
+operadores.style.display='block';
+
+cargarReporteOperadores();
+
+}
+
+
+}
+async function cargarReporteOperadores(){
+
+  const { data, error } = await db
+    .from('reportes_operadores_bano')
+    .select('*')
+    .order('id', { ascending:false });
+
+
+  if(error){
+
+    console.log(error);
+
+    document.getElementById('tab-operadores').innerHTML = `
+      <div style="padding:20px;color:red;">
+        Error cargando reporte operadores
+      </div>
+    `;
+
+    return;
+  }
+
+
+  let html = `
+
+    <div class="messages-header">
+
+      <h2>
+        REPORTE OPERADORES - TIEMPO BAÑO
+      </h2>
+
+    </div>
+
+
+    <div class="tabla-container">
+
+      <div class="tabla-scroll">
+
+        <table class="tabla-reporte">
+
+          <thead>
+
+            <tr>
+
+              <th>GRÚA</th>
+              <th>OPERADOR</th>
+              <th>TIEMPO BAÑO</th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+  `;
+
+
+  if(data && data.length > 0){
+
+
+    data.forEach(r=>{
+
+      html += `
+
+        <tr>
+
+          <td>${r.grua || ''}</td>
+
+          <td>${r.operador || ''}</td>
+
+          <td>
+            ${r.tiempo_bano || '00:00:00'}
+          </td>
+
+        </tr>
+
+      `;
+
+    });
+
+
+  }else{
+
+
+    html += `
+
+      <tr>
+
+        <td colspan="5" style="text-align:center;padding:20px;">
+
+          Sin registros de baño
+
+        </td>
+
+      </tr>
+
+    `;
+
+  }
+
+
+  html += `
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    </div>
+
+  `;
+
+
+  document.getElementById('tab-operadores').innerHTML = html;
+
+
+}
+function cambiarReporte(tipo){
+
+  const gruas =
+  document.getElementById('tab-gruas');
+
+  const operadores =
+  document.getElementById('tab-operadores');
+
+
+  if(gruas){
+    gruas.style.display = 'none';
+  }
+
+  if(operadores){
+    operadores.style.display = 'none';
+  }
+
+
+  document.querySelectorAll('.btn-reporte')
+  .forEach(btn=>{
+    btn.classList.remove('activo');
+  });
+
+
+  if(tipo === 'gruas'){
+
+    gruas.style.display='block';
+
+    document.querySelector(
+      ".btn-reporte:nth-child(1)"
+    ).classList.add('activo');
+
+    cargarReporteGruas();
+
+  }
+
+
+  if(tipo === 'operadores'){
+
+    operadores.style.display='block';
+
+    document.querySelector(
+      ".btn-reporte:nth-child(2)"
+    ).classList.add('activo');
+
+    cargarReporteOperadores();
+
+  }
+
 }
 </script>
 
