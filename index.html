@@ -182,23 +182,27 @@ font-weight:700;
 img, iframe{
   max-width:100%;
 }
-
-
-table{
-  border-collapse:collapse;
-  margin:0 auto; /* centra la tabla */
-}
-.tabla-reporte{
-    width:max-content;
-    min-width:1900px;
-    border-collapse:collapse;
-    white-space:nowrap;
+.tabla-container {
+  width: 100%;
+  overflow-x: auto;
 }
 
-.tabla-scroll{
-    width:max-content;
-    min-width:100%;
-    display:block;
+.tabla-reporte {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+
+
+.tabla-reporte th,
+.tabla-reporte td {
+  padding: 6px 8px;
+  font-size: 12px;
+
+  white-space: normal;   /* 👈 CAMBIO IMPORTANTE */
+  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 /* ================= YARD ================= */
@@ -1933,35 +1937,10 @@ button:hover{
   color:white;
   box-shadow:0 4px 10px rgba(0,0,0,.25);
 }
-#tab-operaciones table{
-  border-collapse:collapse;
-  width:100%;
-  background:white;
-  border-radius:10px;
-  overflow:hidden;
-  box-shadow:0 6px 18px rgba(0,0,0,.08);
-}
 
-#tab-operaciones th{
-  background:#145a96;
-  color:white;
-  padding:10px;
-  font-size:12px;
-}
 
-#tab-operaciones td{
-  padding:8px;
-  font-size:12px;
-  border-bottom:1px solid #e5e7eb;
-}
 
-#tab-operaciones tr:nth-child(even){
-  background:#f4f8fc;
-}
 
-#tab-operaciones tr:hover{
-  background:#e8f2ff;
-}
 
 .topbar{
   background: linear-gradient(90deg,#0b3a66,#145a96);
@@ -2318,6 +2297,7 @@ button:hover{
 body{
     overflow-x:hidden;
 }
+
 </style>
 
 </head>
@@ -2399,6 +2379,9 @@ body{
       REPORTE OPERADORES
     </button>
 
+    <button class="btn-reporte" onclick="cambiarReporte('senal')">
+      REPORTE GRÚA SIN SEÑAL
+    </button>
 </div>
 
 
@@ -2414,6 +2397,7 @@ style="display:none;">
     <div id="tab-gruas"></div>
 
 <div id="tab-operadores"></div>
+<div id="tab-senal"></div>
 
   </div>
 
@@ -2695,15 +2679,15 @@ style="display:none;">
   <label for="actividad">Actividad que realizaba</label>
 
   <select id="actividad">
-    <option value="0">Buque-(Descarga/Carga)</option>
-    <option value="1">CFS-(Programacion/Retirada)</option>
-    <option value="2">Cuadrillas-(Mantto.Patio)</option>
-    <option value="3">Garita-(Entrega/Recepcion)</option>
-    <option value="4">Liberaciones-(Remanejos)</option>
-    <option value="5">Otros-Ir al baño</option>
-    <option value="6">Servicios Internos-(Escaneos,Pesajes,Transf.)</option>
-    <option value="7">Traslados(Entrega/Recepcion)</option>
-    <option value="8">Tren-(Carga/Descarga)</option>
+    <option value="Buque-(Descarga/Carga)">Buque-(Descarga/Carga)</option>
+    <option value="CFS-(Programacion/Retirada)">CFS-(Programacion/Retirada)</option>
+    <option value="Cuadrillas-(Mantto.Patio)">Cuadrillas-(Mantto.Patio)</option>
+    <option value="Garita-(Entrega/Recepcion)">Garita-(Entrega/Recepcion)</option>
+    <option value="Liberaciones-(Remanejos)">Liberaciones-(Remanejos)</option>
+    <option value="Otros-Ir al baño">Otros-Ir al baño</option>
+    <option value="Servicios Internos-(Escaneos,Pesajes,Transf.)">Servicios Internos-(Escaneos,Pesajes,Transf.)</option>
+    <option value="Traslados(Entrega/Recepcion)">Traslados(Entrega/Recepcion)</option>
+    <option value="Tren-(Carga/Descarga)">Tren-(Carga/Descarga)</option>
   </select>
 
 
@@ -3310,7 +3294,7 @@ estadoAnterior = g.estado;
           }
 
 ${
-    g.estado === 'falla' || g.estado === 'baño'
+    g.estado === 'falla' || g.estado === 'baño' || g.estado === 'fseñal'
     ? `
         <div
             class="timer-card"
@@ -3598,55 +3582,59 @@ function renderFallas(){
 
 setInterval(() => {
 
-equipos
-.filter(g =>
-    g.estado === 'falla' ||
-    g.estado === 'baño'
-)
-.forEach(g => {
+  equipos
+    .filter(g =>
+      g.estado === 'falla' ||
+      g.estado === 'baño' ||
+      g.estado === 'fseñal'
+    )
+    .forEach(g => {
 
-    let segundos = 0;
+      let segundos = 0;
 
-    // FALLA
-    if (g.estado === 'falla') {
+      // ================= FALLA =================
+      if (g.estado === 'falla') {
 
         segundos = Number(g.contador_segundos || 0);
 
         if (g.contador_estado === 'running' && g.contador_inicio) {
-            const inicio = new Date(g.contador_inicio);
-            segundos += Math.floor((Date.now() - inicio) / 1000);
+          const inicio = new Date(g.contador_inicio);
+          segundos += Math.floor((Date.now() - inicio) / 1000);
         }
+      }
 
-    }
+      // ================= BAÑO =================
+      else if (g.estado === 'baño') {
 
-   
-// BAÑO
-if (g.estado === 'baño') {
+        segundos = Number(g.contador_bano_segundos || 0);
 
-    segundos = Number(g.contador_bano_segundos || 0);
+        if (g.contador_bano_estado === 'running' && g.contador_bano_inicio) {
+          const inicio = new Date(g.contador_bano_inicio);
+          segundos += Math.floor((Date.now() - inicio) / 1000);
+        }
+      }
 
-    if (
-      g.contador_bano_estado === 'running' &&
-      g.contador_bano_inicio
-    ) {
+      // ================= FALLA DE SEÑAL =================
+      else if (g.estado === 'fseñal') {
 
-        const inicio = new Date(g.contador_bano_inicio);
+        segundos = Number(g.contador_senal_segundos || 0);
 
-        segundos += Math.floor(
-          (Date.now() - inicio) / 1000
-        );
+        if (
+          g.contador_senal_estado === 'running' &&
+          g.contador_senal_inicio
+        ) {
+          const inicio = new Date(g.contador_senal_inicio);
+          segundos += Math.floor((Date.now() - inicio) / 1000);
+        }
+      }
 
-    }
+      const el = document.getElementById(`timer-card-${g.id}`);
 
-}
-
-    const el = document.getElementById(`timer-card-${g.id}`);
-
-    if (el) {
+      if (el) {
         el.innerText = formatearTiempo(segundos);
-    }
+      }
 
-});
+    });
 
 }, 1000);
 /* ================= PRIORIDAD ================= */
@@ -4633,7 +4621,7 @@ async function cargarReporteGeneral(){
 
     <div class="tabla-container">
 
-      <div class="tabla-scroll">
+      <div class="tabla-scroll sin-scroll">
 
         <table class="tabla-reporte">
 
@@ -4964,6 +4952,8 @@ async function guardarEstadoRapido() {
   
   //const estado = document.getElementById('estado').value;
   const g = getEquipo(actual);
+  const estadoAnterior = g.estado;
+const estadoNuevo = estado;
   if (!g) return;
 let contador_estado = g.contador_estado || 'stopped';
 let contador_inicio = g.contador_inicio || null;
@@ -5024,6 +5014,63 @@ if (estado === 'baño') {
 
 }
 
+// ================= FALLA DE SEÑAL (REPORTE) =================
+
+if (
+  estadoAnterior === 'fseñal' &&
+  estadoNuevo !== 'fseñal' &&
+  g.contador_senal_inicio
+){
+
+  const fin = new Date();
+
+  const segundos = Math.floor(
+    (fin - new Date(g.contador_senal_inicio)) / 1000
+  );
+
+  const tiempo_senal_real = formatearTiempo(segundos);
+
+  const { error } = await db
+    .from('reportes_senal')
+    .insert([{
+      grua: g.id,
+      operador: document.getElementById('opOperador')?.value || g.operador || '',
+      fecha_inicio: g.contador_senal_inicio,
+      fecha_fin: fin.toISOString(),
+      tiempo_senal: tiempo_senal_real
+    }]);
+
+  if (error) {
+    console.log("ERROR REPORTE SEÑAL:", error);
+  }
+}
+// ================= FALLA DE SEÑAL =================
+
+let contador_senal_estado = g.contador_senal_estado || 'stopped';
+let contador_senal_inicio = g.contador_senal_inicio || null;
+let contador_senal_segundos = g.contador_senal_segundos || 0;
+
+if (estado === 'fseñal') {
+
+  if (contador_senal_estado !== 'running') {
+    contador_senal_estado = 'running';
+    contador_senal_inicio = new Date().toISOString();
+    contador_senal_segundos = 0;
+  }
+
+} else {
+
+  if (contador_senal_estado === 'running' && contador_senal_inicio) {
+
+    const inicio = new Date(contador_senal_inicio);
+    const fin = new Date();
+
+    contador_senal_segundos += Math.floor((fin - inicio) / 1000);
+  }
+
+  contador_senal_estado = 'stopped';
+  contador_senal_inicio = null;
+}
 // ================= CALCULAR TIEMPO BAÑO =================
 
 let tiempo_bano_real = "00:00:00";
@@ -5042,6 +5089,43 @@ if (
   );
 
   tiempo_bano_real = formatearTiempo(segundos);
+
+}
+// ================= REPORTE FALLA EN TURNO =================
+
+if (
+  g.estado === 'falla' &&
+  estado !== 'falla' &&
+  g.contador_inicio
+){
+
+  const fin = new Date();
+
+  const segundos = Math.floor(
+    (fin - new Date(g.contador_inicio)) / 1000
+  );
+
+  const tiempo_falla_real = formatearTiempo(segundos);
+
+  const { error } = await db
+    .from('reportes_mantenimiento')
+    .insert([{
+      grua: g.id,
+      turno: document.getElementById('turnoGeneral')?.value || '',
+      bloque_tramo: document.getElementById('bloqueTramo')?.value || '',
+      fecha_hora_falla: g.contador_inicio,
+      fecha_hora_entrega: fin.toISOString(),
+      tiempo_muerto_real: tiempo_falla_real,
+      codigo_falla: document.getElementById('codigoFalla')?.value || '',
+      descripcion_falla: document.getElementById('descripcionFalla')?.value || '',
+      supervisor: document.getElementById('supervisor')?.value || '',
+      standby: document.getElementById('standby')?.value || '',
+      area_mantto: document.getElementById('areaMantto')?.value || ''
+    }]);
+
+  if (error) {
+    console.log("ERROR REPORTE FALLA:", error);
+  }
 
 }
 // ================= GUARDAR REPORTE OPERADOR BAÑO =================
@@ -5099,6 +5183,10 @@ if (
   contador_bano_inicio,
   contador_bano_segundos,
 
+  contador_senal_estado,
+  contador_senal_inicio,
+  contador_senal_segundos,
+
   updated_at: new Date().toISOString()
 })
     .eq('id', actual);
@@ -5107,8 +5195,7 @@ if (
     alert(error.message);
     return;
   }
-const estadoAnterior = g.estado;
-const estadoNuevo = estado;
+
 
 if (
     estadoAnterior === "falla" &&
@@ -5176,25 +5263,24 @@ function actualizarCardGrua(id){
     }
   }
 
-  let timer =
-    card.querySelector('.timer-card');
+let timer = card.querySelector(`#timer-card-${g.id}`);
 
-  if(g.estado === 'falla'){
+if (g.estado === 'falla' || g.estado === 'baño' || g.estado === 'fseñal') {
 
-    if(!timer){
-      timer = document.createElement('div');
-      timer.className = 'timer-card';
-      timer.id = `timer-card-${g.id}`;
-      timer.innerText = '00:00:00';
-      card.appendChild(timer);
-    }
-
-  } else {
-
-    if(timer){
-      timer.remove();
-    }
+  if (!timer) {
+    timer = document.createElement('div');
+    timer.className = 'timer-card';
+    timer.id = `timer-card-${g.id}`;
+    timer.innerText = '00:00:00';
+    card.appendChild(timer);
   }
+
+} else {
+
+  if (timer) {
+    timer.remove();
+  }
+}
 }
 function abrirModalCierreFalla(g){
 
@@ -5371,6 +5457,24 @@ function getDescripcionActividad(g) {
     g.detalle_falla ||
     ''
   );
+}
+function formatearFechaMX(fecha) {
+
+  if (!fecha) return '';
+
+  const f = new Date(fecha);
+
+  return f.toLocaleString('es-MX', {
+    timeZone: 'America/Mexico_City',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false
+  });
+
 }
 function ocultarControlesEstado() {
 
@@ -5600,53 +5704,106 @@ async function cargarReporteOperadores(){
 }
 function cambiarReporte(tipo){
 
-  const gruas =
-  document.getElementById('tab-gruas');
+  const gruas = document.getElementById('tab-gruas');
+  const operadores = document.getElementById('tab-operadores');
+  const senal = document.getElementById('tab-senal');
 
-  const operadores =
-  document.getElementById('tab-operadores');
-
-
-  if(gruas){
-    gruas.style.display = 'none';
-  }
-
-  if(operadores){
-    operadores.style.display = 'none';
-  }
-
+  // ocultar todo
+  if(gruas) gruas.style.display = 'none';
+  if(operadores) operadores.style.display = 'none';
+  if(senal) senal.style.display = 'none';
 
   document.querySelectorAll('.btn-reporte')
-  .forEach(btn=>{
-    btn.classList.remove('activo');
-  });
-
+    .forEach(btn => btn.classList.remove('activo'));
 
   if(tipo === 'gruas'){
-
-    gruas.style.display='block';
-
-    document.querySelector(
-      ".btn-reporte:nth-child(1)"
-    ).classList.add('activo');
-
+    gruas.style.display = 'block';
+    document.querySelector(".btn-reporte:nth-child(1)").classList.add('activo');
     cargarReporteGruas();
-
   }
-
 
   if(tipo === 'operadores'){
-
-    operadores.style.display='block';
-
-    document.querySelector(
-      ".btn-reporte:nth-child(2)"
-    ).classList.add('activo');
-
+    operadores.style.display = 'block';
+    document.querySelector(".btn-reporte:nth-child(2)").classList.add('activo');
     cargarReporteOperadores();
-
   }
 
+  // 🔥 NUEVO: SEÑAL
+  if(tipo === 'senal'){
+    senal.style.display = 'block';
+
+    document.querySelector(".btn-reporte:nth-child(3)")
+      ?.classList.add('activo');
+
+    cargarReporteSenal();
+  }
+}
+async function cargarReporteSenal(){
+
+  const { data, error } = await db
+    .from('reportes_senal')
+    .select('*')
+    .order('id', { ascending: false });
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  let html = `
+    <div class="messages-header">
+      <h2>REPORTE GRÚA SIN SEÑAL</h2>
+    </div>
+
+    <div class="tabla-container">
+      <div class="tabla-scroll">
+
+        <table class="tabla-reporte">
+
+          <thead>
+            <tr>
+              <th>GRÚA</th>
+              <th>INICIO</th>
+              <th>FIN</th>
+              <th>TIEMPO SIN SEÑAL</th>
+            </tr>
+          </thead>
+
+          <tbody>
+  `;
+
+  if(data && data.length > 0){
+
+    data.forEach(r => {
+      html += `
+        <tr>
+          <td>${r.grua || ''}</td>
+          <td>${formatearFechaMX(r.fecha_inicio)}</td>
+          <td>${formatearFechaMX(r.fecha_fin)}</td>
+          <td>${r.tiempo_senal || '00:00:00'}</td>
+        </tr>
+      `;
+    });
+
+  } else {
+    html += `
+      <tr>
+        <td colspan="5" style="text-align:center;padding:20px;">
+          Sin registros de señal
+        </td>
+      </tr>
+    `;
+  }
+
+  html += `
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  `;
+
+  document.getElementById('tab-senal').innerHTML = html;
 }
 </script>
 
