@@ -237,9 +237,8 @@ img, iframe{
   z-index:10;
 }
 .yard{
-  position: relative;
-  width: 100%;
-  transform: none;
+  transform:none;
+  width:100%;
 }
 .row{
 
@@ -850,7 +849,7 @@ color:#1f2933;
    TABLET
 ========================================= */
 
-@media (max-width: 1100px){
+@media (max-width:1100px){
 
   .layout{
     flex-direction:column;
@@ -858,65 +857,80 @@ color:#1f2933;
 
   .sidebar{
     width:100%;
-    max-width:100%;
-    display:flex;
     flex-wrap:wrap;
-    gap:10px;
   }
 
-
   .dashboard-main{
-    grid-template-columns: 1fr;
+    grid-template-columns:1fr;
   }
 
   .events-panel{
     position:static;
   }
 
-.grid{
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-}
+  .grid{
+    grid-template-columns:repeat(auto-fit,minmax(110px,1fr));
+    gap:8px;
+  }
+
+  .yard{
+    transform:none;
+  }
 }
 
 /* =========================================
    TABLET PEQUEÑA / MOBILE
 ========================================= */
 
-@media (max-width: 768px){
+@media (max-width:768px){
 
   .header{
     flex-direction:column;
     align-items:flex-start;
+    gap:8px;
   }
 
   .kpis{
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns:repeat(2,1fr);
   }
 
-.dashboard-main{
-  padding:10px;
-}
+  .dashboard-main{
+    padding:10px;
+  }
 
-.grid{
-  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-}
+  .grid{
+    grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+    gap:8px;
+  }
 
   .card{
     min-height:90px;
   }
 
-  .code{
-    font-size:14px;
+  .sidebar{
+    width:100%;
+    flex-direction:column;
   }
 
-  .events-panel{
+  .yard{
+    padding:10px;
+    transform:none;
+  }
+
+  .action-bar{
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .action-buttons{
+    width:100%;
+    flex-direction:column;
+  }
+
+  .btn-excel{
     width:100%;
   }
-  .card{
-  padding:8px;
 }
-}
-
 /* =========================================
    CELULARES
 ========================================= */
@@ -937,6 +951,23 @@ color:#1f2933;
   flex-wrap: wrap;
   justify-content: space-between;
 }
+
+}
+
+@media (max-width:1000px){
+
+  .dashboard-main{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .status-panels{
+    grid-template-columns:1fr;
+  }
+
+  .right-panel{
+    width:100%;
+  }
 
 }
 /* ================= INTRANET ================= */
