@@ -11,7 +11,7 @@ content="width=device-width, initial-scale=1.0"
 >
 
 <title>
-CONTROL OPERATIVO GRÚAS1
+CONTROL OPERATIVO GRÚAS
 </title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -209,22 +209,16 @@ img, iframe{
 
 .yard{
   background:white;
-
   border:none;
-
   border-radius:16px;
-
-  box-shadow:
-  0 8px 25px rgba(0,0,0,.08);
-
+  box-shadow:0 8px 25px rgba(0,0,0,.08);
   padding:20px;
-}
-.yard{
-    width:100%;
-}
-.yard{
+
   position:relative;
+  width:100%;
+  transform:none;
 }
+
 .leyenda-corner{
   position:absolute;
   top:10px;
@@ -236,10 +230,7 @@ img, iframe{
   overflow:hidden;    /* 👈 evita que “se salga” */
   z-index:10;
 }
-.yard{
-  transform:none;
-  width:100%;
-}
+
 .row{
 
 display:flex;
@@ -874,7 +865,8 @@ color:#1f2933;
   }
 
   .yard{
-    transform:none;
+    transform:none !important;
+    padding:16px;
   }
 }
 
@@ -2314,7 +2306,13 @@ button:hover{
 
   text-align: center;
 }
+@media (max-width: 1100px){
 
+  .grid{
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)) !important;
+  }
+
+}
 @keyframes pulse {
   0% { transform: scale(1); }
   50% { transform: scale(1.2); }
@@ -2356,6 +2354,23 @@ html, body {
 img, video, iframe {
   max-width: 100%;
   height: auto;
+}
+@media (max-width: 1100px){
+
+  .dashboard-main{
+    grid-template-columns: 1fr !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .right-panel{
+    width: 100% !important;
+  }
+
+  .events-panel{
+    position: static !important;
+  }
+
 }
 </style>
 
