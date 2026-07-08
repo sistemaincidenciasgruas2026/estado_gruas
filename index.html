@@ -237,12 +237,17 @@ img, iframe{
   z-index:10;
 }
 .yard{
-    position: relative;
+    position:relative;
+    width:100%;
+}
+@media (min-width: 1600px){
 
-    transform: scale(.92);
-    transform-origin: top left;
+    .yard{
+        transform:scale(.92);
+        transform-origin:top left;
+        width:109%;
+    }
 
-    width: 109%; /* compensa el scale */
 }
 .row{
 
@@ -2297,6 +2302,254 @@ button:hover{
 body{
     overflow-x:hidden;
 }
+@media (max-width:1400px){
+
+     .yard{
+        padding-right:180px !important;
+    }
+
+      .leyenda-corner{
+
+        position:absolute;
+
+        top:8px;
+        right:8px;
+
+        width:120px;
+
+        padding:6px;
+
+        border-radius:6px;
+
+        box-shadow:0 3px 8px rgba(0,0,0,.12);
+
+        max-height:150px;
+
+        overflow:hidden;
+
+        z-index:100;
+
+        font-size:10px;
+
+    }
+
+
+    .legend-mini{
+
+        gap:3px;
+
+        font-size:10px;
+
+    }
+
+
+    .legend-row{
+
+        gap:5px;
+
+        line-height:1;
+
+    }
+
+
+    .color-box{
+
+        width:10px;
+
+        height:10px;
+
+        border-radius:3px;
+
+    }
+
+
+    .grid{
+
+        grid-template-columns:repeat(11,85px) !important;
+
+        column-gap:8px !important;
+        row-gap:16px !important;
+
+        width:max-content !important;
+
+    }
+
+
+
+    /* ZONA I */
+    .grid-tren{
+
+        grid-template-columns:repeat(4,85px) !important;
+
+        column-gap:8px !important;
+        row-gap:16px !important;
+
+        margin-left:0 !important;
+
+    }
+
+
+    .card{
+
+        width:85px !important;
+        min-width:85px !important;
+        height:95px !important;
+
+    }
+
+}
+@media (max-width:1366px){
+
+  .dashboard-main{
+
+    grid-template-columns:
+      minmax(0,1fr)
+      280px;
+
+    gap:10px;
+
+  }
+
+  .events-panel{
+
+    width:100%;
+
+  }
+
+}
+@media (max-width:1366px){
+
+.grid{
+
+    grid-template-columns:repeat(11,minmax(75px,1fr));
+
+    gap:8px;
+
+}
+
+.card{
+
+    min-height:95px;
+
+}
+
+.code{
+
+    font-size:16px;
+
+}
+
+}
+/* ================= AJUSTE TABLET LATERAL ================= */
+
+@media (max-width:1400px){
+
+    .dashboard-main{
+
+        display:grid;
+
+        grid-template-columns:
+            minmax(0, 1fr)
+            300px;
+
+        gap:12px;
+
+        overflow:hidden;
+
+    }
+
+
+    .yard-container{
+
+        min-width:0;
+        width:100%;
+        overflow:hidden;
+
+    }
+
+
+    .yard{
+
+        width:100%;
+        transform:none;
+
+        overflow:hidden;
+
+    }
+
+
+    .events-panel{
+
+        width:300px;
+        min-width:300px;
+
+        position:relative;
+
+        top:auto;
+
+    }
+
+
+    .grid{
+
+        grid-template-columns:
+        repeat(11, minmax(70px,1fr));
+
+        gap:8px;
+
+    }
+
+
+    .card{
+
+        min-width:0;
+
+    }
+        .row:has(.grid-tren) .zona{
+
+        margin-right:0px !important;
+
+        width:50px !important;
+
+    }
+
+
+}
+/* ================= TABLET: PANEL DERECHO ABAJO ================= */
+
+@media (max-width:1400px){
+
+    .dashboard-main{
+        display:flex;
+        flex-direction:column;
+        gap:16px;
+    }
+
+    /* Patio ocupa primero */
+    .yard-container{
+        width:100%;
+        order:1;
+    }
+
+    /* Paneles abajo */
+    .events-panel{
+        order:2;
+
+        width:100%;
+        position:static;
+
+        display:flex;
+        flex-direction:column;
+        gap:16px;
+
+        margin-top:20px;
+    }
+
+    .events-panel .panel{
+        width:100%;
+    }
+
+}
 
 </style>
 
@@ -2987,9 +3240,11 @@ gruas:[
 'K-11','K-16','K-34','Z-40','Z-41','Z-39'
 ]
 },
+
 {
-  zona:'I',
-  gruas:['K-08','K-07','K-06','K-05']
+zona:'I',
+  gruas:
+  ['K-08','K-07','K-06','K-05','','','']
 }
 
 
