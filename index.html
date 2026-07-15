@@ -17,7 +17,10 @@ CONTROL OPERATIVO GRÚAS
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-
+<link rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
 
 /* ================= RESET ================= */
@@ -187,22 +190,19 @@ img, iframe{
   overflow-x: auto;
 }
 
-.tabla-reporte {
-  width: 100%;
-  table-layout: fixed;
-  border-collapse: collapse;
+.tabla-reporte{
+    width:max-content;
+    min-width:100%;
+    table-layout:auto;
 }
 
 
 
 .tabla-reporte th,
-.tabla-reporte td {
-  padding: 6px 8px;
-  font-size: 12px;
-
-  white-space: normal;   /* 👈 CAMBIO IMPORTANTE */
-  word-break: break-word;
-  overflow-wrap: break-word;
+.tabla-reporte td{
+    white-space:normal;
+    word-break:break-word;
+    padding:8px;
 }
 
 /* ================= YARD ================= */
@@ -358,7 +358,8 @@ margin-right: 15px;
   color:white;
 }
 .falla{
- animation:blinkFail 1s infinite;
+ background:#c62828;
+ color:white;
 }
 .baño{
   background:#F5B427;
@@ -369,21 +370,7 @@ margin-right: 15px;
   background:#806237;
   color:white;
 }
-@keyframes blinkFail{
 
- 0%{
-   box-shadow:0 0 0px red;
- }
-
- 50%{
-   box-shadow:0 0 15px red;
- }
-
- 100%{
-   box-shadow:0 0 0px red;
- }
-
-}
 
 .sinsenal{
   background:#8e73a8;
@@ -633,7 +620,7 @@ gap:8px;
     border-radius:6px;
 
     padding:12px;
-border-left:5px solid #d32f2f;
+    border-left:5px solid #d32f2f;
 }
 
 .item strong{
@@ -1346,7 +1333,23 @@ color:#1f2933;
     overflow-y:auto;
     padding:10px;
 }
-
+#mensajeActivo .item{
+    display:block !important;
+    color:#111 !important;
+    background:white !important;
+    height:auto !important;
+    min-height:80px !important;
+    overflow:visible !important;
+    visibility:visible !important;
+    opacity:1 !important;
+}
+#mensajeActivo p,
+#mensajeActivo div,
+#mensajeActivo span{
+    color:#111 !important;
+    display:block !important;
+    visibility:visible !important;
+}
 .panel-header{
 
  background:#455a64;
@@ -1618,8 +1621,6 @@ button:hover{
 
   background:white;
 
-  border:none;
-
   border-left:4px solid #76a845;
 
   border-radius:10px;
@@ -1628,8 +1629,6 @@ button:hover{
 
   padding:14px;
 
-  box-shadow:
-    0 2px 8px rgba(0,0,0,.05);
 }
 .messages-header{
 
@@ -1677,19 +1676,26 @@ button:hover{
 }
 
 .compose-card,
-.live-message,
 .history-card{
 
     background:#fff;
+    border-radius:20px;
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
 
-    border-radius:18px;
+    display:flex;
+    flex-direction:column;
 
-    box-shadow:
-    0 10px 25px rgba(0,0,0,.08);
-
-    border:1px solid #dce4ec;
+    min-height:720px;
 }
+.msg-actions{
 
+    margin-top:auto;
+
+    display:flex;
+    justify-content:center;
+
+    padding-top:20px;
+}
 .compose-card{
 
     padding:25px;
@@ -2249,14 +2255,28 @@ button:hover{
     width:170px;
 }
 .mensaje-activo{
-  margin-top:10px;
-  padding:10px 12px;
-  border-radius:10px;
-  background:#fff3cd;
-  color:#856404;
-  font-weight:600;
-  font-size:13px;
-  border:1px solid #ffeeba;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    padding:10px;
+    overflow:visible;
+}
+
+
+.mensaje-activo .item{
+
+    background:white;
+    color:#111;
+
+    border-radius:10px;
+    padding:10px;
+
+    border-left:5px solid #0b5aa2;
+
+    box-shadow:
+    0 2px 8px rgba(0,0,0,.10);
+
+    display:block;
 }
 .msg-badge{
   position: absolute;
@@ -2550,6 +2570,189 @@ body{
     }
 
 }
+/* CORRECCION MENSAJE ACTIVO */
+
+.live-message{
+    overflow:visible !important;
+    min-height:auto;
+}
+
+
+#mensajeActivo{
+    margin-top:15px;
+    width:100%;
+    display:block !important;
+    overflow:visible !important;
+}
+
+
+#mensajeActivo .item{
+
+    width:100%;
+
+    background:#fff !important;
+
+    color:#111 !important;
+
+    padding:10px;
+
+    border-radius:10px;
+
+    border-left:5px solid #0b5aa2;
+
+    min-height:auto;
+
+    display:block !important;
+
+    visibility:visible !important;
+
+    opacity:1 !important;
+
+}
+
+
+#mensajeActivo p{
+
+    color:#111 !important;
+
+    font-size:15px;
+
+    line-height:1.3;
+    margin:6px 0;
+
+}
+.operador-grua{
+    background:#eef6ff;
+    border:1px solid #c9defa;
+    border-radius:6px;
+    padding:8px;
+    margin:8px 0;
+    font-weight:bold;
+    text-align:center;
+}
+/* LIMITAR LISTAS PARA MANTENER MENSAJE ACTIVO VISIBLE */
+
+#listaFallas,
+#listaPrioridad {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.operador-box{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    width:100%;
+}
+
+.operador-label{
+    font-weight:600;
+    color:#1f2937;
+    white-space:nowrap;
+}
+
+.operador-nombre{
+    flex:1;
+    min-width:0;
+    color:#0056a6;
+    font-weight:600;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+
+.editor-operador{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-top:8px;
+}
+
+#operadorManual{
+    flex:1;
+    height:34px;
+    padding:0 10px;
+    border:1px solid #cbd5e1;
+    border-radius:5px;
+    box-sizing:border-box;
+}
+
+.btn-editar{
+    width:30px;
+    height:30px;
+    border:none;
+    border-radius:4px;
+    background:transparent;
+    color:#6b7280;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition:all .2s ease;
+}
+
+.btn-editar:hover{
+    background:#e5e7eb;
+    color:#0056a6;
+}
+
+.btn-operador{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:5px;
+    background:#0068b7;
+    color:#fff;
+    cursor:pointer;
+}
+
+.btn-operador:hover{
+    background:#00529b;
+}
+
+.btn-cancelar{
+    width:34px;
+    height:34px;
+    border:none;
+    border-radius:5px;
+    background:#dc2626;
+    color:#fff;
+    cursor:pointer;
+}
+
+.btn-cancelar:hover{
+    background:#b91c1c;
+}
+.messages-dashboard{
+
+    display:grid;
+    grid-template-columns:420px 1fr;
+    gap:24px;
+    align-items:stretch;   /* importante */
+}
+.history-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    max-height:680px;
+
+}
+
+#historialMensajes{
+
+    flex:1;
+
+    overflow-y:auto;
+
+}
+.compose-card{
+
+    position:sticky;
+
+    top:20px;
+
+}
 
 </style>
 
@@ -2666,71 +2869,68 @@ style="display:none;">
     ">
   </iframe>
 </div>
-<!-- ================= HEADER ================= -->
 <div id="vistaMensajes" class="vista">
 
-  <div class="messages-container">
+    <div class="messages-container">
 
-    <div class="messages-header">
+        <div class="messages-header">
 
-      <h2>Mensajes Operativos OPERACIONES - GRUAS RTG</h2>
+            <h2>Mensajes Operativos OPERACIONES - GRÚAS RTG</h2>
 
-      <span>
-        Información en tiempo real para Operaciones y Mantenimiento
-      </span>
-
-    </div>
-
-    <div class="messages-dashboard">
-
-      <!-- IZQUIERDA -->
-
-      <div class="compose-card">
-
-        <div class="card-title">
-          NUEVO MENSAJE
-        </div>
-
-        <textarea
-          class="msg"
-          id="mensajeInput"
-          placeholder="Informe acerca de la grua..."
-        ></textarea>
-
-        <div class="msg-actions">
-
-          <button
-            class="publish-btn"
-            onclick="guardarMensaje()">
-
-            PUBLICAR MENSAJE
-
-          </button>
+            <span>
+                Información en tiempo real para Operaciones y Mantenimiento
+            </span>
 
         </div>
 
-      </div>
+        <!-- LAS DOS COLUMNAS -->
+        <div class="messages-dashboard">
 
+            <!-- IZQUIERDA -->
+            <div class="compose-card">
 
+                <div class="card-title">
+                    NUEVO MENSAJE
+                </div>
+
+                <label><strong>Quién envía</strong></label>
+
+                <select id="autorMensaje" class="input">
+                    <option value="">Seleccione...</option>
+                    <option value="OPERACIONES">OPERACIONES</option>
+                    <option value="MTTO GRÚAS">MTTO GRÚAS</option>
+                </select>
+
+                <textarea
+                    class="msg"
+                    id="mensajeInput"
+                    placeholder="Informe acerca de la grúa..."
+                ></textarea>
+
+                <div class="msg-actions">
+                    <button
+                        class="publish-btn"
+                        onclick="guardarMensaje()">
+                        PUBLICAR MENSAJE
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- DERECHA -->
+            <div class="history-card">
+
+                <div class="history-header">
+                    HISTORIAL OPERATIVO
+                </div>
+
+                <div id="historialMensajes"></div>
+
+            </div>
+
+        </div>
 
     </div>
-
-    <div class="history-card">
-
-      <div class="history-header">
-
-        HISTORIAL OPERATIVO
-
-      </div>
-
-      <div
-        id="historialMensajes">
-
-      </div>
-
-    </div>
-
-  </div>
 
 </div>
 <div id="vistaOperativo" class="vista activa">
@@ -2863,16 +3063,16 @@ style="display:none;">
 
             <div class="list" id="listaPrioridad"></div>
 
-            
+            </div>
 <div class="panel dashboard-panel">
 
     <div class="panel-header">
         MENSAJE ACTIVO
     </div>
 
-    <div class="list" id="mensajeActivo">
-        Cargando mensaje...
-    </div>
+<div id="mensajeActivo" class="mensaje-activo">
+    Cargando mensaje...
+</div>
 <span id="msgBadge" class="msg-badge" style="display:none;">1</span>
 </div>
         </div>
@@ -2899,6 +3099,67 @@ style="display:none;">
   <div class="modal-title" id="modalTitle">
   REGISTRO DE EVENTO
 </div>
+
+<div class="operador-box">
+
+    <span class="operador-label">OPERADOR:</span>
+
+    <span id="operadorActual" class="operador-nombre">
+        SIN ASIGNAR
+    </span>
+
+    <button
+        type="button"
+        class="btn-editar"
+        onclick="mostrarEditorOperador()"
+        title="Editar operador">
+        <i class="fas fa-pen"></i>
+    </button>
+
+</div>
+
+<div id="editorOperador" class="editor-operador" style="display:none;">
+
+    <input
+        id="operadorManual"
+        type="text"
+        placeholder="Nuevo operador">
+
+    <button
+        type="button"
+        class="btn-operador"
+        onclick="guardarOperadorManual()"
+        title="Guardar">
+        <i class="fas fa-check"></i>
+    </button>
+
+    <button
+        type="button"
+        class="btn-cancelar"
+        onclick="ocultarEditorOperador()"
+        title="Cancelar">
+        <i class="fas fa-times"></i>
+    </button>
+
+</div>
+
+<div id="editorOperador" class="editor-operador" style="display:none;">
+
+    <input
+        id="operadorManual"
+        type="text"
+        placeholder="Nuevo operador">
+
+    <button class="btn-operador" onclick="guardarOperadorManual()">
+        ✔
+    </button>
+
+    <button class="btn-cancelar" onclick="ocultarEditorOperador()">
+        ✖
+    </button>
+
+</div>
+
 <div class="estado-panel">
 
   <div id="panelEstado">
@@ -2930,7 +3191,6 @@ style="display:none;">
 
 <div id="grupoActividad" style="display:none;">
   <label for="actividad">Actividad que realizaba</label>
-
   <select id="actividad">
     <option value="Buque-(Descarga/Carga)">Buque-(Descarga/Carga)</option>
     <option value="CFS-(Programacion/Retirada)">CFS-(Programacion/Retirada)</option>
@@ -2942,18 +3202,29 @@ style="display:none;">
     <option value="Traslados(Entrega/Recepcion)">Traslados(Entrega/Recepcion)</option>
     <option value="Tren-(Carga/Descarga)">Tren-(Carga/Descarga)</option>
   </select>
-
-
 </div>
 
-<label id="labelRegistroFalla" style="display:none;">
-    ¿Que falla reporta?
-</label>
 
-<textarea
-    id="registro_falla"
-    style="display:none;">
-</textarea>
+<div id="labelRegistroFalla" style="display:none;">
+  <label for="registro_falla">¿Qué falla reporta?</label>
+
+  <select id="registro_falla">
+    <option value="">Seleccione una opción</option>
+    <option value="Spreader">Spreader</option>
+    <option value="Falla Gantry">Falla Gantry</option>
+    <option value="Falla Hoist">Falla Hoist</option>
+    <option value="Falla Winche (Cable)">Falla Winche (Cable)</option>
+    <option value="Falla Aire Acondicionado">Falla Aire Acondicionado</option>
+    <option value="Falla Alumbrado">Falla Alumbrado</option>
+    <option value="Falla Control">Falla Control</option>
+    <option value="Falla en Trolley">Falla en Trolley</option>
+    <option value="Falla Neumática (Llanta)">Falla Neumática (Llanta)</option>
+    <option value="Percance">Percance</option>
+    <option value="Preventivo">Preventivo</option>
+    <option value="Falla Eléctrica">Falla Eléctrica</option>
+    <option value="Falla Sistema">Falla Sistema</option>
+  </select>
+</div>
 
 <div id="grupoPrioridad" style="display:none">
 
@@ -2966,18 +3237,25 @@ style="display:none;">
     <option value="1">1</option>
     <option value="2">2</option>
     <option value="3">3</option>
+    <option value="4">4</option>
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
   </select>
 
 </div>
 </select>
-
 
 </div>
 
 <div id="estadoIndicador" class="estado-indicador">
   Estado actual: —
 </div>
-
+<button 
+ id="btnAtenderFalla"
+ onclick="activarAtencionFalla()">
+    STANDBY GRÚA ATENDIENDO FALLA
+</button>
   <button type="button" class="btn-estado" onclick="guardarEstadoRapido()">
     ACTUALIZAR ESTADO
   </button>
@@ -3001,11 +3279,9 @@ style="display:none;">
 <label>Bloque / Tramo</label>
 <input type="text" id="bloqueTramo">
 
-<label>Fecha / Hora Reporte Falla</label>
+<label>Fecha/Hora de falla</label>
 <input type="datetime-local" id="fechaReporte">
 
-<label>Fecha / Hora Entrega Turno</label>
-<input type="datetime-local" id="fechaEntrega">
 
 <label>Tiempo Muerto</label>
 
@@ -3051,23 +3327,13 @@ Seleccione supervisor
 
 <label>Responsabilidad</label>
 
-<select id="responsabilidad">
-
-<option value="AA">AA</option>
-<option value="CELDAS DE CARGA">Celdas de carga</option>
-<option value="CABLE REEL">Cable reel</option>
-<option value="FALLAS DE GANTRY">Fallas de gantry</option>
-<option value="SPREADER">Fallas de spreader</option>
-<option value="TROLLEY">Fallas de trolley</option>
-
+<select id="responsabilidad"
+        onchange="cargarCodigos()">
 </select>
 
 <label>Código Falla</label>
-<input
-type="text"
-id="codigoFalla"
-placeholder="Ej: STS-101"
->
+<select id="codigoFalla">
+</select>
 
 <label>Descripción de falla</label>
 
@@ -3310,7 +3576,11 @@ function abrirIFS() {
 /* ================= GET ================= */
 
 function getEquipo(id){
-  return equipos.find(e => e.id === id) || null;
+
+  return equipos.find(
+    g => g.id === id
+  );
+
 }
 /* ================= TIEMPO FALLA ================= */
 
@@ -3450,7 +3720,7 @@ filtroEstado=v;
 render();
 
 }
-
+let fallasAtendiendo = [];
 function render(){
   
   let html = '';
@@ -3479,20 +3749,18 @@ function render(){
         return;
       }
 
-      const g = getEquipo(id);
+const g = getEquipo(id);
 
-if (!g) return;
+if(!g){
+
+  html += `
+    <div class="card invisible-slot"></div>
+  `;
+
+  return;
+}
 
 estadoAnterior = g.estado;
-      // si no existe en BD
-      if(!g){
-
-        html += `
-          <div class="card invisible-slot"></div>
-        `;
-
-        return;
-      }
 
       // filtro estado
       if(
@@ -3526,11 +3794,15 @@ estadoAnterior = g.estado;
 
 
 
-      html += `
-        <div
-          class="card ${g.estado}"
-          onclick="abrir('${g.id}')"
-        >
+html += `
+<div
+ class="card ${g.estado} ${
+(g.estado === 'falla' && fallasAtendiendo.includes(g.id))
+    ? 'priority-blink'
+    : ''
+ }"
+ onclick="abrir('${g.id}')"
+>
 
           <div class="code">
             ${g.id}
@@ -3606,7 +3878,27 @@ function renderKPIs(){
     equipos.filter(g => parseInt(g.prioridad || 0) > 0).length;
 
 }
+function obtenerTiempoContador(g){
 
+  let segundos = g.contador_segundos || 0;
+
+  if(
+    g.contador_estado === 'running' &&
+    g.contador_inicio
+  ){
+
+    const inicio = new Date(g.contador_inicio);
+    const ahora = new Date();
+
+    segundos += Math.floor(
+      (ahora - inicio) / 1000
+    );
+
+  }
+
+  return formatearTiempo(segundos);
+
+}
 function renderFallas(){
 
   const cont = document.getElementById('listaFallas');
@@ -3645,11 +3937,7 @@ function renderFallas(){
   ${g.registro_falla || 'Sin detalle'}
 </span>
 
-        <span>
-          ${g.codigo_falla || ''} - ${g.descripcion_falla || ''}
-        </span>
-
-        <div>${tiempo}</div>
+        <div>${obtenerTiempoContador(g)}</div>
       </div>
     `;
   });
@@ -3713,7 +4001,7 @@ setInterval(() => {
       }
 
     });
-
+renderFallas();
 }, 1000);
 /* ================= PRIORIDAD ================= */
 
@@ -3727,9 +4015,9 @@ function renderPrioridad(){
 const list = equipos
   .filter(g =>
     (g.prioridad || 0) > 0 &&
-    !['disponible','operacion'].includes((g.estado || '').toLowerCase().trim())
+    g.estado === 'falla'
   )
-    .sort((a,b) => a.prioridad - b.prioridad);
+  .sort((a,b) => a.prioridad - b.prioridad);
 
   if(list.length === 0){
     cont.innerHTML = 'Sin prioridades operativas';
@@ -3771,14 +4059,16 @@ function abrir(id){
   }
 
   mostrarPanelEstado();
-
+  document.getElementById('operadorActual').innerText =
+  g.nombre_operador || "SIN ASIGNAR";
+  document.getElementById('operadorManual').value =
+g.nombre_operador || "";
   document.getElementById('modalTitle').innerText = `GRÚA ${id}`;
   document.getElementById('modal').style.display = 'flex';
 
   document.getElementById('gruaGeneral').value = id;
   document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
   document.getElementById('fechaReporte').value = g.fecha_hora_falla || '';
-  document.getElementById('fechaEntrega').value = g.fecha_hora_entrega || '';
   document.getElementById('tiempoMuerto').value = g.tiempo_muerto || '';
   document.getElementById('turnoGeneral').value = g.turno_operacion || '1';
   document.getElementById('tipoRegistro').value = 'operaciones';
@@ -3824,7 +4114,6 @@ function abrir(id){
   actualizarIndicadorEstado(); // 👈 indicador final
   estadoAnterior = g.estado;
 }
-
 function abrirFormularioTransicion(){
   const el = document.getElementById('accionesCierreFalla');
 
@@ -3910,7 +4199,6 @@ function validarCamposDisponibilidad() {
     'turnoGeneral',
     'bloqueTramo',
     'fechaReporte',
-    'fechaEntrega',
     'tiempoMuerto',
     'areaMantto',
     'supervisor',
@@ -3946,7 +4234,6 @@ function limpiarErroresDisponibilidad() {
     'turnoGeneral',
     'bloqueTramo',
     'fechaReporte',
-    'fechaEntrega',
     'tiempoMuerto',
     'areaMantto',
     'supervisor',
@@ -3969,16 +4256,23 @@ async function guardar() {
 
   const estadoNuevo = document.getElementById('estado').value;
   const estado = estadoNuevo;
-
-  if (estado === 'disponible') {
+  
+if (estado === 'disponible') {
 
     const errores = validarCamposDisponibilidad();
 
     if (errores.length > 0) {
-      alert("Faltan campos obligatorios para DISPONIBLE");
-      return;
+
+        console.log("Campos faltantes:", errores);
+
+        alert(
+            "Faltan estos campos:\n\n" +
+            errores.join("\n")
+        );
+
+        return;
     }
-  }
+}
 
 
   const equipoActual = getEquipo(actual);
@@ -4024,10 +4318,6 @@ estadoNuevo !== 'falla';
 
   const fecha_hora_falla =
     document.getElementById("fechaReporte").value;
-
-
-  const fecha_hora_entrega =
-    document.getElementById("fechaEntrega").value;
 
 
   const tiempo_muerto =
@@ -4149,8 +4439,6 @@ const registro = {
 
     fecha_hora_falla,
 
-
-    fecha_hora_entrega,
 
 
     tiempo_muerto,
@@ -4415,9 +4703,20 @@ function cargarStandby(){
 
 async function guardarMensaje(){
 
-let mensaje =
-document.getElementById('mensajeInput')
-.value.trim();
+let mensaje = document.getElementById('mensajeInput').value.trim();
+const autor = document.getElementById('autorMensaje').value;
+
+
+if(!autor){
+    alert("Seleccione quién envía el mensaje");
+    return;
+}
+
+if(!mensaje){
+    alert("Escribe un mensaje");
+    return;
+}
+
 
 if(!mensaje){
 
@@ -4434,6 +4733,7 @@ await db
 
 .insert([
 {
+autor: autor,
 mensaje:mensaje
 }
 ]);
@@ -4448,11 +4748,9 @@ return;
 
 }
 
-document.getElementById('mensajeInput')
-.value='';
-
+document.getElementById('mensajeInput').value = "";
+document.getElementById('autorMensaje').value = "";
 cargarMensajeActual();
-
 cargarHistorial();
 
 }
@@ -4477,16 +4775,13 @@ async function cargarMensajeActual() {
   const cont = document.getElementById('mensajeActivo');
   const badge = document.getElementById('msgBadge');
 
-  if (!cont) return;
-
-  if (!data || !data.length) {
-    cont.innerHTML = 'Sin mensajes operativos.';
-    if (badge) badge.style.display = 'none';
-    return;
-  }
+if (!cont) {
+  console.log("NO EXISTE mensajeActivo");
+  return;
+}
 
   const m = data[0];
-
+console.log("MENSAJE ACTUAL:", m);
   // ================= BADGE (CORRECTO) =================
   if (badge) {
     if (ultimoIdGuardado != m.id) {
@@ -4496,35 +4791,39 @@ async function cargarMensajeActual() {
     }
   }
 
-  localStorage.setItem('ultimoMensajeId', m.id);
+  
 
-  // ================= FECHA =================
-  const fecha = new Date(m.created_at + 'Z');
-
-  const fechaFormateada = fecha.toLocaleString('es-MX', {
-    timeZone: 'America/Mexico_City',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
+const fechaFormateada = formatearFechaMX(m.created_at);
 
   // ================= RENDER =================
-  cont.innerHTML = `
-    <div class="item">
+cont.innerHTML = `
+<div class="item">
 
-      <div style="font-size:12px; color:#64748b; margin-bottom:8px; font-weight:700;">
-        ${fechaFormateada}
-      </div>
+<div style="font-weight:bold;color:#0b5aa2;">
+${m.autor || "SIN REMITENTE"}
+</div>
 
-      <div style="font-size:14px; line-height:1.5; font-weight:600; color:#1f2937;">
-        ${m.mensaje}
-      </div>
+<div style="
+margin-top:10px;
+color:#111;
+font-size:16px;
+display:block;
+">
+${m.mensaje}
+</div>
 
-    </div>
-  `;
+<div style="
+margin-top:10px;
+font-size:12px;
+color:#64748b;
+">
+${fechaFormateada}
+</div>
+
+</div>
+`;
+console.log("CONTENIDO PINTADO:", cont.innerHTML);
+localStorage.setItem('ultimoMensajeId', m.id);
 }
 
 /* ================= HISTORIAL ================= */
@@ -4561,24 +4860,39 @@ async function cargarHistorial(){
       hour12: false
     });
 
-    html += `
-      <div class="history-item">
+html += `
+<div class="history-item">
 
-          <div class="history-date">
-              ${fechaFormateada}
-          </div>
+    <div class="history-date">
+        ${fechaFormateada}
+    </div>
 
-          <div class="history-text">
-              ${m.mensaje}
-          </div>
+    <div style="
+        font-weight:bold;
+        color:#0b5aa2;
+        margin-bottom:6px;
+    ">
+        ${m.autor || "SIN REMITENTE"}
+    </div>
 
-      </div>
-    `;
+    <div class="history-text">
+        ${m.mensaje}
+    </div>
+
+</div>
+`;
 
   });
 
-  document.getElementById('historialMensajes').innerHTML =
+const contenedor =
+document.getElementById('historialMensajes');
+
+if(contenedor){
+
+    contenedor.innerHTML =
     html || 'Sin historial';
+
+}
 }
 
 
@@ -4609,6 +4923,37 @@ reloadTimeout = setTimeout(() => {
 )
 .subscribe(status => {
   console.log('Realtime:', status);
+});
+/* ================= REALTIME MENSAJES ================= */
+
+db
+.channel('mensajes-operativos-changes')
+.on(
+  'postgres_changes',
+  {
+    event:'INSERT',
+    schema:'public',
+    table:'mensajes_operativos'
+  },
+  (payload)=>{
+
+    console.log("🚨 EVENTO MENSAJE:",payload);
+
+    setTimeout(()=>{
+
+      cargarHistorial();
+
+    },500);
+
+  }
+)
+.subscribe(status=>{
+
+ console.log(
+   "ESTADO REALTIME MENSAJES:",
+   status
+ );
+
 });
 /* ================= CERRAR CLICK AFUERA ================= */
 
@@ -4669,11 +5014,7 @@ function mostrarVista(vista) {
     botonActivo.classList.add('active');
   }
 }
-cargar();
 
-cargarMensajeActual();
-
-cargarHistorial();
 async function cargarExcel(event){
 
   const file = event.target.files[0];
@@ -4748,105 +5089,285 @@ async function procesarHoja(sheet){
     const celdaEquipo = sheet['A' + (fila + 1)];
     if(!celdaEquipo) continue;
 
-    const id = normalizarGrua(String(celdaEquipo.v));
-    if(!id) continue;
 
-    // ================= OBSERVACIÓN =================
-    const observacion = sheet['F' + (fila + 1)]?.v || '';
-    const texto = String(observacion).toUpperCase().trim();
+const id = normalizarGrua(String(celdaEquipo.v));
+console.log("EXCEL LEIDO:", celdaEquipo.v, "ID GENERADO:", id);
+if (!id) continue;
 
-    // ================= MARCA OPERACIÓN (COLUMNA B) =================
-    const marca = sheet['B' + (fila + 1)]?.v;
-    const esOperacion = String(marca || '').trim() === '*';
+// ================= DATOS EXCEL =================
 
-    let estado = 'disponible';
+const empleado = String(
+  sheet['C' + (fila + 1)]?.v || ''
+).trim();
+
+const operador = String(
+  sheet['D' + (fila + 1)]?.v || ''
+).trim();
+
+console.log("GRÚA:", id, "OPERADOR EXCEL:", operador);
+    // ================= GRÚA ACTUAL EN SISTEMA =================
+
+    const g = getEquipo(id);
+
+    if(!g){
+      console.log("No existe:", id);
+      continue;
+    }
+
+
+
+    // ================= OBSERVACIÓN EXCEL =================
+
+    const observacion =
+      sheet['F' + (fila + 1)]?.v || '';
+
+
+    const texto =
+      String(observacion)
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g,"")
+      .toUpperCase()
+      .trim();
+
+
+
+    // ================= OPERACION =================
+
+    const marca =
+      sheet['B' + (fila + 1)]?.v;
+
+
+    const esOperacion =
+      String(marca || '').trim() === '*';
+
+
+
+    let estadoExcel = "disponible";
+
     let prioridad = 0;
 
-    // ================= OPERACIÓN (PRIORIDAD MÁXIMA) =================
-    if (esOperacion) {
-      estado = 'operacion';
-    }
 
-    // ================= FALLA =================
-    else if (texto.includes('FALLA')) {
-      estado = 'falla';
-    }
 
-    // ================= MANTENIMIENTO =================
-    else if (
-      texto.includes('DAILY') ||
-      texto.includes('DAYLI') ||
-      texto.includes('MANTTO') ||
-      texto.includes('MANTENIMIENTO')
+    // ================= DETECCION ESTADOS EXCEL =================
+
+
+    // FALLA DE SEÑAL
+    if(
+      texto.includes("FALLA DE SENAL") ||
+      texto.includes("SIN SENAL") ||
+      texto.includes("SENAL")
     ){
-      estado = 'dayli';
+
+      estadoExcel = "fseñal";
+
     }
 
-    // ================= FUERA DE SERVICIO =================
-    else if (texto.includes('FUERA')) {
-      estado = 'anclada';
-    }
 
-    // ================= DISPONIBLE =================
-    else if (
-      texto.includes('DISPONI') ||
-      texto.includes('OPERADOR')
+    // FALLA
+    else if(
+      texto.includes("FALLA")
     ){
-      estado = 'disponible';
+
+      estadoExcel = "falla";
+
     }
+
+
+    // BAÑO
+    else if(
+      texto.includes("BANO") ||
+      texto.includes("OPERADOR EN BANO")
+    ){
+
+      estadoExcel = "baño";
+
+    }
+
+
+    // DAYLI
+    else if(
+      texto.includes("DAYLI") ||
+      texto.includes("DAILY") ||
+      texto.includes("DAYLY") ||
+      texto.includes("DIALY") ||
+      texto.includes("DALI") ||
+      texto.includes("MTTO") ||
+      texto.includes("MANTTO") ||
+      texto.includes("MANTENIMIENTO")
+    ){
+
+      estadoExcel = "dayli";
+
+    }
+
+
+    // FUERA
+    else if(
+      texto.includes("FUERA")
+    ){
+
+      estadoExcel = "anclada";
+
+    }
+
+
+    // DISPONIBLE
+    else if(
+      texto.includes("DISPONI") ||
+      texto.includes("OPERADOR")
+    ){
+
+      estadoExcel = "disponible";
+
+    }
+
+
+    // OPERACION
+    else if(esOperacion){
+
+      estadoExcel = "operacion";
+
+    }
+
+
+
+
+    // ==================================================
+    // CONSERVAR ESTADOS ACTIVOS DEL SISTEMA
+    // ==================================================
+
+    let estado = estadoExcel;
+
+
+    if(
+      g.estado === "baño" ||
+      g.estado === "fseñal" ||
+      g.estado === "dayli"
+    ){
+
+      estado = g.estado;
+
+
+      console.log(
+        "SE CONSERVA ESTADO SISTEMA:",
+        id,
+        g.estado
+      );
+
+    }
+
+
 
     // ================= PRIORIDAD =================
-    if (
-      texto.includes('PRIORID') ||
-      texto.includes('PRIORIDAD')
+
+
+    if(
+      texto.includes("PRIORIDAD") ||
+      texto.includes("PRIORID")
     ){
+
       prioridad = 1;
-      observacion_extra = 'GRÚA PRIORIDAD PARA OPERACIÓN';
+
+      observacion_extra =
+      "GRÚA PRIORIDAD PARA OPERACIÓN";
+
     }
 
-    console.log(id, estado, prioridad, observacion_extra);
 
-    const { error } = await db
+
+
+    console.log(
+      "GRUA:",
+      id,
+      "EXCEL:",
+      estadoExcel,
+      "SISTEMA:",
+      g.estado,
+      "FINAL:",
+      estado
+    );
+
+
+
+    const {error} = await db
       .from('gruas')
-      .update({
-        estado,
-        prioridad,
-        observacion_extra,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', id);
+.update({
+
+  estado,
+
+  prioridad,
+
+  observacion_extra,
+
+  nombre_operador: operador,
+
+  updated_at:
+  new Date().toISOString()
+
+})
+      .eq('id',id);
+
+
 
     if(error){
+
       console.log(error);
+
     }
+
+
   }
 
+
   await cargar();
-  alert('Estados actualizados correctamente');
+
+
+  alert(
+    "Estados actualizados correctamente"
+  );
+
 }
-
-
 document.addEventListener('DOMContentLoaded', () => {
-
+  controlarBotonStandby();
   mostrarVista('operativo');
-
+  cargarOpcionesTiempoMuerto();
   cargar();
   cargarMensajeActual();
   cargarHistorial();
+  cargarResponsabilidades();
 
-  document.getElementById('estado').addEventListener(
-    'change',
-    controlarPrioridad
-  );
-    document.getElementById('estado')
-    .addEventListener('change', actualizarIndicadorEstado);
+  const estado = document.getElementById('estado');
 
-      document.getElementById('estado')
-    .addEventListener('change', actualizarUIEstado);
+  if (estado) {
 
-    document.getElementById('areaMantto').addEventListener('change', function () {
-  actualizarGruaPorArea(this.value);
-});
+    estado.addEventListener(
+      'change',
+      controlarPrioridad
+    );
+
+    estado.addEventListener(
+      'change',
+      actualizarIndicadorEstado
+    );
+
+    estado.addEventListener(
+      'change',
+      actualizarUIEstado
+    );
+
+  }
+
+
+  const area = document.getElementById('areaMantto');
+
+  if (area) {
+
+    area.addEventListener('change', function () {
+      actualizarGruaPorArea(this.value);
+    });
+
+  }
+
 });
 function obtenerTextoEstado(g){
 
@@ -4942,12 +5463,11 @@ async function cargarReporteGruas() {
 
           <thead>
             <tr>
-              <th>FECHA/HORA REPORTE</th>
-              <th>FECHA/HORA ENTREGA</th>
-              <th>TURNO</th>
+              <th>FECHA/HORA DE FALLA</th>
+              <th>GRÚA</th>
               <th>SUPERVISOR</th>
               <th>STANDBY</th>
-              <th>GRÚA</th>
+              <th>TURNO</th>
               <th>ÁREA</th>
               <th>RESPONSABILIDAD</th>
               <th>BLOQUE</th>
@@ -4968,12 +5488,11 @@ async function cargarReporteGruas() {
     data.forEach(r => {
       html += `
         <tr>
-          <td>${r.fecha_hora_falla ?? ''}</td>
-          <td>${r.fecha_hora_entrega ?? ''}</td>
-          <td>${r.turno ?? ''}</td>
+          <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
+          <td>${r.grua ?? ''}</td>
           <td>${r.supervisor ?? ''}</td>
           <td>${r.standby ?? ''}</td>
-          <td>${r.grua ?? ''}</td>
+          <td>${r.turno ?? ''}</td>
           <td>${r.area_mantto ?? ''}</td>
           <td>${r.responsabilidad ?? ''}</td>
           <td>${r.bloque_tramo ?? ''}</td>
@@ -5137,25 +5656,30 @@ const registro_falla =
 // ================= FALLA =================
 if (estado === 'falla') {
 
-  if (contador_estado !== 'running') {
+  // NUEVA FALLA: siempre inicia contador nuevo
+  if (estadoAnterior !== 'falla') {
 
     const inicioFalla = new Date().toISOString();
 
     contador_estado = 'running';
-
     contador_inicio = inicioFalla;
-
     contador_segundos = 0;
 
     falla_inicio = inicioFalla;
-console.log("GUARDANDO INICIO FALLA:", falla_inicio);
+
+    console.log(
+      "NUEVO INICIO DE FALLA:",
+      falla_inicio
+    );
+
   }
 
 } else {
-    contador_estado = 'stopped';
-    contador_inicio = null;
-    contador_segundos = 0;
-  }
+
+  contador_estado = 'stopped';
+  contador_inicio = null;
+
+}
 
   // ================= BAÑO =================
   let contador_bano_estado = g.contador_bano_estado || 'stopped';
@@ -5283,15 +5807,20 @@ console.log("GUARDANDO INICIO FALLA:", falla_inicio);
 
     const finBano = new Date();
 
-    const { error: errorBano } = await db
-      .from('reportes_operadores_bano')
-      .insert([{
-        grua: g.id,
-        operador: document.getElementById('opOperador')?.value || g.operador || '',
-        fecha_inicio: g.contador_bano_inicio,
-        fecha_fin: finBano.toISOString(),
-        tiempo_bano: tiempo_bano_real
-      }]);
+const { error: errorBano } = await db
+  .from('reportes_operadores_bano')
+  .insert([{
+    grua: g.id,
+
+    // operador que viene del Excel
+    operador: g.nombre_operador || 'SIN ASIGNAR',
+
+    fecha_inicio: g.contador_bano_inicio,
+
+    fecha_fin: finBano.toISOString(),
+
+    tiempo_bano: tiempo_bano_real
+  }]);
 
     if (errorBano) console.log("ERROR BAÑO:", errorBano);
   }
@@ -5311,7 +5840,7 @@ const { error } = await db
 
     // ESTADO ACTUAL DE LA GRÚA
     estado: estado,
-
+    prioridad: prioridad,
 
     // DATOS TEMPORALES DE LA FALLA
     quien_reporto:
@@ -5361,7 +5890,7 @@ falla_inicio:
 
 })
 .eq("id", actual);
-
+g.prioridad = prioridad;
 if (error) {
     console.error(error);
     alert(error.message);
@@ -5478,7 +6007,6 @@ function abrirModalCierreFalla(g){
   document.getElementById('c_grua').value = g.id || '';
   document.getElementById('c_bloque').value = g.bloque_tramo || '';
   document.getElementById('c_fechaFalla').value = formatDateTime(g.fecha_hora_falla);
-  document.getElementById('c_fechaEntrega').value = new Date().toISOString().slice(0,16);
   document.getElementById('c_tm').value = g.tiempo_muerto || '';
   document.getElementById('c_operador').value = g.operador || '';
   document.getElementById('c_tipoFalla').value = g.tipo_falla || '';
@@ -5495,10 +6023,9 @@ async function guardarCierreFalla(){
     .from('reportes_operacion')
     .insert([{
       grua,
-      turno: document.getElementById('c_turno').value,
+      turno: obtenerTurnoActual(),
       bloque_tramo: document.getElementById('c_bloque').value,
       fecha_hora_falla: document.getElementById('c_fechaFalla').value,
-      fecha_hora_entrega: document.getElementById('c_fechaEntrega').value,
       tiempo_muerto: document.getElementById('c_tm').value,
       operador: document.getElementById('c_operador').value,
       tipo_falla: document.getElementById('c_tipoFalla').value,
@@ -5525,6 +6052,7 @@ async function guardarCierreFalla(){
     contador_estado: "stopped",
     contador_inicio: null,
     contador_segundos: 0,
+    contador_estado: "stopped",
 
     updated_at: new Date().toISOString()
 })
@@ -5591,7 +6119,8 @@ function abrirFormularioCierreFalla(equipo) {
   ocultarControlesEstado();
   const form =
   document.getElementById('formularioCierreFalla');
-
+  document.getElementById('c_turno').value =
+  obtenerTurnoActual();
   if (!form) return;
 
   form.style.display = 'block';
@@ -5605,8 +6134,6 @@ function abrirFormularioCierreFalla(equipo) {
   document.getElementById('c_fechaFalla').value =
     equipo.falla_inicio || '';
 
-  document.getElementById('c_fechaEntrega').value =
-    new Date().toISOString().slice(0,16);
 }
 function iniciarContadorNuevo(g) {
   if (!g) return;
@@ -5651,7 +6178,6 @@ function formatearFechaMX(fecha) {
     day: '2-digit',
     hour: '2-digit',
     minute: '2-digit',
-    second: '2-digit',
     hour12: false
   });
 
@@ -5697,8 +6223,45 @@ function mostrarPanelEstado(){
 
 }
 function actualizarUIEstado() {
+
   controlarPrioridad();
   actualizarIndicadorEstado();
+  controlarBotonStandby();
+
+  const estado =
+    document.getElementById('estado').value;
+
+  const grupo =
+    document.getElementById('grupoRegistroFalla');
+
+  if(grupo){
+
+    if(estado === 'falla'){
+      grupo.style.display = 'block';
+    }else{
+      grupo.style.display = 'none';
+    }
+
+  }
+if(estado === 'falla'){
+
+  const fecha =
+    document.getElementById('fechaReporte');
+
+  if(fecha){
+
+    const ahora = new Date();
+
+    ahora.setMinutes(
+      ahora.getMinutes() - ahora.getTimezoneOffset()
+    );
+
+    fecha.value =
+      ahora.toISOString().slice(0,16);
+
+  }
+
+}
 }
 function detectarArea(id){
 
@@ -5984,6 +6547,273 @@ async function cargarReporteSenal(){
   `;
 
   document.getElementById('tab-senal').innerHTML = html;
+}
+function activarAtencionFalla(){
+
+  if(!actual){
+    alert("Seleccione una grúa");
+    return;
+  }
+
+  const g = getEquipo(actual);
+
+  if(!g){
+    alert("No se encontró la grúa");
+    return;
+  }
+
+  // SOLO FALLA PUEDE SER ATENDIDA
+  if(g.estado !== 'falla'){
+
+    alert("La grúa debe estar en estado FALLA para iniciar atención");
+
+    return;
+  }
+
+
+  if(!fallasAtendiendo.includes(actual)){
+    fallasAtendiendo.push(actual);
+  }
+
+  render();
+
+}
+function cargarOpcionesTiempoMuerto() {
+
+    const select = document.getElementById("tiempoMuerto");
+
+    if (!select) return;
+
+    // Limpiar
+    select.innerHTML = '<option value="">Seleccione...</option>';
+
+    for (let minutos = 10; minutos <= 600; minutos += 10) {
+
+        const horas = String(Math.floor(minutos / 60)).padStart(2, "0");
+        const mins = String(minutos % 60).padStart(2, "0");
+
+        const tiempo = `${horas}:${mins}:00`;
+
+        select.add(new Option(tiempo, tiempo));
+    }
+}
+async function guardarOperadorManual(){
+
+  if(!actual){
+    alert("No hay grúa seleccionada");
+    return;
+  }
+
+
+  const operador =
+    document.getElementById('operadorManual')
+    .value.trim();
+
+
+  if(!operador){
+    alert("Escriba un nombre");
+    return;
+  }
+
+
+  const {error} = await db
+  .from('gruas')
+  .update({
+
+    nombre_operador: operador,
+
+    updated_at:
+    new Date().toISOString()
+
+  })
+  .eq('id',actual);
+
+
+  if(error){
+
+    console.log(error);
+    alert(error.message);
+    return;
+
+  }
+
+
+  document.getElementById('operadorActual')
+  .innerText = operador;
+
+
+  const g = getEquipo(actual);
+
+  if(g){
+    g.nombre_operador = operador;
+  }
+
+
+  alert("Operador actualizado");
+
+}
+let columnasCodigos = [];
+
+async function cargarResponsabilidades(){
+
+  const { data, error } = await db
+    .from("Codigo_fallas")
+    .select("*")
+    .limit(1);
+
+  if(error){
+    console.log(error);
+    return;
+  }
+
+  if(!data || data.length === 0) return;
+
+  columnasCodigos = Object.keys(data[0]);
+
+  const select =
+    document.getElementById("responsabilidad");
+
+  select.innerHTML =
+    '<option value="">Seleccione...</option>';
+
+columnasCodigos.forEach(col =>{
+
+  const option = document.createElement("option");
+
+  // Valor real para consultar Supabase
+  option.value = col;
+
+  // Texto mostrado al usuario
+  option.textContent = col
+    .replace(/_/g, ' ')
+    .toUpperCase();
+
+  select.appendChild(option);
+
+});
+
+}
+async function cargarCodigos(){
+
+  const responsabilidad =
+    document.getElementById("responsabilidad").value;
+
+
+  const codigo =
+    document.getElementById("codigoFalla");
+
+
+  codigo.innerHTML =
+    '<option value="">Seleccione...</option>';
+
+
+  if(!responsabilidad){
+    return;
+  }
+
+
+  const { data, error } = await db
+    .from("Codigo_fallas")
+    .select(responsabilidad);
+
+
+  if(error){
+
+    console.log("ERROR CODIGOS:", error);
+    return;
+
+  }
+
+
+  console.log("Datos recibidos:", data);
+
+
+  data.forEach(fila => {
+
+
+    const valor = fila[responsabilidad];
+
+
+    if(valor){
+
+
+      const option =
+        document.createElement("option");
+
+
+      option.value = valor;
+
+      option.textContent = valor;
+
+
+      codigo.appendChild(option);
+
+    }
+
+
+  });
+
+}
+function obtenerTurnoActual(){
+
+  const hora = new Date().getHours();
+
+  if(hora >= 6 && hora < 14){
+    return "1er Turno";
+  }
+
+  if(hora >= 14 && hora < 22){
+    return "2do Turno";
+  }
+
+  return "3er Turno";
+
+}
+function controlarBotonStandby(){
+
+  const estado =
+    document.getElementById('estado').value;
+
+  const boton =
+    document.getElementById('btnAtenderFalla');
+
+  if(!boton) return;
+
+
+  if(estado === 'falla'){
+
+    boton.style.display = 'block';
+
+  }else{
+
+    boton.style.display = 'none';
+
+  }
+
+}
+function mostrarEditorOperador() {
+    document.getElementById("editorOperador").style.display = "flex";
+
+    const nombre = document.getElementById("operadorActual").textContent.trim();
+    document.getElementById("operadorManual").value = nombre;
+    document.getElementById("operadorManual").focus();
+}
+
+function ocultarEditorOperador() {
+    document.getElementById("editorOperador").style.display = "none";
+}
+function obtenerZonaGrua(idGrua){
+
+  if(!idGrua) return '';
+
+  idGrua = idGrua.toUpperCase().trim();
+
+  const zona = zonasGruas.find(z =>
+    z.gruas.includes(idGrua)
+  );
+
+  return zona ? zona.zona : '';
+
 }
 </script>
 
