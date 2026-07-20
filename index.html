@@ -2740,41 +2740,42 @@ body{
 }
 
 #historialMensajes{
-
     flex:1;
-
     overflow-y:auto;
-
 }
+
 .compose-card{
-
     position:sticky;
-
     top:20px;
+}
 
+.falla-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.badge-prioridad{
+    background:#b91c1c;
+    color:white;
+    font-weight:bold;
+    padding:4px 12px;
+    border-radius:12px;
+    font-size:12px;
 }
 
 </style>
-
 </head>
-
 <body>
 
-
-
 <div class="topbar">
-
     <div class="logo">
         CONTROL OPERATIVO DE GRÚAS
     </div>
-
 </div>
 
 <div class="layout">
-
 <div class="sidebar">
-
-
 
   <div class="sidebar-title">
     APLICACIONES 
@@ -2894,13 +2895,18 @@ style="display:none;">
                 </div>
 
                 <label><strong>Quién envía</strong></label>
-
                 <select id="autorMensaje" class="input">
                     <option value="">Seleccione...</option>
                     <option value="OPERACIONES">OPERACIONES</option>
                     <option value="MTTO GRÚAS">MTTO GRÚAS</option>
+                    <option value="Supervisor">Supervisor</option>
+                    <option value="Monitor AB">Monitor AB</option>
+                    <option value="Monitor CD">Monitor CD</option>
+                    <option value="Monitor EF">Monitor EF</option>
+                    <option value="Monitor SDS">Monitor SDS</option>
+                    <option value="Monitor VSL">Monitor VSL</option>
+                    <option value="Rail Monitor ">Rail Monitor </option>
                 </select>
-
                 <textarea
                     class="msg"
                     id="mensajeInput"
@@ -3056,14 +3062,6 @@ style="display:none;">
             <div class="list" id="listaFallas"></div>
         </div>
 
-        <div class="panel dashboard-panel">
-            <div class="panel-header">
-                PRIORIDAD OPERATIVA
-            </div>
-
-            <div class="list" id="listaPrioridad"></div>
-
-            </div>
 <div class="panel dashboard-panel">
 
     <div class="panel-header">
@@ -3179,6 +3177,12 @@ style="display:none;">
 </select>
 <div id="bloqueOperaciones">
 
+<div id="grupoFechaOpRepo" style="display:none;">
+<label>Fecha/Hora Grua Reportada</label>
+<input type="datetime-local" id="fechaOpRepo"readonly>
+</div>
+
+
 <div id="grupoQuienReporto" style="display:none;">
 
   <label for="quienReporto">
@@ -3279,7 +3283,7 @@ style="display:none;">
 <label>Bloque / Tramo</label>
 <input type="text" id="bloqueTramo">
 
-<label>Fecha/Hora de falla</label>
+<label>Fecha/Hora de grua entregada</label>
 <input type="datetime-local" id="fechaReporte">
 
 
@@ -3917,27 +3921,33 @@ function renderFallas(){
 
   fallas.forEach(g => {
 
-    let tiempo = "00:00:00";
-
-    if (g.contador_inicio) {
-
-      const inicio = new Date(g.contador_inicio);
-      const segActivos = Math.floor((Date.now() - inicio) / 1000);
-
-      const total = segActivos + (g.contador_segundos || 0);
-
-      tiempo = formatearTiempo(total);
-    }
-
     html += `
       <div class="item">
-        <strong>${g.id}</strong>
+
+        <div class="falla-header">
+
+          <strong>${g.id}</strong>
+
+          ${
+            g.prioridad > 0
+            ? `<span class="badge-prioridad">
+                 P${g.prioridad}
+               </span>`
+            : ''
+          }
+
+        </div>
+
 
         <span>
-  ${g.registro_falla || 'Sin detalle'}
-</span>
+          ${g.registro_falla || 'Sin detalle'}
+        </span>
 
-        <div>${obtenerTiempoContador(g)}</div>
+
+        <div>
+          ${obtenerTiempoContador(g)}
+        </div>
+
       </div>
     `;
   });
@@ -4024,13 +4034,19 @@ const list = equipos
     return;
   }
 
-  cont.innerHTML = list.map(g => `
+cont.innerHTML = list.map(g => `
     <div class="item">
-      <strong>${g.id}</strong>
-      <span>${g.estado}</span>
-      <span>Prioridad: ${g.prioridad}</span>
+        <div class="item-header">
+            <strong>${g.id}</strong>
+            ${g.prioridad > 0
+              ? `<span class="badge-prioridad">P${g.prioridad}</span>`
+              : ""
+            }
+        </div>
+
+        <div>${g.estado}</div>
     </div>
-  `).join('');
+`).join('');
 }
 /* ================= MODAL ================= */
 
@@ -4067,8 +4083,9 @@ g.nombre_operador || "";
   document.getElementById('modal').style.display = 'flex';
 
   document.getElementById('gruaGeneral').value = id;
-  document.getElementById('bloqueTramo').value = g.bloque_tramo || '';
-  document.getElementById('fechaReporte').value = g.fecha_hora_falla || '';
+  document.getElementById('bloqueTramo').value =
+  obtenerZonaGrua(id);
+
   document.getElementById('tiempoMuerto').value = g.tiempo_muerto || '';
   document.getElementById('turnoGeneral').value = g.turno_operacion || '1';
   document.getElementById('tipoRegistro').value = 'operaciones';
@@ -4107,6 +4124,9 @@ g.nombre_operador || "";
     indicador.innerText = `Estado actual: ${obtenerTextoEstado(g)}`;
     indicador.className = 'estado-indicador ' + g.estado;
   }
+if (!document.getElementById("fechaOpRepo").value) {
+    ponerFechaGruaReportada();
+}
 
   // ================= UI STATE (IMPORTANTE ORDEN) =================
   actualizarUIEstado();        // 👈 primero campos dinámicos (quién reportó)
@@ -4197,8 +4217,6 @@ function validarCamposDisponibilidad() {
   const campos = [
     'gruaGeneral',
     'turnoGeneral',
-    'bloqueTramo',
-    'fechaReporte',
     'tiempoMuerto',
     'areaMantto',
     'supervisor',
@@ -4232,7 +4250,6 @@ function limpiarErroresDisponibilidad() {
   [
     'gruaGeneral',
     'turnoGeneral',
-    'bloqueTramo',
     'fechaReporte',
     'tiempoMuerto',
     'areaMantto',
@@ -4312,12 +4329,16 @@ estadoNuevo !== 'falla';
     parseInt(document.getElementById("turnoGeneral").value);
 
 
-  const bloque_tramo =
-    document.getElementById("bloqueTramo").value;
+const bloque_tramo =
+    obtenerZonaGrua(grua);
 
 
   const fecha_hora_falla =
     document.getElementById("fechaReporte").value;
+
+ const fecha_op_repo =
+equipoActual.fecha_op_repo || null;
+
 
 
   const tiempo_muerto =
@@ -4475,7 +4496,10 @@ const registro = {
     codigo_falla,
 
 
-    descripcion_falla
+    descripcion_falla,
+
+fecha_op_repo
+
 
 
 };
@@ -4483,6 +4507,8 @@ const registro = {
 
 
 console.log("REGISTRO REPORTE:",registro);
+console.log("FECHA OP REPORTE:", registro.fecha_op_repo);
+console.log("FECHA QUE VA AL REPORTE:", fecha_op_repo);
 
 
 
@@ -4823,7 +4849,14 @@ ${fechaFormateada}
 </div>
 `;
 console.log("CONTENIDO PINTADO:", cont.innerHTML);
-localStorage.setItem('ultimoMensajeId', m.id);
+if (vista === 'mensajes') {
+
+    cargarMensajeActual();
+
+    const badge = document.getElementById('msgBadge');
+    if (badge) badge.style.display = 'none';
+
+}
 }
 
 /* ================= HISTORIAL ================= */
@@ -4931,28 +4964,26 @@ db
 .on(
   'postgres_changes',
   {
-    event:'INSERT',
-    schema:'public',
-    table:'mensajes_operativos'
+    event: 'INSERT',
+    schema: 'public',
+    table: 'mensajes_operativos'
   },
-  (payload)=>{
+  (payload) => {
 
-    console.log("🚨 EVENTO MENSAJE:",payload);
+    console.log("🚨 EVENTO MENSAJE:", payload);
 
-    setTimeout(()=>{
+    setTimeout(async () => {
 
-      cargarHistorial();
+      await cargarMensajeActual();
+      await cargarHistorial();
 
-    },500);
+    }, 300);
 
   }
 )
-.subscribe(status=>{
+.subscribe(status => {
 
- console.log(
-   "ESTADO REALTIME MENSAJES:",
-   status
- );
+  console.log("ESTADO REALTIME MENSAJES:", status);
 
 });
 /* ================= CERRAR CLICK AFUERA ================= */
@@ -4979,7 +5010,7 @@ cerrarTipo();
 
 }
 /* ================= INIT ================= */
-function mostrarVista(vista) {
+async function mostrarVista(vista) {
 
   document.querySelectorAll('.vista').forEach(v => {
     v.classList.remove('activa');
@@ -4995,24 +5026,43 @@ function mostrarVista(vista) {
     vistaSeleccionada.classList.add('activa');
 
     if (vista === 'mensajes') {
+
       vistaSeleccionada.style.display = 'flex';
+
+      // Actualizar mensajes al entrar
+      await cargarMensajeActual();
+      await cargarHistorial();
+
+      // Quitar aviso de mensaje nuevo
+      const badge = document.getElementById('msgBadge');
+
+      if (badge) {
+        badge.style.display = 'none';
+      }
+
     } else {
+
       vistaSeleccionada.style.display = 'block';
+
     }
   }
+
 
   // marcar botón activo
   document.querySelectorAll('.menu-btn').forEach(btn => {
     btn.classList.remove('active');
   });
 
+
   const botonActivo = document.querySelector(
     `[onclick="mostrarVista('${vista}')"]`
   );
 
+
   if (botonActivo) {
     botonActivo.classList.add('active');
   }
+
 }
 
 async function cargarExcel(event){
@@ -5242,7 +5292,8 @@ console.log("GRÚA:", id, "OPERADOR EXCEL:", operador);
     if(
       g.estado === "baño" ||
       g.estado === "fseñal" ||
-      g.estado === "dayli"
+      g.estado === "dayli" ||
+      g.estado === "falla"
     ){
 
       estado = g.estado;
@@ -5256,7 +5307,28 @@ console.log("GRÚA:", id, "OPERADOR EXCEL:", operador);
 
     }
 
+// ================= CONTADOR AUTOMÁTICO DE FALLA =================
 
+let contador_estado = g.contador_estado || "stopped";
+let contador_inicio = g.contador_inicio;
+let contador_segundos = g.contador_segundos || 0;
+let falla_inicio = g.falla_inicio;
+let fecha_hora_falla = g.fecha_hora_falla;
+
+// Si en Excel viene FALLA y antes no estaba en falla
+if (estado === "falla" && g.estado !== "falla") {
+
+    const ahora = new Date().toISOString();
+
+    contador_estado = "running";
+    contador_inicio = ahora;
+    contador_segundos = 0;
+
+    falla_inicio = ahora;
+    fecha_hora_falla = ahora;
+
+    console.log("▶ Iniciando contador de falla:", id);
+}
 
     // ================= PRIORIDAD =================
 
@@ -5294,15 +5366,18 @@ console.log("GRÚA:", id, "OPERADOR EXCEL:", operador);
 .update({
 
   estado,
-
   prioridad,
-
   observacion_extra,
-
   nombre_operador: operador,
 
-  updated_at:
-  new Date().toISOString()
+  contador_estado,
+  contador_inicio,
+  contador_segundos,
+
+  falla_inicio,
+  fecha_hora_falla,
+
+  updated_at: new Date().toISOString()
 
 })
       .eq('id',id);
@@ -5463,7 +5538,8 @@ async function cargarReporteGruas() {
 
           <thead>
             <tr>
-              <th>FECHA/HORA DE FALLA</th>
+              <th>FECHA/HORA GRÚA REPORTADA</th>
+              <th>FECHA/HORA DE GRUA ENTREGADA</th>
               <th>GRÚA</th>
               <th>SUPERVISOR</th>
               <th>STANDBY</th>
@@ -5488,13 +5564,19 @@ async function cargarReporteGruas() {
     data.forEach(r => {
       html += `
         <tr>
+          <td>${formatearFechaMX(r.fecha_op_repo)}</td>
           <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
           <td>${r.grua ?? ''}</td>
           <td>${r.supervisor ?? ''}</td>
           <td>${r.standby ?? ''}</td>
           <td>${r.turno ?? ''}</td>
           <td>${r.area_mantto ?? ''}</td>
-          <td>${r.responsabilidad ?? ''}</td>
+          <td>${(r.responsabilidad || '')
+               .replace(/_/g, ' ')
+               .toLowerCase()
+               .replace(/\b\w/g, l => l.toUpperCase())
+          }</td>
+
           <td>${r.bloque_tramo ?? ''}</td>
           <td>${r.quien_reporto || ''}</td>
           <td>${r.actividad || ''}</td>
@@ -5583,6 +5665,44 @@ function actualizarIndicadorEstado(){
 
   indicador.className = 'estado-indicador ' + estado;
 }
+function ponerFechaFallaActual(){
+
+    const fecha = document.getElementById('fechaReporte');
+
+    if(!fecha) return;
+
+    const ahora = new Date();
+
+    const año = ahora.getFullYear();
+    const mes = String(ahora.getMonth()+1).padStart(2,'0');
+    const dia = String(ahora.getDate()).padStart(2,'0');
+
+    const hora = String(ahora.getHours()).padStart(2,'0');
+    const minuto = String(ahora.getMinutes()).padStart(2,'0');
+
+    fecha.value = `${año}-${mes}-${dia}T${hora}:${minuto}`;
+
+    console.log("FECHA PUESTA:", fecha.value);
+}
+function ponerFechaGruaReportada(){
+
+    const fecha = document.getElementById('fechaOpRepo');
+
+    if(!fecha) return;
+
+    const ahora = new Date();
+
+    const año = ahora.getFullYear();
+    const mes = String(ahora.getMonth()+1).padStart(2,'0');
+    const dia = String(ahora.getDate()).padStart(2,'0');
+
+    const hora = String(ahora.getHours()).padStart(2,'0');
+    const minuto = String(ahora.getMinutes()).padStart(2,'0');
+
+    fecha.value = `${año}-${mes}-${dia}T${hora}:${minuto}`;
+
+    console.log("FECHA GRUA REPORTADA:", fecha.value);
+}
 async function guardarEstadoRapido() {
 console.log("ENTRÉ A GUARDAR ESTADO RÁPIDO");
 try {
@@ -5642,9 +5762,19 @@ const actividad =
 
 const registro_falla =
   document.getElementById('registro_falla').value.trim();
+
+const fecha_op_repo =
+  document.getElementById('fechaOpRepo')?.value || null;
+
   const estadoAnterior = g.estado;
   const estadoNuevo = estado;
 
+//const fecha_op_repo =
+ // document.getElementById('fechaOpRepo').value;
+
+const entroAFalla =
+  estadoAnterior !== 'falla' &&
+  estadoNuevo === 'falla';
   let contador_estado = g.contador_estado || 'stopped';
   let contador_inicio = g.contador_inicio || null;
   let contador_segundos = g.contador_segundos || 0;
@@ -5656,10 +5786,15 @@ const registro_falla =
 // ================= FALLA =================
 if (estado === 'falla') {
 
-  // NUEVA FALLA: siempre inicia contador nuevo
   if (estadoAnterior !== 'falla') {
 
-    const inicioFalla = new Date().toISOString();
+    ponerFechaFallaActual();
+
+    const fechaInput =
+      document.getElementById('fechaReporte').value;
+
+    const inicioFalla =
+      new Date(fechaInput).toISOString();
 
     contador_estado = 'running';
     contador_inicio = inicioFalla;
@@ -5667,10 +5802,7 @@ if (estado === 'falla') {
 
     falla_inicio = inicioFalla;
 
-    console.log(
-      "NUEVO INICIO DE FALLA:",
-      falla_inicio
-    );
+    g.fecha_hora_falla = inicioFalla;
 
   }
 
@@ -5841,6 +5973,15 @@ const { error } = await db
     // ESTADO ACTUAL DE LA GRÚA
     estado: estado,
     prioridad: prioridad,
+fecha_hora_falla:
+  entroAFalla
+  ? falla_inicio
+  : g.fecha_hora_falla,
+
+  fecha_op_repo:
+  estado === "falla"
+  ? fecha_op_repo
+  : g.fecha_op_repo,
 
     // DATOS TEMPORALES DE LA FALLA
     quien_reporto:
@@ -5998,15 +6139,22 @@ function abrirModalCierreFalla(g){
 
   console.log("Abriendo modal cierre", g);
 
-  // 🔵 helper para datetime-local
   const formatDateTime = (dt) => {
     if (!dt) return '';
     return new Date(dt).toISOString().slice(0,16);
   };
 
   document.getElementById('c_grua').value = g.id || '';
-  document.getElementById('c_bloque').value = g.bloque_tramo || '';
+
+  // 🔥 ZONA AUTOMÁTICA
+  const zona = obtenerZonaGrua(g.id);
+
+  console.log("GRÚA:", g.id, "ZONA:", zona);
+
+  document.getElementById('c_bloque').value = zona;
+
   document.getElementById('c_fechaFalla').value = formatDateTime(g.fecha_hora_falla);
+  document.getElementById('c_fechaRepo').value = formatDateTime(g.fecha_op_repo);
   document.getElementById('c_tm').value = g.tiempo_muerto || '';
   document.getElementById('c_operador').value = g.operador || '';
   document.getElementById('c_tipoFalla').value = g.tipo_falla || '';
@@ -6024,8 +6172,9 @@ async function guardarCierreFalla(){
     .insert([{
       grua,
       turno: obtenerTurnoActual(),
-      bloque_tramo: document.getElementById('c_bloque').value,
+      bloque_tramo: obtenerZonaGrua(grua),
       fecha_hora_falla: document.getElementById('c_fechaFalla').value,
+      fecha_op_repo: document.getElementById('c_fechaRepo').value,
       tiempo_muerto: document.getElementById('c_tm').value,
       operador: document.getElementById('c_operador').value,
       tipo_falla: document.getElementById('c_tipoFalla').value,
@@ -6117,19 +6266,30 @@ function manejarCambioEstado() {
 function abrirFormularioCierreFalla(equipo) {
 
   ocultarControlesEstado();
-  const form =
-  document.getElementById('formularioCierreFalla');
+
+  const form = document.getElementById('formularioCierreFalla');
+
   document.getElementById('c_turno').value =
-  obtenerTurnoActual();
+    obtenerTurnoActual();
+
   if (!form) return;
 
   form.style.display = 'block';
 
+
   document.getElementById('c_grua').value =
     equipo.id || '';
 
-  document.getElementById('c_bloque').value =
-    equipo.bloque_tramo || '';
+
+  // ZONA AUTOMÁTICA
+  const zona = obtenerZonaGrua(equipo.id);
+
+  console.log("GRÚA:", equipo.id);
+  console.log("ZONA:", zona);
+
+
+  document.getElementById('bloqueTramo').value = zona;
+
 
   document.getElementById('c_fechaFalla').value =
     equipo.falla_inicio || '';
@@ -6245,21 +6405,30 @@ function actualizarUIEstado() {
   }
 if(estado === 'falla'){
 
-  const fecha =
-    document.getElementById('fechaReporte');
+    ponerFechaFallaActual();
 
-  if(fecha){
+    ponerFechaGruaReportada();
 
-    const ahora = new Date();
+}else{
 
-    ahora.setMinutes(
-      ahora.getMinutes() - ahora.getTimezoneOffset()
-    );
+    const fechaOpRepo =
+    document.getElementById('fechaOpRepo');
 
-    fecha.value =
-      ahora.toISOString().slice(0,16);
+    if(fechaOpRepo){
+        fechaOpRepo.value = '';
+    }
 
-  }
+}
+const grupoFechaOpRepo =
+document.getElementById('grupoFechaOpRepo');
+
+
+if(grupoFechaOpRepo){
+
+    grupoFechaOpRepo.style.display =
+    estado === 'falla'
+    ? 'block'
+    : 'none';
 
 }
 }
@@ -6695,12 +6864,8 @@ columnasCodigos.forEach(col =>{
 }
 async function cargarCodigos(){
 
-  const responsabilidad =
-    document.getElementById("responsabilidad").value;
-
-
-  const codigo =
-    document.getElementById("codigoFalla");
+  const responsabilidad = document.getElementById("responsabilidad").value;
+  const codigo = document.getElementById("codigoFalla");
 
 
   codigo.innerHTML =
@@ -6771,29 +6936,18 @@ function obtenerTurnoActual(){
 }
 function controlarBotonStandby(){
 
-  const estado =
-    document.getElementById('estado').value;
-
-  const boton =
-    document.getElementById('btnAtenderFalla');
+  const estado = document.getElementById('estado').value;
+  const boton = document.getElementById('btnAtenderFalla');
 
   if(!boton) return;
-
-
   if(estado === 'falla'){
-
     boton.style.display = 'block';
-
   }else{
-
     boton.style.display = 'none';
-
   }
-
 }
 function mostrarEditorOperador() {
     document.getElementById("editorOperador").style.display = "flex";
-
     const nombre = document.getElementById("operadorActual").textContent.trim();
     document.getElementById("operadorManual").value = nombre;
     document.getElementById("operadorManual").focus();
@@ -6802,19 +6956,37 @@ function mostrarEditorOperador() {
 function ocultarEditorOperador() {
     document.getElementById("editorOperador").style.display = "none";
 }
+
 function obtenerZonaGrua(idGrua){
 
   if(!idGrua) return '';
 
-  idGrua = idGrua.toUpperCase().trim();
+  const id = idGrua
+    .toUpperCase()
+    .replace('-','')
+    .trim();
 
-  const zona = zonasGruas.find(z =>
-    z.gruas.includes(idGrua)
-  );
 
-  return zona ? zona.zona : '';
+  for(const z of layout){
+
+    const existe = z.gruas.some(g => 
+      g &&
+      g.toUpperCase()
+       .replace('-','')
+       .trim() === id
+    );
+
+
+    if(existe){
+      return `ZONA ${z.zona}`;
+    }
+
+  }
+
+  return '';
 
 }
+
 </script>
 
 </div>
