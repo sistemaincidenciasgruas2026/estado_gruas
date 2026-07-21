@@ -793,10 +793,13 @@ overflow-y:auto;
 .modal-title{
 
 font-size:20px;
-
 font-weight:700;
-
 margin-bottom:16px;
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+width:100%;
 
 }
 
@@ -2763,7 +2766,73 @@ body{
     border-radius:12px;
     font-size:12px;
 }
+.barra-reportes{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:12px;
+    margin:15px 0;
+    flex-wrap:wrap;
+}
 
+.btn-reporte{
+    min-width:200px;
+}
+
+.cerrar-modal{
+
+    width:32px !important;
+    height:32px !important;
+
+    min-width:32px !important;
+    padding:0 !important;
+
+    margin:0 0 0 auto !important;
+
+    background:#ef4444 !important;
+    color:white !important;
+
+    border:none !important;
+    border-radius:50% !important;
+
+    font-size:18px !important;
+    font-weight:700 !important;
+
+    cursor:pointer;
+
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+
+    line-height:1;
+
+    transition:all .2s ease;
+
+    box-shadow:
+    0 2px 6px rgba(0,0,0,.25);
+
+    flex-shrink:0;
+
+}
+
+
+.cerrar-modal:hover{
+
+    background:#b91c1c !important;
+
+    transform:scale(1.08);
+
+    box-shadow:
+    0 4px 10px rgba(0,0,0,.35);
+
+}
+
+
+.cerrar-modal:active{
+
+    transform:scale(.95);
+
+}
 </style>
 </head>
 <body>
@@ -2823,22 +2892,30 @@ body{
   <div class="contenido">
 
 <div class="menu-reportes">
+<div class="barra-reportes">
+<button class="btn-reporte activo"
+    onclick="cambiarReporte('gruas', this)">
+    REPORTE GRÚAS
+</button>
 
-    <button 
-      class="btn-reporte activo"
-      onclick="cambiarReporte('gruas')">
-      REPORTE GRÚAS
-    </button>
+<button class="btn-reporte"
+    onclick="cambiarReporte('operadores', this)">
+    REPORTE OPERADORES
+</button>
 
-    <button 
-      class="btn-reporte"
-      onclick="cambiarReporte('operadores')">
-      REPORTE OPERADORES
-    </button>
+<button class="btn-reporte"
+    onclick="cambiarReporte('senal', this)">
+    REPORTE GRÚA SIN SEÑAL
+</button>
 
-    <button class="btn-reporte" onclick="cambiarReporte('senal')">
-      REPORTE GRÚA SIN SEÑAL
-    </button>
+<button class="btn-reporte"
+    onclick="generarReporteDT(this)">
+    DT OPERACIONES
+</button>
+
+
+</div>
+
 </div>
 
 
@@ -2846,6 +2923,9 @@ body{
 
 </div>
 
+<div id="contenedorReporteDT" style="display:none;">
+
+</div>
 
 <div id="contenedorReporteOperadores"
 style="display:none;">
@@ -3094,9 +3174,27 @@ style="display:none;">
 <div class="modal" id="modal">
 
 <div class="modal-content">
-  <div class="modal-title" id="modalTitle">
-  REGISTRO DE EVENTO
+
+    <button 
+        type="button"
+        class="cerrar-modal"
+        onclick="cerrarModal()">
+        ✕
+    </button>
+
+<div class="modal-title" id="modalTitle">
+
+    <span>REGISTRO DE EVENTO</span>
+
+    <button 
+        type="button"
+        class="cerrar-modal"
+        onclick="cerrarModal()">
+        ✕
+    </button>
+
 </div>
+
 
 <div class="operador-box">
 
@@ -3507,7 +3605,7 @@ gruas:[
 {
 zona:'F',
 gruas:[
-'K-11','K-16','K-34','Z-40','Z-41','Z-39'
+'K-11','K-34','Z-40','Z-41','Z-39'
 ]
 },
 
@@ -4990,25 +5088,18 @@ db
 
 window.onclick = function(e){
 
-const modal =
-document.getElementById('modal');
-
 const modalTipo =
 document.getElementById('modalTipo');
 
-if(e.target === modal){
-
-cerrarModal();
-
-}
 
 if(e.target === modalTipo){
 
-cerrarTipo();
+    cerrarTipo();
 
 }
 
 }
+
 /* ================= INIT ================= */
 async function mostrarVista(vista) {
 
@@ -5124,6 +5215,68 @@ function colorAEstado(rgb){
   }
 
 }
+let fallasPendientesExcel = [];
+let indiceFallaExcel = 0;
+function iniciarFallaPendienteExcel(){
+
+  if(indiceFallaExcel >= fallasPendientesExcel.length){
+
+    console.log("Todas las fallas Excel fueron completadas");
+
+    fallasPendientesExcel = [];
+    indiceFallaExcel = 0;
+
+    return;
+  }
+
+
+  const id = fallasPendientesExcel[indiceFallaExcel];
+
+
+  abrir(id);
+
+
+// Seleccionar automáticamente FALLA EN TURNO
+const estado = document.getElementById('estado');
+
+if(estado){
+
+  estado.value = "falla";
+
+  // disparar eventos para que actualice todo
+  estado.dispatchEvent(new Event('change'));
+
+}
+
+
+  const equipo = getEquipo(id);
+
+
+  if(equipo){
+
+    abrir(id);
+
+
+    // FORZAR FORMULARIO FALLA EN TURNO
+    const selectEstado = document.getElementById('estado');
+
+    if(selectEstado){
+
+      selectEstado.value = "falla";
+
+      actualizarUIEstado();
+      actualizarIndicadorEstado();
+
+    }
+
+
+    alert(
+      "Complete la información de FALLA EN TURNO para la grúa: " + id
+    );
+
+  }
+
+}
 async function procesarHoja(sheet){
 
   const rango = XLSX.utils.decode_range(sheet['!ref']);
@@ -5214,13 +5367,13 @@ console.log("GRÚA:", id, "OPERADOR EXCEL:", operador);
 
 
     // FALLA
-    else if(
-      texto.includes("FALLA")
-    ){
+   // else if(
+   //   texto.includes("FALLA")
+   // ){
 
-      estadoExcel = "falla";
+    //  estadoExcel = "falla";
 
-    }
+  //  }
 
 
     // BAÑO
@@ -5289,46 +5442,25 @@ console.log("GRÚA:", id, "OPERADOR EXCEL:", operador);
     let estado = estadoExcel;
 
 
-    if(
-      g.estado === "baño" ||
-      g.estado === "fseñal" ||
-      g.estado === "dayli" ||
-      g.estado === "falla"
-    ){
+if(
+  g.estado === "falla" ||
+  g.estado === "baño" ||
+  g.estado === "fseñal" ||
+  g.estado === "dayli"
+){
 
-      estado = g.estado;
+  estado = g.estado;
 
 
-      console.log(
-        "SE CONSERVA ESTADO SISTEMA:",
-        id,
-        g.estado
-      );
+  console.log(
+    "SE CONSERVA ESTADO ACTIVO DEL SISTEMA:",
+    id,
+    g.estado
+  );
 
-    }
-
-// ================= CONTADOR AUTOMÁTICO DE FALLA =================
-
-let contador_estado = g.contador_estado || "stopped";
-let contador_inicio = g.contador_inicio;
-let contador_segundos = g.contador_segundos || 0;
-let falla_inicio = g.falla_inicio;
-let fecha_hora_falla = g.fecha_hora_falla;
-
-// Si en Excel viene FALLA y antes no estaba en falla
-if (estado === "falla" && g.estado !== "falla") {
-
-    const ahora = new Date().toISOString();
-
-    contador_estado = "running";
-    contador_inicio = ahora;
-    contador_segundos = 0;
-
-    falla_inicio = ahora;
-    fecha_hora_falla = ahora;
-
-    console.log("▶ Iniciando contador de falla:", id);
 }
+
+
 
     // ================= PRIORIDAD =================
 
@@ -5366,18 +5498,15 @@ if (estado === "falla" && g.estado !== "falla") {
 .update({
 
   estado,
+
   prioridad,
+
   observacion_extra,
+
   nombre_operador: operador,
 
-  contador_estado,
-  contador_inicio,
-  contador_segundos,
-
-  falla_inicio,
-  fecha_hora_falla,
-
-  updated_at: new Date().toISOString()
+  updated_at:
+  new Date().toISOString()
 
 })
       .eq('id',id);
@@ -5611,6 +5740,95 @@ async function cargarReporteGruas() {
 
   document.getElementById('tab-gruas').innerHTML = html;
 }
+async function cargarReporteDT() {
+  const { data, error } = await db
+    .from('reportes_mantenimiento')
+    .select('*')
+    .order('id', { ascending: false });
+
+  if (error) {
+    console.log(error);
+    return;
+  }
+
+  let html = `
+  <div class="reporte-container">
+
+    <div class="reporte-header">
+
+      <h2 class="reporte-title">DT OPERACIONES</h2>
+              <button onclick="descargarExcel()" class="btn-excel">
+    Descargar Excel
+  </button>
+    </div>
+
+    <div class="tabla-container">
+      <div class="tabla-scroll">
+
+        <table class="tabla-reporte">
+
+<thead>
+<tr>
+    <th>FECHA/HORA REPORTADA</th>
+    <th>FECHA/HORA ENTREGADA</th>
+    <th>GRÚA</th>
+    <th>TURNO</th>
+    <th>ÁREA</th>
+    <th>BLOQUE</th>
+    <th>QUIÉN REPORTÓ</th>
+    <th>ACTIVIDAD</th>
+    <th>DESCRIPCIÓN</th>
+    <th>TIEMPO MUERTO</th>
+</tr>
+</thead>
+
+          <tbody>
+  `;
+
+  if (data && data.length > 0) {
+data.forEach(r => {
+
+    html += `
+    <tr>
+        <td>${formatearFechaMX(r.fecha_op_repo)}</td>
+        <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
+        <td>${r.grua ?? ''}</td>
+        <td>${r.turno ?? ''}</td>
+        <td>${r.area_mantto ?? ''}</td>
+        <td>${r.bloque_tramo ?? ''}</td>
+        <td>${r.quien_reporto ?? ''}</td>
+        <td>${r.actividad ?? ''}</td>
+        <td>${r.descripcion_falla ?? ''}</td>
+        <td>${r.tiempo_muerto_real ?? ''}</td>
+    </tr>
+    `;
+
+});
+  } else {
+    html += `
+      <tr>
+        <td colspan="12" style="text-align:center;padding:20px;">
+          Sin registros
+        </td>
+      </tr>
+    `;
+  }
+
+  html += `
+          </tbody>
+
+        </table>
+
+      </div>
+    </div>
+
+  </div>
+  `;
+
+ document.getElementById('contenedorReporteDT').innerHTML = html;
+
+
+}
 function abrirDowntimeMTTO(){
 
   // ocultar vistas
@@ -5735,7 +5953,15 @@ try {
       errores.push("¿Qué falla reporta?");
       document.getElementById('registro_falla').style.border = "2px solid red";
     }
+    const fechaRepo =
+document.getElementById('fechaOpRepo').value;
 
+
+if(!fechaRepo){
+
+ errores.push("Fecha/Hora Grúa Reportada");
+
+}
     if (errores.length > 0) {
       alert("Faltan campos obligatorios:\n\n- " + errores.join("\n- "));
       return;
@@ -6614,42 +6840,67 @@ async function cargarReporteOperadores(){
 
 
 }
-function cambiarReporte(tipo){
+function cambiarReporte(tipo, boton){
+const dt = document.getElementById('contenedorReporteDT');
+
+if(dt){
+    dt.style.display='none';
+}
 
   const gruas = document.getElementById('tab-gruas');
   const operadores = document.getElementById('tab-operadores');
   const senal = document.getElementById('tab-senal');
 
-  // ocultar todo
+
+  // ocultar reportes
   if(gruas) gruas.style.display = 'none';
   if(operadores) operadores.style.display = 'none';
   if(senal) senal.style.display = 'none';
 
+
+  // quitar activo
   document.querySelectorAll('.btn-reporte')
     .forEach(btn => btn.classList.remove('activo'));
 
-  if(tipo === 'gruas'){
-    gruas.style.display = 'block';
-    document.querySelector(".btn-reporte:nth-child(1)").classList.add('activo');
-    cargarReporteGruas();
+
+  // poner activo al botón presionado
+  if(boton){
+    boton.classList.add('activo');
   }
+
+
+  if(tipo === 'gruas'){
+
+    if(gruas)
+      gruas.style.display='block';
+
+    cargarReporteGruas();
+
+  }
+
 
   if(tipo === 'operadores'){
-    operadores.style.display = 'block';
-    document.querySelector(".btn-reporte:nth-child(2)").classList.add('activo');
+
+    if(operadores)
+      operadores.style.display='block';
+
     cargarReporteOperadores();
+
   }
 
-  // 🔥 NUEVO: SEÑAL
-  if(tipo === 'senal'){
-    senal.style.display = 'block';
 
-    document.querySelector(".btn-reporte:nth-child(3)")
-      ?.classList.add('activo');
+  if(tipo === 'senal'){
+
+    if(senal)
+      senal.style.display='block';
 
     cargarReporteSenal();
+
   }
+
 }
+
+
 async function cargarReporteSenal(){
 
   const { data, error } = await db
@@ -6986,6 +7237,88 @@ function obtenerZonaGrua(idGrua){
   return '';
 
 }
+function notificarFallaExcel(id){
+
+  const aviso = document.createElement('div');
+
+  aviso.innerHTML = `
+    <strong>⚠️ FALLA DETECTADA</strong><br>
+    Grúa: ${id}<br>
+    Complete los datos obligatorios
+  `;
+
+  aviso.style.position = "fixed";
+  aviso.style.top = "20px";
+  aviso.style.right = "20px";
+  aviso.style.background = "#dc2626";
+  aviso.style.color = "white";
+  aviso.style.padding = "15px 25px";
+  aviso.style.borderRadius = "8px";
+  aviso.style.fontSize = "16px";
+  aviso.style.fontWeight = "bold";
+  aviso.style.zIndex = "99999";
+  aviso.style.boxShadow = "0 4px 12px rgba(0,0,0,.3)";
+
+
+  document.body.appendChild(aviso);
+
+
+  setTimeout(()=>{
+
+    aviso.remove();
+
+  },4000);
+
+}
+function generarReporteDT(){
+
+    // OCULTAR TODOS LOS REPORTES
+    const vistas = [
+        'tab-gruas',
+        'tab-operadores',
+        'tab-senal',
+        'contenedorReporteGruas',
+        'contenedorReporteOperadores',
+        'contenedorReporteDT'
+    ];
+
+    vistas.forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){
+            el.style.display = "none";
+        }
+    });
+
+
+    // ACTIVAR DT
+    const contenedorDT =
+        document.getElementById("contenedorReporteDT");
+
+    if(contenedorDT){
+        contenedorDT.style.display = "block";
+    }
+
+
+    // QUITAR ACTIVO DE BOTONES
+    document.querySelectorAll('.btn-reporte')
+    .forEach(btn=>{
+        btn.classList.remove('activo');
+    });
+
+
+    // ACTIVAR BOTON DT
+    const botones =
+        document.querySelectorAll('.btn-reporte');
+
+    if(botones[3]){
+        botones[3].classList.add('activo');
+    }
+
+
+    cargarReporteDT();
+
+}
+
 
 </script>
 
