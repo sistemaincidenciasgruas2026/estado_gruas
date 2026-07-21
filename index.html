@@ -191,20 +191,45 @@ img, iframe{
 }
 
 .tabla-reporte{
-    width:max-content;
+    width:auto;
     min-width:100%;
+    border-collapse:collapse;
     table-layout:auto;
 }
 
+.tabla-reporte th{
+    padding:6px 8px;
+    font-size:11px;
+    white-space:nowrap;
+    text-align:center;
+}
 
+.tabla-reporte td{
+    padding:4px 8px;
+    white-space:nowrap;
+    vertical-align:middle;
+}
 
 .tabla-reporte th,
 .tabla-reporte td{
-    white-space:normal;
-    word-break:break-word;
-    padding:8px;
+    padding:4px 6px;
+    white-space:nowrap;
+    width:auto;
 }
+.tabla-reporte th,
+.tabla-reporte td{
+    min-width:0 !important;
+}
+.tabla-reporte td:nth-child(11),
+.tabla-reporte td:nth-child(12),
+.tabla-reporte td:nth-child(13){
 
+    max-width:250px;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+
+}
 /* ================= YARD ================= */
 
 .yard{
@@ -2002,9 +2027,7 @@ button:hover{
 }
 
 .tabla-reporte th{
-  padding:10px;
-  text-align:left;
-  font-weight:700;
+    font-size:12px;
 }
 
 
@@ -2185,10 +2208,7 @@ button:hover{
 }
 
 .tabla-container{
-    width:100vw;
-    max-width:100%;
     overflow-x:auto;
-    box-sizing:border-box;
 }
 
 .tabla-reporte thead th{
@@ -2831,6 +2851,137 @@ body{
 .cerrar-modal:active{
 
     transform:scale(.95);
+
+}
+/* CONTENEDOR */
+.tabla-container{
+    width:100%;
+    overflow-x:auto;
+    background:#ffffff;
+    border-radius:10px;
+    padding:10px;
+}
+
+
+/* TABLA */
+.tabla-reporte{
+
+    width:100%;
+    border-collapse:separate;
+    border-spacing:0;
+
+    table-layout:auto;
+
+    font-family:Arial, sans-serif;
+    font-size:13px;
+
+}
+
+
+/* ENCABEZADO */
+.tabla-reporte thead th{
+
+    background:#155b96;
+    color:white;
+
+    padding:10px 8px;
+
+    text-align:center;
+
+    font-size:12px;
+    font-weight:bold;
+
+    text-transform:uppercase;
+
+    border-right:1px solid rgba(255,255,255,.25);
+
+    white-space:nowrap;
+
+}
+
+
+/* PRIMERA COLUMNA REDONDEADA */
+.tabla-reporte thead th:first-child{
+    border-radius:8px 0 0 0;
+}
+
+
+/* ULTIMA COLUMNA */
+.tabla-reporte thead th:last-child{
+    border-radius:0 8px 0 0;
+}
+
+
+
+/* CELDAS */
+.tabla-reporte tbody td{
+
+    padding:8px 10px;
+
+    color:#243447;
+
+    border-bottom:1px solid #d9e2ec;
+
+    white-space:nowrap;
+
+}
+
+
+/* FILAS ALTERNADAS */
+.tabla-reporte tbody tr:nth-child(even){
+
+    background:#f5f9fc;
+
+}
+
+
+/* EFECTO AL PASAR MOUSE */
+.tabla-reporte tbody tr:hover{
+
+    background:#dceeff;
+
+    transition:.2s;
+
+}
+
+
+/* AJUSTE AUTOMATICO */
+.tabla-reporte th,
+.tabla-reporte td{
+
+    width:auto;
+    min-width:0;
+
+}
+
+
+/* COLUMNAS DE TEXTO LARGO */
+.tabla-reporte td:nth-child(8),
+.tabla-reporte td:nth-child(9),
+.tabla-reporte td:nth-child(11),
+.tabla-reporte td:nth-child(12){
+
+    max-width:250px;
+
+    overflow:hidden;
+
+    text-overflow:ellipsis;
+
+}
+
+
+/* TEXTO COMPLETO AL PASAR MOUSE */
+.tabla-reporte td:hover{
+
+    white-space:normal;
+
+    background:white;
+
+    position:relative;
+
+    z-index:5;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
 
 }
 </style>
@@ -5532,6 +5683,7 @@ if(
 
 }
 document.addEventListener('DOMContentLoaded', () => {
+  ponerFechasFallaAutomaticas();
   controlarBotonStandby();
   mostrarVista('operativo');
   cargarOpcionesTiempoMuerto();
@@ -5667,22 +5819,22 @@ async function cargarReporteGruas() {
 
           <thead>
             <tr>
-              <th>FECHA/HORA GRÚA REPORTADA</th>
-              <th>FECHA/HORA DE GRUA ENTREGADA</th>
-              <th>GRÚA</th>
+               <!-- <th>FECHA/HORA GRÚA REPORTADA</th> -->
+              <th>FECHA/HORA DE REPORTE</th>
+              <th>TURNO</th>
               <th>SUPERVISOR</th>
               <th>STANDBY</th>
-              <th>TURNO</th>
-              <th>ÁREA</th>
-              <th>RESPONSABILIDAD</th>
-              <th>BLOQUE</th>
-              <th>QUIÉN REPORTÓ</th>
-              <th>ACTIVIDAD REALIZABA OPERADOR</th>
+              <th>EQUIPO</th>
               <th>CODIGO DE FALLA</th>
               <th>DESCRIPCIÓN</th>
-              <th>TIPO DE FALLA(TM/TI)</th>
-              <th>TIEMPO MUERTO (Atencion de falla)</th>
-              <th>TIEMPO MUERTO(tiempo grua inactiva)</th>
+              <th>TM</th>
+              <!--<th>TIEMPO MUERTO(tiempo grua inactiva)</th>-->
+              <!-- <th>ACTIVIDAD REALIZABA OPERADOR</th>-->
+              <!-- <th>ÁREA</th>-->
+              <!-- <th>RESPONSABILIDAD</th>-->
+              <!-- <th>BLOQUE</th>-->
+              <!-- <th>QUIÉN REPORTÓ</th>-->
+              <!-- <th>ACTIVIDAD REALIZABA OPERADOR</th>-->
             </tr>
           </thead>
 
@@ -5693,27 +5845,29 @@ async function cargarReporteGruas() {
     data.forEach(r => {
       html += `
         <tr>
-          <td>${formatearFechaMX(r.fecha_op_repo)}</td>
+         <!-- <td>${formatearFechaMX(r.fecha_op_repo)}</td>-->
           <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
-          <td>${r.grua ?? ''}</td>
+          <td>${r.turno ?? ''}</td>
           <td>${r.supervisor ?? ''}</td>
           <td>${r.standby ?? ''}</td>
-          <td>${r.turno ?? ''}</td>
-          <td>${r.area_mantto ?? ''}</td>
-          <td>${(r.responsabilidad || '')
+          <td>${r.grua ?? ''}</td>
+          <td>${r.codigo_falla ?? ''}</td>
+          <td>${r.descripcion_falla ?? ''}</td>
+          <td>${r.tiempo_muerto || ''}</td>
+          <!--<td>${r.tiempo_muerto_real || '00:00:00'}</td>-->
+         <!-- <td>${r.area_mantto ?? ''}</td>-->
+         <!-- <td>${(r.responsabilidad || '')
                .replace(/_/g, ' ')
                .toLowerCase()
                .replace(/\b\w/g, l => l.toUpperCase())
-          }</td>
-
-          <td>${r.bloque_tramo ?? ''}</td>
-          <td>${r.quien_reporto || ''}</td>
-          <td>${r.actividad || ''}</td>
-          <td>${r.codigo_falla ?? ''}</td>
-          <td>${r.descripcion_falla ?? ''}</td>
-          <td>${r.tmi || ''}</td>
-          <td>${r.tiempo_muerto || ''}</td>
-          <td>${r.tiempo_muerto_real || '00:00:00'}</td>
+          }</td>-->
+          <!--<td>${r.bloque_tramo ?? ''}</td>-->
+          <!--<td>${r.quien_reporto || ''}</td>-->
+          <!--<td>${r.actividad || ''}</td>-->
+          <!--<td>${r.descripcion_falla ?? ''}</td>-->
+          <!--<td>${r.tmi || ''}</td>-->
+          
+          
         </tr>
       `;
     });
@@ -5777,7 +5931,7 @@ async function cargarReporteDT() {
     <th>BLOQUE</th>
     <th>QUIÉN REPORTÓ</th>
     <th>ACTIVIDAD</th>
-    <th>DESCRIPCIÓN</th>
+   <!-- <th>DESCRIPCIÓN</th>-->
     <th>TIEMPO MUERTO</th>
 </tr>
 </thead>
@@ -5798,7 +5952,7 @@ data.forEach(r => {
         <td>${r.bloque_tramo ?? ''}</td>
         <td>${r.quien_reporto ?? ''}</td>
         <td>${r.actividad ?? ''}</td>
-        <td>${r.descripcion_falla ?? ''}</td>
+        <!--<td>${r.descripcion_falla ?? ''}</td>-->
         <td>${r.tiempo_muerto_real ?? ''}</td>
     </tr>
     `;
@@ -6588,11 +6742,176 @@ function descargarExcel() {
 
   const tabla = document.querySelector("table");
 
-  const wb = XLSX.utils.table_to_book(tabla, {
-    sheet: "REPORTE GRÚAS"
+  if(!tabla){
+    alert("No hay tabla para exportar");
+    return;
+  }
+
+
+  const wb = XLSX.utils.book_new();
+
+
+  // Convertir tabla HTML a datos
+  const datos = XLSX.utils
+    .table_to_sheet(tabla);
+
+
+  const filas = XLSX.utils.sheet_to_json(
+    datos,
+    {
+      header:1
+    }
+  );
+
+
+  // Crear nueva hoja limpia
+  const ws = XLSX.utils.aoa_to_sheet([]);
+
+
+
+  // TÍTULO
+  XLSX.utils.sheet_add_aoa(ws,[
+
+    ["REPORTE DE GRÚAS"],
+
+    [
+      "Fecha generación: " +
+      new Date().toLocaleString('es-MX')
+    ],
+
+    []
+
+
+  ],{
+    origin:"A1"
   });
 
-  XLSX.writeFile(wb, "reporte_gruas.xlsx");
+
+
+  // INSERTAR TABLA ORIGINAL DESDE FILA 4
+  XLSX.utils.sheet_add_aoa(
+    ws,
+    filas,
+    {
+      origin:"A4"
+    }
+  );
+
+
+
+  // Combinar título
+  const totalColumnas =
+    filas[0].length;
+
+
+  ws["!merges"] = [
+
+    {
+      s:{
+        r:0,
+        c:0
+      },
+
+      e:{
+        r:0,
+        c:totalColumnas-1
+      }
+    }
+
+  ];
+
+
+
+  // Ajustar ancho columnas
+  const anchos=[];
+
+
+  for(let c=0;c<totalColumnas;c++){
+
+    let max=10;
+
+
+    filas.forEach(f=>{
+
+      if(f[c]){
+
+        max=Math.max(
+          max,
+          String(f[c]).length
+        );
+
+      }
+
+    });
+
+
+    anchos.push({
+
+      wch:
+      Math.min(max+3,40)
+
+    });
+
+  }
+
+
+  ws["!cols"]=anchos;
+
+
+
+  // Filtro solo en encabezados reales
+  ws["!autofilter"]={
+
+    ref:
+    XLSX.utils.encode_range({
+
+      s:{
+        r:3,
+        c:0
+      },
+
+      e:{
+        r:filas.length+3,
+        c:totalColumnas-1
+      }
+
+    })
+
+  };
+
+
+
+  // Congelar encabezados
+  ws["!freeze"]={
+
+    xSplit:0,
+    ySplit:4
+
+  };
+
+
+
+  XLSX.utils.book_append_sheet(
+
+    wb,
+
+    ws,
+
+    "REPORTE GRÚAS"
+
+  );
+
+
+
+  XLSX.writeFile(
+
+    wb,
+
+    "Reporte_Gruas.xlsx"
+
+  );
+
+
 }
 function mostrarFormularioCierre(){
 
@@ -6631,9 +6950,7 @@ function actualizarUIEstado() {
   }
 if(estado === 'falla'){
 
-    ponerFechaFallaActual();
-
-    ponerFechaGruaReportada();
+    ponerFechasFallaAutomaticas();
 
 }else{
 
@@ -7318,7 +7635,49 @@ function generarReporteDT(){
     cargarReporteDT();
 
 }
+function ponerFechasFallaAutomaticas(){
 
+    const ahora = new Date();
+
+    const año = ahora.getFullYear();
+    const mes = String(ahora.getMonth()+1).padStart(2,'0');
+    const dia = String(ahora.getDate()).padStart(2,'0');
+
+    const hora = String(ahora.getHours()).padStart(2,'0');
+    const minuto = String(ahora.getMinutes()).padStart(2,'0');
+
+
+    const fechaActual =
+    `${año}-${mes}-${dia}T${hora}:${minuto}`;
+
+
+
+    // Fecha grúa reportada
+    const fechaRepo =
+    document.getElementById('fechaOpRepo');
+
+
+    if(fechaRepo && !fechaRepo.value){
+
+        fechaRepo.value = fechaActual;
+
+    }
+
+
+
+    // Fecha grúa entregada
+    const fechaEntrega =
+    document.getElementById('fechaReporte');
+
+
+    if(fechaEntrega && !fechaEntrega.value){
+
+        fechaEntrega.value = fechaActual;
+
+    }
+
+
+}
 
 </script>
 
