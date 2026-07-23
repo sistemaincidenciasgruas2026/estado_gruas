@@ -3176,22 +3176,22 @@ body{
 <div class="barra-reportes">
 <button class="btn-reporte activo"
     onclick="cambiarReporte('gruas', this)">
-    REPORTE GRÚAS
+    DT REPORTE MTTO GRÚAS
 </button>
 
 <button class="btn-reporte"
     onclick="cambiarReporte('operadores', this)">
-    REPORTE OPERADORES
+    REPORTE TIEMPO OPERADORES BAÑO
 </button>
 
 <button class="btn-reporte"
     onclick="cambiarReporte('senal', this)">
-    REPORTE GRÚA SIN SEÑAL
+    REPORTE MI JACK SIN SEÑAL
 </button>
 
 <button class="btn-reporte"
     onclick="generarReporteDT(this)">
-    DT OPERACIONES
+    REPORTE FALLAS OPERACIONES
 </button>
 
 
@@ -6012,13 +6012,13 @@ async function cargarReporteGruas() {
               <th>SUPERVISOR</th>
               <th>STANDBY</th>
               <th>EQUIPO</th>
+              <th>RESPONSABILIDAD</th>
               <th>CODIGO DE FALLA</th>
               <th>DESCRIPCIÓN</th>
               <th>TM</th>
-              <th>TIEMPO MUERTO(tiempo grua inactiva)</th>
+              <th>Grua inactiva</th>
               <!-- <th>ACTIVIDAD REALIZABA OPERADOR</th>-->
               <!-- <th>ÁREA</th>-->
-              <!-- <th>RESPONSABILIDAD</th>-->
               <!-- <th>BLOQUE</th>-->
               <!-- <th>QUIÉN REPORTÓ</th>-->
               <!-- <th>ACTIVIDAD REALIZABA OPERADOR</th>-->
@@ -6164,6 +6164,8 @@ function pintarTablaReporteGruas(data){
 
         <td>${r.grua ?? ''}</td>
 
+        <td>${r.responsabilidad ?? ''}</td>
+
         <td>${r.codigo_falla ?? ''}</td>
 
         <td>${r.descripcion_falla ?? ''}</td>
@@ -6226,16 +6228,16 @@ async function cargarReporteDT() {
 
 <thead>
 <tr>
+    <th>GRÚA</th>
     <th>FECHA/HORA REPORTADA</th>
     <th>FECHA/HORA ENTREGADA</th>
-    <th>GRÚA</th>
+    <th>TIEMPO MUERTO</th>
+    <th>BLOQUE</th>
+    <th>ACTIVIDAD</th>
+    <th>QUIÉN REPORTÓ</th>
     <th>TURNO</th>
     <th>ÁREA</th>
-    <th>BLOQUE</th>
-    <th>QUIÉN REPORTÓ</th>
-    <th>ACTIVIDAD</th>
    <!-- <th>DESCRIPCIÓN</th>-->
-    <th>TIEMPO MUERTO</th>
 </tr>
 </thead>
 
@@ -6247,16 +6249,16 @@ data.forEach(r => {
 
     html += `
     <tr>
+        <td>${r.grua ?? ''}</td>
         <td>${formatearFechaMX(r.fecha_op_repo)}</td>
         <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
-        <td>${r.grua ?? ''}</td>
+        <td>${r.tiempo_muerto_real ?? ''}</td>
+        <td>${r.bloque_tramo ?? ''}</td>
+        <td>${r.actividad ?? ''}</td>
+        <td>${r.quien_reporto ?? ''}</td>
         <td>${r.turno ?? ''}</td>
         <td>${r.area_mantto ?? ''}</td>
-        <td>${r.bloque_tramo ?? ''}</td>
-        <td>${r.quien_reporto ?? ''}</td>
-        <td>${r.actividad ?? ''}</td>
         <!--<td>${r.descripcion_falla ?? ''}</td>-->
-        <td>${r.tiempo_muerto_real ?? ''}</td>
     </tr>
     `;
 
