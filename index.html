@@ -622,17 +622,7 @@ background:#8f2f2f;
   font-size:12px;
   font-weight:700;
 }
-/* ================= LIST ================= */
 
-.list{
-
-display:flex;
-
-flex-direction:column;
-
-gap:8px;
-
-}
 
 /* ================= ITEM ================= */
 
@@ -1351,16 +1341,7 @@ color:#1f2933;
     position:sticky;
     top:80px;
 }
-.dashboard-panel{
-    max-height:400px;
-    overflow:hidden;
-}
 
-.list{
-    max-height:340px;
-    overflow-y:auto;
-    padding:10px;
-}
 #mensajeActivo .item{
     display:block !important;
     color:#111 !important;
@@ -2984,6 +2965,155 @@ body{
     box-shadow:0 2px 8px rgba(0,0,0,.15);
 
 }
+
+.badge-prioridad,
+.priority-badge,
+.p1 {
+    color: white !important;
+    background: #c00000 !important;
+    font-weight: 900 !important;
+    font-size: 16px !important;
+    text-align: center;
+}
+
+/* PANEL FALLAS */
+.events-panel .dashboard-panel{
+    height:520px;
+    max-height:520px;
+    overflow:hidden;
+}
+
+#listaFallas{
+    height:460px;
+    max-height:460px;
+    overflow-y:auto;
+    padding:10px;
+}
+
+.filtros-reporte{
+    display:flex;
+    align-items:end;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+
+.campo-filtro{
+    display:flex;
+    flex-direction:column;
+    gap:5px;
+}
+
+
+.campo-filtro label{
+    font-size:11px;
+    font-weight:700;
+    color:#475569;
+}
+
+
+.campo-filtro input{
+    height:36px;
+    padding:0 10px;
+    border:1px solid #cbd5e1;
+    border-radius:6px;
+    background:white;
+}
+
+
+/* BOTÓN FILTRAR */
+.btn-filtrar{
+
+    width:100px;
+    height:36px;
+
+    background:#1f6fb2;
+    color:white;
+
+    border:none;
+    border-radius:6px;
+
+    font-weight:700;
+    font-size:12px;
+
+    cursor:pointer;
+}
+
+
+.btn-filtrar:hover{
+    background:#0f4c81;
+}
+
+
+/* BOTÓN EXCEL */
+.btn-descargar{
+
+    width:150px;
+    height:36px;
+
+    background:#76a845;
+    color:white;
+
+    border:none;
+    border-radius:6px;
+
+    font-weight:700;
+    font-size:12px;
+
+    cursor:pointer;
+}
+
+
+.btn-descargar:hover{
+    background:#5f8e34;
+}
+
+/* SELECT ORDENAMIENTO */
+#ordenReporte{
+
+    height:36px;
+
+    min-width:190px;
+
+    padding:0 12px;
+
+    border:1px solid #cbd5e1;
+
+    border-radius:6px;
+
+    background:#ffffff;
+
+    color:#334155;
+
+    font-size:12px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    outline:none;
+
+    transition:.2s;
+
+}
+
+
+#ordenReporte:hover{
+
+    border-color:#1f6fb2;
+
+}
+
+
+#ordenReporte:focus{
+
+    border-color:#1f6fb2;
+
+    box-shadow:
+    0 0 0 3px rgba(31,111,178,.15);
+
+}
+
 </style>
 </head>
 <body>
@@ -3519,22 +3649,32 @@ style="display:none;">
   <center>
   <h3>Formulario para Downtime</h3>
   </center>
-<label>Grúa</label>
-<input type="text" id="gruaGeneral" readonly>
+<div class="form-group" style="display:none;">
+    <label>Grúa</label>
+    <input type="text" id="gruaGeneral" readonly>
+</div>
 
-<label>Turno</label>
-<select id="turnoGeneral">
-  <option value="1">1er Turno</option>
-  <option value="2">2do Turno</option>
-  <option value="3">3er Turno</option>
-</select>
 
-<label>Bloque / Tramo</label>
-<input type="text" id="bloqueTramo">
+<div style="display:none;">
+  <label>Turno</label>
+  <select id="turnoGeneral">
+    <option value="1">1er Turno</option>
+    <option value="2">2do Turno</option>
+    <option value="3">3er Turno</option>
+  </select>
+</div>
 
-<label>Fecha/Hora de grua entregada</label>
-<input type="datetime-local" id="fechaReporte">
 
+<div style="display:none;">
+  <label>Bloque / Tramo</label>
+  <input type="text" id="bloqueTramo">
+</div>
+
+
+<div style="display:none;">
+  <label>Fecha/Hora de grua entregada</label>
+  <input type="datetime-local" id="fechaReporte">
+</div>
 
 <label>Tiempo Muerto</label>
 
@@ -3543,15 +3683,15 @@ style="display:none;">
 </select>
 
 
-<label>Área</label>
+<div style="display:none;">
+  <label>Área</label>
 
-<select id="areaMantto">
+  <select id="areaMantto">
+    <option value="RTG">RTG</option>
+    <option value="TREN">TREN</option>
+  </select>
+</div>
 
-
-<option value="RTG">RTG</option>
-<option value="TREN">TREN</option>
-
-</select>
 
 <label>Supervisor</label>
 <select id="supervisor" onchange="cargarStandby()">
@@ -4161,6 +4301,19 @@ function renderFallas(){
     (g.estado || '').toLowerCase().trim() === 'falla'
   );
 
+
+  // ORDENAR PRIORIDAD P1 → P7
+  // SIN PRIORIDAD AL FINAL
+  fallas.sort((a,b)=>{
+
+    const prioridadA = Number(a.prioridad) || 999;
+    const prioridadB = Number(b.prioridad) || 999;
+
+    return prioridadA - prioridadB;
+
+  });
+
+
   if(fallas.length === 0){
     cont.innerHTML = "Sin fallas";
     return;
@@ -4203,6 +4356,7 @@ function renderFallas(){
 
   cont.innerHTML = html;
 }
+
 /* ================= TIMER VISUAL ================= */
 
 setInterval(() => {
@@ -5800,16 +5954,49 @@ async function cargarReporteGruas() {
     console.log(error);
     return;
   }
+  reporteGruasData = data || [];
+  llenarFiltrosReporte();
 
   let html = `
   <div class="reporte-container">
 
     <div class="reporte-header">
 
-      <h2 class="reporte-title">REPORTE GRÚAS</h2>
-              <button onclick="descargarExcel()" class="btn-excel">
-    Descargar Excel
-  </button>
+<h2 class="reporte-title">REPORTE GRÚAS</h2>
+
+<div class="filtros-reporte">
+
+    <div class="campo-filtro">
+        <label>Desde</label>
+        <input type="date" id="fechaInicio">
+    </div>
+
+    <div class="campo-filtro">
+        <label>Hasta</label>
+        <input type="date" id="fechaFin">
+    </div>
+
+
+    <div class="campo-filtro">
+        <label>Ordenar</label>
+        <select id="ordenReporte" onchange="filtrarReporteGruas()">
+            <option value="normal">Normal</option>
+            <option value="az">Grúa A-Z / Código A-Z</option>
+        </select>
+    </div>
+
+    <button onclick="filtrarReporteGruas()" class="btn-filtrar">
+        Filtrar
+    </button>
+
+    <button onclick="descargarExcel()" class="btn-descargar">
+        Descargar Excel
+    </button>
+
+</div>
+
+
+
     </div>
 
     <div class="tabla-container">
@@ -5828,7 +6015,7 @@ async function cargarReporteGruas() {
               <th>CODIGO DE FALLA</th>
               <th>DESCRIPCIÓN</th>
               <th>TM</th>
-              <!--<th>TIEMPO MUERTO(tiempo grua inactiva)</th>-->
+              <th>TIEMPO MUERTO(tiempo grua inactiva)</th>
               <!-- <th>ACTIVIDAD REALIZABA OPERADOR</th>-->
               <!-- <th>ÁREA</th>-->
               <!-- <th>RESPONSABILIDAD</th>-->
@@ -5838,48 +6025,10 @@ async function cargarReporteGruas() {
             </tr>
           </thead>
 
-          <tbody>
-  `;
+          <tbody id="tbodyReporteGruas">
+</tbody>
 
-  if (data && data.length > 0) {
-    data.forEach(r => {
-      html += `
-        <tr>
-         <!-- <td>${formatearFechaMX(r.fecha_op_repo)}</td>-->
-          <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
-          <td>${r.turno ?? ''}</td>
-          <td>${r.supervisor ?? ''}</td>
-          <td>${r.standby ?? ''}</td>
-          <td>${r.grua ?? ''}</td>
-          <td>${r.codigo_falla ?? ''}</td>
-          <td>${r.descripcion_falla ?? ''}</td>
-          <td>${r.tiempo_muerto || ''}</td>
-          <!--<td>${r.tiempo_muerto_real || '00:00:00'}</td>-->
-         <!-- <td>${r.area_mantto ?? ''}</td>-->
-         <!-- <td>${(r.responsabilidad || '')
-               .replace(/_/g, ' ')
-               .toLowerCase()
-               .replace(/\b\w/g, l => l.toUpperCase())
-          }</td>-->
-          <!--<td>${r.bloque_tramo ?? ''}</td>-->
-          <!--<td>${r.quien_reporto || ''}</td>-->
-          <!--<td>${r.actividad || ''}</td>-->
-          <!--<td>${r.descripcion_falla ?? ''}</td>-->
-          <!--<td>${r.tmi || ''}</td>-->
-          
-          
-        </tr>
-      `;
-    });
-  } else {
-    html += `
-      <tr>
-        <td colspan="12" style="text-align:center;padding:20px;">
-          Sin registros
-        </td>
-      </tr>
-    `;
-  }
+  `;
 
   html += `
           </tbody>
@@ -5893,7 +6042,161 @@ async function cargarReporteGruas() {
   `;
 
   document.getElementById('tab-gruas').innerHTML = html;
+  pintarTablaReporteGruas(reporteGruasData);
 }
+function llenarFiltrosReporte(){
+
+    const equipo = document.getElementById('filtroEquipo');
+    const codigo = document.getElementById('filtroCodigo');
+
+    if(!equipo || !codigo) return;
+
+
+    let equipos = [...new Set(
+        reporteGruasData.map(r => r.grua)
+        .filter(Boolean)
+    )];
+
+
+    let codigos = [...new Set(
+        reporteGruasData.map(r => r.codigo_falla)
+        .filter(Boolean)
+    )];
+
+
+    equipo.innerHTML = `
+        <option value="">Todos</option>
+        ${
+            equipos.map(e =>
+            `<option value="${e}">${e}</option>`
+            ).join('')
+        }
+    `;
+
+
+    codigo.innerHTML = `
+        <option value="">Todos</option>
+        ${
+            codigos.map(c =>
+            `<option value="${c}">${c}</option>`
+            ).join('')
+        }
+    `;
+
+}
+
+function filtrarReporteGruas(){
+ const orden = document.getElementById('ordenReporte').value;
+ const inicio = document.getElementById('fechaInicio').value;
+ const fin = document.getElementById('fechaFin').value;
+
+
+let datos = [...reporteGruasData];
+
+
+ if(inicio){
+
+   datos = datos.filter(r =>
+     new Date(r.fecha_hora_falla) >= new Date(inicio)
+   );
+
+ }
+
+
+ if(fin){
+
+   const fechaFin = new Date(fin);
+   fechaFin.setHours(23,59,59);
+
+   datos = datos.filter(r =>
+     new Date(r.fecha_hora_falla) <= fechaFin
+   );
+
+ }
+
+
+if(orden === "az"){
+
+    datos.sort((a,b)=>{
+
+        let gruaA = (a.grua || '').toString();
+        let gruaB = (b.grua || '').toString();
+
+        let compararGrua = gruaA.localeCompare(gruaB);
+
+        if(compararGrua !== 0){
+            return compararGrua;
+        }
+
+
+        let codigoA = (a.codigo_falla || '').toString();
+        let codigoB = (b.codigo_falla || '').toString();
+
+        return codigoA.localeCompare(codigoB);
+
+    });
+
+}
+
+ pintarTablaReporteGruas(datos);
+
+}
+
+
+function pintarTablaReporteGruas(data){
+
+  let html = '';
+
+  if(data && data.length > 0){
+
+    data.forEach(r => {
+
+      html += `
+      <tr>
+
+        <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
+
+        <td>${r.turno ?? ''}</td>
+
+        <td>${r.supervisor ?? ''}</td>
+
+        <td>${r.standby ?? ''}</td>
+
+        <td>${r.grua ?? ''}</td>
+
+        <td>${r.codigo_falla ?? ''}</td>
+
+        <td>${r.descripcion_falla ?? ''}</td>
+
+        <td>${r.tiempo_muerto || ''}</td>
+
+        <td>${r.tiempo_muerto_real || '00:00:00'}</td>
+      </tr>
+      `;
+
+    });
+
+  }else{
+
+    html = `
+    <tr>
+      <td colspan="8" style="text-align:center;padding:20px;">
+        Sin registros
+      </td>
+    </tr>
+    `;
+
+  }
+
+
+  const tbody = document.getElementById('tbodyReporteGruas');
+
+  if(tbody){
+    tbody.innerHTML = html;
+  }
+
+}
+
 async function cargarReporteDT() {
   const { data, error } = await db
     .from('reportes_mantenimiento')
@@ -6705,23 +7008,24 @@ function getDescripcionActividad(g) {
     ''
   );
 }
-function formatearFechaMX(fecha) {
+function formatearFechaMX(fechaBD){
 
-  if (!fecha) return '';
+    if(!fechaBD) return '';
 
-  const f = new Date(fecha);
+    const fecha = new Date(fechaBD + 'Z');
 
-  return f.toLocaleString('es-MX', {
-    timeZone: 'America/Mexico_City',
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false
-  });
+    return fecha.toLocaleString('es-MX', {
+        timeZone: 'America/Mexico_City',
+        year:'numeric',
+        month:'2-digit',
+        day:'2-digit',
+        hour:'2-digit',
+        minute:'2-digit',
+        hour12:false
+    });
 
 }
+
 function ocultarControlesEstado() {
 
   document.getElementById('grupoEstado').style.display = 'none';
@@ -7040,7 +7344,8 @@ cargarReporteOperadores();
 
 }
 async function cargarReporteOperadores(){
-
+  
+  let reporteOperadoresData = [];
   const { data, error } = await db
     .from('reportes_operadores_bano')
     .select('*')
