@@ -21,6 +21,10 @@ CONTROL OPERATIVO GRÚAS
 href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<link 
+rel="stylesheet" 
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 <style>
 
 /* ================= RESET ================= */
@@ -145,10 +149,10 @@ font-weight:700;
 /* ================= KPIS ================= */
 
 .kpis{
-  display:grid;
-  grid-template-columns:repeat(4, minmax(120px,1fr));
-  gap:6px;
-  padding:4px 10px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin-bottom:6px;
 }
 
 .kpi{
@@ -280,25 +284,19 @@ display:flex;
 
 align-items:flex-start;
 
-margin-bottom:16px;
+margin-bottom:8px;
 
 }
 
 .zona{
 
-width:90px;
+    width:80px;
 
-padding-top:18px;
+    font-size:11px;
 
-font-size:12px;
+    font-weight:700;
 
-font-weight:700;
-
-color:var(--muted);
-
-
-margin-right: 15px;
-
+    color:#64748b;
 
 }
 
@@ -315,8 +313,8 @@ margin-right: 15px;
 .card{
   position:relative;
 
-  min-height:110px;
-  border-radius:14px;
+  min-height: 90px;
+  border-radius: 6px;
 
   cursor:pointer;
   transition:.25s;
@@ -374,6 +372,11 @@ margin-right: 15px;
   background:#141212;
   color:white;
 }
+.percance{
+  background:#8C2CC7;
+  color:white;
+}
+
 .fmenor{
   background:#ED7158;
   color:white;
@@ -1388,8 +1391,8 @@ color:#1f2933;
 }
 
 .panel-body{
-  max-height:90px;
-  overflow-y:auto;
+    max-height: none;
+    overflow-y: visible;
 }
 .stats{
   display:grid;
@@ -1474,7 +1477,7 @@ color:#1f2933;
   margin-left:auto; /* 🔥 esto lo empuja a la derecha */
 }
 
-/* botón */
+/* botón barra superior */
 .yard-btn,
 .btn-excel{
 
@@ -1486,17 +1489,17 @@ color:#1f2933;
   );
 
   border:none;
-  border-radius:10px;
+  border-radius:6px;
 
   transition:.25s;
 
-  min-width:220px;
-  height:50px;
+  min-width:140px;
+  height:30px;
 
-  padding:0 24px;
+  padding:0 12px;
 
-  font-size:15px;
-  font-weight:700;
+  font-size:12px;
+  font-weight:600;
 
   display:flex;
   align-items:center;
@@ -1505,14 +1508,16 @@ color:#1f2933;
   color:white;
   cursor:pointer;
 }
+
+
 .yard-btn:hover,
 .btn-excel:hover,
 button:hover{
 
-  transform:translateY(-2px);
+  transform:translateY(-1px);
 
   box-shadow:
-  0 8px 20px rgba(15,76,129,.35);
+  0 4px 10px rgba(15,76,129,.25);
 }
 .color{
   width:16px;
@@ -1539,6 +1544,10 @@ button:hover{
 .dayli-color{
   background:#8d6e63; /* Café */
 }
+.percance-color{
+  background:#8C2CC7; /* Café */
+}
+
 .fmenor-color{
   background:#ED7158; /* Café */
 }
@@ -1958,10 +1967,6 @@ button:hover{
   box-shadow:0 4px 10px rgba(0,0,0,.25);
 }
 
-
-
-
-
 .topbar{
   background: linear-gradient(90deg,#0b3a66,#145a96);
   box-shadow: 0 4px 12px rgba(0,0,0,.25);
@@ -2064,6 +2069,7 @@ button:hover{
 .color-box.baño{ background:#F5B427; }
 .color-box.fmenor{ background:#ED7158; }
 .color-box.fseñal{ background:#969696; }
+.color-box.percance{ background:#8C2CC7; }
 
 .estado-indicador{
   width:100%;
@@ -2099,6 +2105,10 @@ button:hover{
 .estado-indicador.anclada{
   background:#806237;
 }
+.estado-indicador.percance{
+  background:#8C2CC7;
+}
+
 .reporte-container{
     width:100%;
     max-width:none;
@@ -3112,6 +3122,66 @@ body{
     box-shadow:
     0 0 0 3px rgba(31,111,178,.15);
 
+}.barra-acciones{
+
+    position:static;
+
+    display:flex;
+
+    justify-content:flex-start;  /* mueve a la izquierda */
+
+    gap:5px;
+
+    padding:4px 6px;
+
+    background:#ffffff;
+
+    border-radius:8px;
+
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+    margin-bottom:10px;
+
+}
+
+/* BOTONES MÁS COMPACTOS */
+.btn-accion{
+
+    width:200px;     /* reduce el largo */
+
+    height:30px;     /* conserva el alto */
+
+    padding:0 5px;
+
+    font-size:9px;
+
+    border-radius:4px;
+
+    white-space:nowrap;
+
+}
+
+
+.btn-importar{
+
+    background:#1565c0;
+    color:white;
+
+}
+
+
+.btn-captura{
+
+    background:#2e7d32;
+    color:white;
+
+}
+
+
+.btn-accion:hover{
+
+    opacity:.85;
+
 }
 
 </style>
@@ -3325,8 +3395,6 @@ style="display:none;">
             <div class="kpi-value" id="k4">0</div>
         </div>
 
-
-
     </div>
   
 <input
@@ -3336,7 +3404,25 @@ style="display:none;">
   style="display:none"
   onchange="cargarExcel(event)"
 >
+<div class="barra-acciones">
 
+    <button 
+        class="btn-accion btn-importar"
+        onclick="document.getElementById('excelFile').click()">
+
+        <i class="fa-solid fa-file-import"></i>
+        Importar Estados de Hoja de Equipo
+
+    </button>
+    <button 
+        class="btn-accion btn-captura"
+        onclick="capturarTablero()">
+
+        <i class="fa-solid fa-camera"></i>
+        Capturar Yard Estado de Gruas
+    </button>
+
+</div>
 
 <div class="dashboard-main">
 
@@ -3388,24 +3474,20 @@ style="display:none;">
     <div class="legend-row">
       <span class="color-box fseñal"></span>
       <span>Falla de señal</span>
+
+    </div>
+        <div class="legend-row">
+        <span class="color-box percance"></span>
+        <span>Percance</span>
     </div>
 
   </div>
 
 </div>
 <div class="yard-panel">
-
-    <div class="yard-title">
-      CARGAR ESTADOS DE HOJA DE EQUIPO
-    </div>
-
-    <button
-        class="yard-btn"
-        onclick="document.getElementById('excelFile').click()">
-        Cargar Excel
-    </button>
-
 </div>
+
+
   <div id="yard"></div>
 
 </div>
@@ -3553,6 +3635,7 @@ style="display:none;">
   <option value="anclada">ANCLADA</option>
   <option value="fmenor">FALLA MENOR</option>
   <option value="fseñal">FALLA DE SEÑAL</option>
+  <option value="percance">PERCANCE</option>
 </select>
 <div id="bloqueOperaciones">
 
@@ -3564,11 +3647,52 @@ style="display:none;">
 
 <div id="grupoQuienReporto" style="display:none;">
 
-  <label for="quienReporto">
-    Quién reportó
-  </label>
+    <label for="quienReporto">Quién reportó</label>
 
-  <textarea id="quienReporto"></textarea>
+    <input
+        type="text"
+        id="quienReporto"
+        list="listaReportantes"
+        placeholder="Escriba un apellido o nombre">
+
+    <datalist id="listaReportantes">
+        <option value="AGUILAR SANCHEZ">
+        <option value="ALVARADO CRUZ">
+        <option value="ANAYA ORTIZ">
+        <option value="ARENAS PÉREZ">
+        <option value="ARROYO LOPEZ">
+        <option value="ARUMIR BLANCAS">
+        <option value="AVILA ARROYO">
+        <option value="BARRAGAN MOLINA">
+        <option value="BLANDO CORONA">
+        <option value="CALDERON FIGUEROA">
+        <option value="CARRILLO MORALES">
+        <option value="CLAVELLINA LORA">
+        <option value="CORTES GONZALEZ">
+        <option value="CRUZ ARRIAGA">
+        <option value="CRUZ HERNÁNDEZ">
+        <option value="CUETO MENDOZA">
+        <option value="CUEVAS MARTINEZ">
+        <option value="DE JESÚS ALBERDIN">
+        <option value="DEHESA VEYRA">
+        <option value="ESCORCIA GARCÍA">
+        <option value="ESPINOSA CORTES">
+        <option value="ESPINOSA DURAN">
+        <option value="FERNANDEZ LOPEZ">
+        <option value="FERNÁNDEZ VILLALOBOS">
+        <option value="FLORES BLANCAS">
+        <option value="FRAGOSO CARREÓN">
+        <option value="GARCIA MALDONADO">
+        <option value="GARCÍA MARTÍNEZ">
+        <option value="GARCIA PAREDES">
+        <option value="ZAVALA REYES">
+        <option value="GOMEZ GUERRA">
+        <option value="HERNANDEZ CORIA">
+        <option value="HERNANDEZ GARDUÑO">
+        <option value="HERNANDEZ SERENA">
+
+          </option>
+    </datalist>
 
 </div>
 
@@ -3904,11 +4028,11 @@ gruas:[
 zona:'I',
   gruas:
   ['K-08','K-07','K-06','K-05','','','']
-}
-
-
-
-
+},
+    {
+        zona: "SIDE LOADER",
+        gruas: ["SD310","SD311","SD312","SD314","SD315","SD316","SD317","SD318","SD320","SD321","SD323"]
+    }
 
 ];
 
@@ -4123,9 +4247,9 @@ function render(){
     html += `
       <div class="row">
 
-        <div class="zona">
-          ZONA ${row.zona}
-        </div>
+<div class="zona">
+  ${row.zona === 'SIDE LOADER' ? row.zona : 'ZONA ' + row.zona}
+</div>
 
         <div class="grid ${row.zona === 'I' ? 'grid-tren' : ''}">
     `;
@@ -4482,8 +4606,13 @@ function abrir(id){
   g.nombre_operador || "SIN ASIGNAR";
   document.getElementById('operadorManual').value =
 g.nombre_operador || "";
-  document.getElementById('modalTitle').innerText = `GRÚA ${id}`;
+document.getElementById('modalTitle').innerText = id;
   document.getElementById('modal').style.display = 'flex';
+
+  // Siempre poner la fecha y hora actual
+ponerFechaGruaReportada();
+ponerFechaFallaActual();
+
 
   document.getElementById('gruaGeneral').value = id;
   document.getElementById('bloqueTramo').value =
@@ -4527,15 +4656,27 @@ g.nombre_operador || "";
     indicador.innerText = `Estado actual: ${obtenerTextoEstado(g)}`;
     indicador.className = 'estado-indicador ' + g.estado;
   }
-if (!document.getElementById("fechaOpRepo").value) {
-    ponerFechaGruaReportada();
-}
+
+document.getElementById("fechaOpRepo").value = "";
+ponerFechaGruaReportada();
+
 
   // ================= UI STATE (IMPORTANTE ORDEN) =================
   actualizarUIEstado();        // 👈 primero campos dinámicos (quién reportó)
   controlarPrioridad();        // 👈 luego prioridad
   actualizarIndicadorEstado(); // 👈 indicador final
   estadoAnterior = g.estado;
+}
+function nombreEquipoModal(id){
+
+  const equiposEspeciales = {
+    "SD310": "SIDE LOADER SD310",
+    "SD311": "SIDE LOADER SD311",
+    "SD312": "SIDE LOADER SD312"
+  };
+
+  return equiposEspeciales[id] || id;
+
 }
 function abrirFormularioTransicion(){
   const el = document.getElementById('accionesCierreFalla');
@@ -4544,6 +4685,7 @@ function abrirFormularioTransicion(){
 
   el.style.display = 'flex'; // mejor que block en botones
 }
+
 function controlarPrioridad() {
 
   const estado = document.getElementById('estado').value;
@@ -5905,6 +6047,9 @@ function obtenerTextoEstado(g){
   if(g.estado === 'fseñal')
     return 'FALLA DE SEÑAL';
 
+  if(g.estado === 'percance')
+    return 'PERCANCE';
+
   return '';
 }
 function abrirIncidentes() {
@@ -6198,7 +6343,7 @@ function pintarTablaReporteGruas(data){
   }
 
 }
-
+let reporteDTData = [];
 async function cargarReporteDT() {
   const { data, error } = await db
     .from('reportes_mantenimiento')
@@ -6209,13 +6354,30 @@ async function cargarReporteDT() {
     console.log(error);
     return;
   }
-
+reporteDTData = data || [];
   let html = `
   <div class="reporte-container">
 
     <div class="reporte-header">
 
       <h2 class="reporte-title">DT OPERACIONES</h2>
+      <div class="filtros-reporte">
+
+    <div class="campo-filtro">
+        <label>Desde</label>
+        <input type="date" id="dtFechaInicio">
+    </div>
+
+    <div class="campo-filtro">
+        <label>Hasta</label>
+        <input type="date" id="dtFechaFin">
+    </div>
+
+    <button
+        class="btn-filtrar"
+        onclick="filtrarReporteDT()">
+        Filtrar
+    </button>
               <button onclick="descargarExcel()" class="btn-excel">
     Descargar Excel
   </button>
@@ -6229,10 +6391,11 @@ async function cargarReporteDT() {
 <thead>
 <tr>
     <th>GRÚA</th>
-    <th>FECHA/HORA REPORTADA</th>
-    <th>FECHA/HORA ENTREGADA</th>
+    <th>FECHA REPORTADA</th>
+    <th>FECHA ENTREGADA</th>
     <th>TIEMPO MUERTO</th>
     <th>BLOQUE</th>
+    <th>Tipo de Falla</th>
     <th>ACTIVIDAD</th>
     <th>QUIÉN REPORTÓ</th>
     <th>TURNO</th>
@@ -6241,37 +6404,16 @@ async function cargarReporteDT() {
 </tr>
 </thead>
 
-          <tbody>
-  `;
+<tbody id="tbodyReporteDT">
+</tbody>
 
-  if (data && data.length > 0) {
-data.forEach(r => {
+</table>
 
-    html += `
-    <tr>
-        <td>${r.grua ?? ''}</td>
-        <td>${formatearFechaMX(r.fecha_op_repo)}</td>
-        <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
-        <td>${r.tiempo_muerto_real ?? ''}</td>
-        <td>${r.bloque_tramo ?? ''}</td>
-        <td>${r.actividad ?? ''}</td>
-        <td>${r.quien_reporto ?? ''}</td>
-        <td>${r.turno ?? ''}</td>
-        <td>${r.area_mantto ?? ''}</td>
-        <!--<td>${r.descripcion_falla ?? ''}</td>-->
-    </tr>
-    `;
+</div>
+</div>
 
-});
-  } else {
-    html += `
-      <tr>
-        <td colspan="12" style="text-align:center;padding:20px;">
-          Sin registros
-        </td>
-      </tr>
-    `;
-  }
+</div>
+`;
 
   html += `
           </tbody>
@@ -6286,7 +6428,7 @@ data.forEach(r => {
 
  document.getElementById('contenedorReporteDT').innerHTML = html;
 
-
+pintarReporteDT(reporteDTData);
 }
 function abrirDowntimeMTTO(){
 
@@ -6338,8 +6480,9 @@ function actualizarIndicadorEstado(){
   if(estado === 'anclada') texto = 'Estado actual: ANCLADA';
   if(estado === 'fmenor') texto = 'Estado actual: FALLA MENOR';
   if(estado === 'fseñal') texto = 'Estado actual: FALLA DE SEÑAL';
-  indicador.innerText = texto;
+  if(estado === 'percance') texto = 'Estado actual: PERCANCE EN GRUA';
 
+  indicador.innerText = texto;
   indicador.className = 'estado-indicador ' + estado;
 }
 function ponerFechaFallaActual(){
@@ -6377,9 +6520,8 @@ function ponerFechaGruaReportada(){
     const minuto = String(ahora.getMinutes()).padStart(2,'0');
 
     fecha.value = `${año}-${mes}-${dia}T${hora}:${minuto}`;
-
-    console.log("FECHA GRUA REPORTADA:", fecha.value);
 }
+
 async function guardarEstadoRapido() {
 console.log("ENTRÉ A GUARDAR ESTADO RÁPIDO");
 try {
@@ -6474,6 +6616,12 @@ if (estado === 'falla') {
   if (estadoAnterior !== 'falla') {
 
     ponerFechaFallaActual();
+    ponerFechaGruaReportada();
+
+    // ================= UI =================
+actualizarUIEstado();
+controlarPrioridad();
+actualizarIndicadorEstado();
 
     const fechaInput =
       document.getElementById('fechaReporte').value;
@@ -6835,9 +6983,7 @@ function abrirModalCierreFalla(g){
   const zona = obtenerZonaGrua(g.id);
 
   console.log("GRÚA:", g.id, "ZONA:", zona);
-
   document.getElementById('c_bloque').value = zona;
-
   document.getElementById('c_fechaFalla').value = formatDateTime(g.fecha_hora_falla);
   document.getElementById('c_fechaRepo').value = formatDateTime(g.fecha_op_repo);
   document.getElementById('c_tm').value = g.tiempo_muerto || '';
@@ -7014,16 +7160,12 @@ function formatearFechaMX(fechaBD){
 
     if(!fechaBD) return '';
 
-    const fecha = new Date(fechaBD + 'Z');
+    const fecha = new Date(fechaBD);
 
-    return fecha.toLocaleString('es-MX', {
-        timeZone: 'America/Mexico_City',
-        year:'numeric',
-        month:'2-digit',
+    return fecha.toLocaleDateString('es-MX', {
         day:'2-digit',
-        hour:'2-digit',
-        minute:'2-digit',
-        hour12:false
+        month:'2-digit',
+        year:'numeric'
     });
 
 }
@@ -7953,39 +8095,131 @@ function ponerFechasFallaAutomaticas(){
     const hora = String(ahora.getHours()).padStart(2,'0');
     const minuto = String(ahora.getMinutes()).padStart(2,'0');
 
+    const fechaActual = `${año}-${mes}-${dia}T${hora}:${minuto}`;
 
-    const fechaActual =
-    `${año}-${mes}-${dia}T${hora}:${minuto}`;
-
-
-
-    // Fecha grúa reportada
-    const fechaRepo =
-    document.getElementById('fechaOpRepo');
-
-
-    if(fechaRepo && !fechaRepo.value){
-
+    const fechaRepo = document.getElementById("fechaOpRepo");
+    if(fechaRepo){
         fechaRepo.value = fechaActual;
-
     }
 
-
-
-    // Fecha grúa entregada
-    const fechaEntrega =
-    document.getElementById('fechaReporte');
-
-
-    if(fechaEntrega && !fechaEntrega.value){
-
+    const fechaEntrega = document.getElementById("fechaReporte");
+    if(fechaEntrega){
         fechaEntrega.value = fechaActual;
+    }
+}
+
+function capturarTablero(){
+
+    const tablero = document.getElementById("yard");
+
+
+    if(!tablero){
+
+        alert("No se encontró el tablero");
+
+        return;
 
     }
+
+
+    html2canvas(tablero,{
+
+        scale:2,
+
+        backgroundColor:"#ffffff"
+
+    })
+    .then(canvas=>{
+
+
+        const enlace =
+        document.createElement("a");
+
+
+        enlace.download =
+        "Estado_Grúas_"+new Date()
+        .toLocaleDateString("es-MX")
+        +".png";
+
+
+        enlace.href =
+        canvas.toDataURL("image/png");
+
+
+        enlace.click();
+
+
+    });
 
 
 }
+function pintarReporteDT(data){
 
+    let html = '';
+
+    if(data && data.length){
+
+        data.forEach(r => {
+
+            html += `
+            <tr>
+                <td>${r.grua ?? ''}</td>
+                <td>${formatearFechaMX(r.fecha_op_repo)}</td>
+                <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
+                <td>${r.tiempo_muerto_real ?? ''}</td>
+                <td>${r.bloque_tramo ?? ''}</td>
+                <td>${r.registro_falla ?? ''}</td>
+                <td>${r.actividad ?? ''}</td>
+                <td>${r.quien_reporto ?? ''}</td>
+                <td>${r.turno ?? ''}</td>
+                <td>${r.area_mantto ?? ''}</td>
+            </tr>
+            `;
+        });
+
+    }else{
+
+        html = `
+        <tr>
+            <td colspan="10" style="text-align:center">
+                Sin registros
+            </td>
+        </tr>
+        `;
+    }
+
+    document.getElementById("tbodyReporteDT").innerHTML = html;
+
+}
+function filtrarReporteDT(){
+
+    const inicio = document.getElementById("dtFechaInicio").value;
+    const fin = document.getElementById("dtFechaFin").value;
+
+    let datos = [...reporteDTData];
+
+    if(inicio){
+
+        datos = datos.filter(r =>
+            new Date(r.fecha_op_repo) >= new Date(inicio)
+        );
+
+    }
+
+    if(fin){
+
+        const fechaFin = new Date(fin);
+        fechaFin.setHours(23,59,59,999);
+
+        datos = datos.filter(r =>
+            new Date(r.fecha_op_repo) <= fechaFin
+        );
+
+    }
+
+    pintarReporteDT(datos);
+
+}
 </script>
 
 </div>
@@ -7997,5 +8231,4 @@ function ponerFechasFallaAutomaticas(){
 </body>
 
 </html>
-
 
