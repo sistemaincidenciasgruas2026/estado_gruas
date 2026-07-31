@@ -307,7 +307,14 @@ margin-bottom:8px;
   grid-template-columns: repeat(11, minmax(110px, 120px));
   gap:10px;
 }
-
+.grid-side{
+  grid-template-columns: repeat(13, minmax(95px, 1fr));
+  gap:10px;
+}
+.grid-sts{
+  grid-template-columns: repeat(13, minmax(95px, 1fr));
+  gap:10px;
+}
 /* ================= CARD ================= */
 
 .card{
@@ -986,11 +993,8 @@ color:#1f2933;
 .menu-title{
 
     font-size:18px;
-
     font-weight:700;
-
     margin-bottom:20px;
-
     color:#6da544;
 
 }
@@ -998,14 +1002,14 @@ color:#1f2933;
 /* ================= SIDEBAR MODERNA ================= */
 
 .sidebar{
-  width:220px;
-  min-width:220px;
-  max-width:220px;
+  width:170px;
+  min-width:170px;
+  max-width:170px;
 
   background:linear-gradient(180deg,#0f172a,#1e293b);
   color:white;
 
-  padding:16px;
+  padding:12px;
 
   overflow-y:auto;
   overflow-x:hidden;
@@ -3992,7 +3996,7 @@ gruas:[
 {
 zona:'B',
 gruas:[
-'Z-32','Z-28','N-58','Z-44','Z-43','Z-42','N-53','N-54','K-22','',''
+'Z-28','Z-32','N-58','Z-44','Z-43','Z-42','N-53','N-54','K-22','',''
 ]
 },
 
@@ -4020,18 +4024,17 @@ gruas:[
 {
 zona:'F',
 gruas:[
-'K-11','K-34','Z-40','Z-41','Z-39'
+'K-11','K-34','Z-40','Z-41','Z-39','','K-08','K-07','K-06','K-05'
 ]
 },
 
-{
-zona:'I',
-  gruas:
-  ['K-08','K-07','K-06','K-05','','','']
-},
     {
         zona: "SIDE LOADER",
-        gruas: ["SD310","SD311","SD312","SD314","SD315","SD316","SD317","SD318","SD320","SD321","SD323"]
+        gruas: ["SD310","SD311","SD312","SD314","SD315","SD316","SD317","SD318","SD320","SD321","SD323","SD325","SD326"]
+    },
+    {
+        zona: "STS",
+        gruas: ["STS10","STS11","STS12","STS13","STS16","STS17","STS18","STS19","STS20","STS21","STS22","STS23"]
     }
 
 ];
@@ -4248,10 +4251,14 @@ function render(){
       <div class="row">
 
 <div class="zona">
-  ${row.zona === 'SIDE LOADER' ? row.zona : 'ZONA ' + row.zona}
+  ${
+    row.zona === 'SIDE LOADER' || row.zona === 'STS'
+    ? row.zona
+    : 'ZONA ' + row.zona
+  }
 </div>
 
-        <div class="grid ${row.zona === 'I' ? 'grid-tren' : ''}">
+        <div class="grid ${row.zona === 'I' ? 'grid-tren' : ''} ${row.zona === 'SIDE LOADER' ? 'grid-side' : ''}${row.zona === 'STS' ? 'grid-sts' : ''}">
     `;
 
     row.gruas.forEach(id => {
@@ -4580,7 +4587,11 @@ cont.innerHTML = list.map(g => `
 function abrir(id){
   
   actual = id;
-  
+  // Limpiar formulario anterior
+document.getElementById("estado").value = "disponible";
+document.getElementById("registro_falla").value = "";
+document.getElementById("quienReporto").value = "";
+document.getElementById("actividad").value = "";
   setTimeout(() => {
   const area = detectarArea(id);
 
@@ -4602,6 +4613,10 @@ function abrir(id){
   }
 
   mostrarPanelEstado();
+
+  document.getElementById("estado").value = "disponible";
+actualizarUIEstado();
+
   document.getElementById('operadorActual').innerText =
   g.nombre_operador || "SIN ASIGNAR";
   document.getElementById('operadorManual').value =
@@ -4615,8 +4630,11 @@ ponerFechaFallaActual();
 
 
   document.getElementById('gruaGeneral').value = id;
-  document.getElementById('bloqueTramo').value =
-  obtenerZonaGrua(id);
+const bloque = document.getElementById('bloqueTramo');
+
+if (bloque) {
+  bloque.value = obtenerZonaGrua(id);
+}
 
   document.getElementById('tiempoMuerto').value = g.tiempo_muerto || '';
   document.getElementById('turnoGeneral').value = g.turno_operacion || '1';
@@ -4691,6 +4709,21 @@ function controlarPrioridad() {
   const estado = document.getElementById('estado').value;
   const esFalla = estado === 'falla';
 
+  const g = getEquipo(actual);
+
+  const id = (g?.id || "")
+    .toUpperCase()
+    .replace(/[-\s]/g,'');
+
+  const esSideLoaderSTS =
+    id.startsWith("SD") ||
+    id.startsWith("STS");
+
+
+  const ocultarCampos =
+    esFalla && esSideLoaderSTS;
+
+
   const grupoPrioridad = document.getElementById('grupoPrioridad');
 
   const labelRegistro = document.getElementById('labelRegistroFalla');
@@ -4702,22 +4735,53 @@ function controlarPrioridad() {
   const grupo = document.getElementById('grupoQuienReporto');
   const grupoAct = document.getElementById('grupoActividad');
 
+
+
   if (grupo) {
-  grupo.style.display = esFalla ? 'block' : 'none';
+    grupo.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
   }
+
+
   if (grupoPrioridad) {
-    grupoPrioridad.style.display = esFalla ? 'block' : 'none';
+    grupoPrioridad.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
   }
 
-  if (labelRegistro) labelRegistro.style.display = esFalla ? 'block' : 'none';
-  if (txtRegistro) txtRegistro.style.display = esFalla ? 'block' : 'none';
 
-  if (labelQuien) labelQuien.style.display = esFalla ? 'block' : 'none';
-  if (txtQuien) txtQuien.style.display = esFalla ? 'block' : 'none';
+  if (labelRegistro)
+    labelRegistro.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
+
+
+  if (txtRegistro)
+    txtRegistro.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
+
+
+  if (labelQuien)
+    labelQuien.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
+
+
+  if (txtQuien)
+    txtQuien.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
+
 
   if (grupoAct) {
-  grupoAct.style.display = esFalla ? 'block' : 'none';
-}
+    grupoAct.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
+  }
+
+
+  const btn = document.getElementById('btnAtenderFalla');
+
+  if(btn){
+    btn.style.display =
+      ocultarCampos ? 'none' : (esFalla ? 'block' : 'none');
+  }
+
 }
 
 function ocultarCierreFalla(){
@@ -6023,32 +6087,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 function obtenerTextoEstado(g){
 
-  if(g.estado === 'operacion')
-    return 'OPERACIÓN';
+ // if(g.estado === 'operacion')
+ //   return 'OPERACIÓN';
 
-  if(g.estado === 'disponible')
-    return 'DISPONIBLE';
+ // if(g.estado === 'disponible')
+ //   return 'DISPONIBLE';
 
-  if(g.estado === 'falla')
-    return 'FALLA EN TURNO';
+ // if(g.estado === 'falla')
+ //   return 'FALLA EN TURNO';
 
-  if(g.estado === 'dayli')
-    return 'DAYLI';
+ // if(g.estado === 'dayli')
+ //   return 'DAYLI';
   
-  if(g.estado === 'baño')
-    return 'BAÑO';  
+ // if(g.estado === 'baño')
+ //   return 'BAÑO';  
   
-  if(g.estado === 'anclada')
-    return 'ANCLADA';
+ // if(g.estado === 'anclada')
+ //   return 'ANCLADA';
 
-  if(g.estado === 'fmenor')
-    return 'FALLA MENOR';
+ // if(g.estado === 'fmenor')
+ //   return 'FALLA MENOR';
 
-  if(g.estado === 'fseñal')
-    return 'FALLA DE SEÑAL';
+ // if(g.estado === 'fseñal')
+ //   return 'FALLA DE SEÑAL';
 
-  if(g.estado === 'percance')
-    return 'PERCANCE';
+ // if(g.estado === 'percance')
+ //   return 'PERCANCE';
 
   return '';
 }
@@ -6523,6 +6587,12 @@ function ponerFechaGruaReportada(){
 }
 
 async function guardarEstadoRapido() {
+  const tipoGrua = actual.substring(0,3);
+
+const esSDSTS =
+  tipoGrua === "SD-" ||
+  tipoGrua === "STS";
+
 console.log("ENTRÉ A GUARDAR ESTADO RÁPIDO");
 try {
 
@@ -6540,6 +6610,8 @@ try {
 
     let errores = [];
 
+if (!esSDSTS) {
+
     if (!quien) {
       errores.push("Quién reportó");
       document.getElementById('quienReporto').style.border = "2px solid red";
@@ -6554,6 +6626,8 @@ try {
       errores.push("¿Qué falla reporta?");
       document.getElementById('registro_falla').style.border = "2px solid red";
     }
+
+}
     const fechaRepo =
 document.getElementById('fechaOpRepo').value;
 
@@ -6612,7 +6686,8 @@ const entroAFalla =
 
 // ================= FALLA =================
 if (estado === 'falla') {
-
+const esSDSTS =
+  actual.startsWith("SD") || actual.startsWith("STS");
   if (estadoAnterior !== 'falla') {
 
     ponerFechaFallaActual();
@@ -7422,6 +7497,26 @@ if(grupoFechaOpRepo){
     : 'none';
 
 }
+// CONTROL SD / STS
+const esSDSTS =
+    actual.startsWith("SD") || actual.startsWith("STS");
+
+const fechaRepo = document.getElementById("grupoFechaOpRepo");
+const btnStandby = document.getElementById("btnAtenderFalla");
+
+if (esSDSTS) {
+
+    // Ocultar Fecha/Hora Grúa Reportada
+    if (fechaRepo) {
+        fechaRepo.style.display = "none";
+    }
+
+    // Ocultar botón STANDBY
+    if (btnStandby) {
+        btnStandby.style.display = "none";
+    }
+
+}
 }
 function detectarArea(id){
 
@@ -7444,7 +7539,7 @@ function actualizarGruaPorArea(area) {
     console.log('Área TREN seleccionada:', grupoTREN);
 
     // EJEMPLO: si tienes un input de grúa
-    // document.getElementById('gruaGeneral').value = grupoTREN[0];
+     document.getElementById('gruaGeneral').value = grupoTREN[0];
 
   } else if (area === 'RTG') {
 
