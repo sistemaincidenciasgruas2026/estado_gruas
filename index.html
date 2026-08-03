@@ -2297,31 +2297,31 @@ button:hover{
     display:block;
 }
 .msg-badge{
-  position: absolute;
-  top: 6px;
-  right: 10px;
+    position:absolute !important;
 
-  width: 16px;
-  height: 16px;
+    top:3px !important;
+    right:3px !important;
 
-  background: red;
-  color: white;
+    width:12px !important;
+    height:12px !important;
 
-  border-radius: 50%;
+    background:#ff0000;
+    color:#fff;
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    border-radius:50%;
 
-  font-size: 10px;
-  font-weight: 700;
+    display:flex;
+    align-items:center;
+    justify-content:center;
 
-  line-height: 1; /* 🔥 clave */
+    font-size:7px !important;
+    font-weight:700;
+    line-height:12px !important;
 
-  padding: 0;     /* 🔥 evita descentrado */
-  box-sizing: border-box;
+    padding:0;
+    box-sizing:border-box;
 
-  text-align: center;
+    z-index:100;
 }
 
 @keyframes pulse {
@@ -3187,7 +3187,569 @@ body{
     opacity:.85;
 
 }
+/*desde aqui se modifico
+/* =====================================
+   MENU LATERAL COMPACTO MOBILE AJUSTADO
+===================================== */
 
+@media(max-width:768px){
+
+    .layout{
+
+        display:flex !important;
+
+        flex-direction:row !important;
+
+        align-items:flex-start !important;
+
+    }
+
+
+    .sidebar{
+
+        width:100px !important;
+
+        min-width:100px !important;
+
+        max-width:100px !important;
+
+        height:100vh;
+
+        padding:5px !important;
+
+        display:flex !important;
+
+        flex-direction:column !important;
+
+        justify-content:flex-start !important;
+
+        gap:4px !important;
+
+        overflow:hidden !important;
+
+    }
+
+
+    .sidebar-title{
+
+        font-size:8px !important;
+
+        text-align:center;
+
+        margin:2px 0 5px !important;
+
+    }
+
+
+    .menu-btn{
+
+        width:100% !important;
+
+        height:auto !important;
+
+        min-height:42px !important;
+
+        padding:4px !important;
+
+        margin:0 !important;
+
+        display:flex !important;
+
+        flex-direction:column !important;
+
+        align-items:center !important;
+
+        justify-content:center !important;
+
+        flex:none !important;
+
+        text-align:center;
+
+    }
+
+
+    /* MOSTRAR TEXTO */
+  .menu-btn span{
+
+    display:block !important;
+
+    font-size:6px !important;
+    line-height:1 !important;
+
+    white-space:normal !important;
+    word-break:break-word !important;
+
+    text-align:center !important;
+
+    width:100% !important;
+}
+
+
+    .menu-btn i{
+
+        font-size:14px !important;
+
+        margin-bottom:2px !important;
+
+    }
+
+}
+
+/* =====================================
+   BADGE NOTIFICACION ULTRA COMPACTO
+===================================== */
+
+.msg-badge{
+
+    position:absolute !important;
+
+    width:10px !important;
+    min-width:10px !important;
+    max-width:10px !important;
+
+    height:10px !important;
+    min-height:10px !important;
+
+    padding:0 !important;
+
+    margin:0 !important;
+
+    border-radius:50% !important;
+
+    font-size:7px !important;
+
+    line-height:10px !important;
+
+    text-align:center !important;
+
+    display:flex !important;
+
+    align-items:center !important;
+
+    justify-content:center !important;
+
+    box-sizing:border-box !important;
+
+}
+.header-badge{
+    display:none !important;
+}
+/* =====================================
+   GRUAS + SIDE LOADER + STS
+   COMPACTO MOBILE DEFINITIVO
+===================================== */
+
+@media(max-width:768px){
+
+    .yard{
+        padding:4px !important;
+        overflow:hidden;
+    }
+
+
+    /* TODOS LOS GRIDS */
+    .grid,
+    .grid-side,
+    .grid-sts{
+
+        gap:2px !important;
+
+    }
+
+
+    /* GRUAS PRINCIPALES */
+    .grid{
+
+        grid-template-columns:
+        repeat(11, 1fr) !important;
+
+    }
+
+
+    /* SIDE LOADER / STS */
+    .grid-side,
+    .grid-sts{
+
+        grid-template-columns:
+        repeat(13, 1fr) !important;
+
+    }
+
+
+    /* TODAS LAS TARJETAS IGUALES */
+    .grid .card,
+    .grid-side .card,
+    .grid-sts .card{
+
+        width:auto !important;
+
+        min-width:0 !important;
+
+        height:32px !important;
+
+        min-height:32px !important;
+
+        padding:1px !important;
+
+        border-radius:3px !important;
+
+    }
+
+
+    /* CODIGO DE GRUA */
+    .grid .code,
+    .grid-side .code,
+    .grid-sts .code{
+
+        font-size:7px !important;
+
+        line-height:1 !important;
+
+        margin:0 !important;
+
+    }
+
+
+    /* TEXTO */
+    .grid .small,
+    .grid-side .small,
+    .grid-sts .small{
+
+        font-size:5px !important;
+
+        line-height:1 !important;
+
+    }
+
+
+    /* TIMER */
+    .grid .timer-card,
+    .grid-side .timer-card,
+    .grid-sts .timer-card{
+
+        font-size:5px !important;
+
+        padding:0 !important;
+
+        margin:0 !important;
+
+    }
+
+
+    /* ETIQUETAS */
+    .estado-label,
+    .corner-badge{
+
+        font-size:4px !important;
+
+        padding:0 1px !important;
+
+    }
+
+
+    .zona{
+
+        width:18px !important;
+
+        font-size:6px !important;
+
+    }
+
+}
+
+
+/* =====================================
+   LEYENDA MINI SIN TAPAR
+===================================== */
+
+@media(max-width:768px){
+
+    .leyenda-corner{
+
+        top:3px !important;
+
+        right:3px !important;
+
+        width:70px !important;
+
+        padding:3px !important;
+
+        max-height:90px !important;
+
+        overflow:hidden !important;
+
+        transform:scale(.85);
+
+        transform-origin:top right;
+
+    }
+
+
+    .legend-mini{
+
+        gap:1px !important;
+
+        font-size:6px !important;
+
+    }
+
+
+    .legend-row{
+
+        gap:2px !important;
+
+        line-height:1 !important;
+
+    }
+
+
+    .color-box{
+
+        width:5px !important;
+
+        height:5px !important;
+
+    }
+
+}
+
+
+/* =====================================
+   CELULARES PEQUEÑOS
+===================================== */
+
+@media(max-width:480px){
+
+
+    .grid .card,
+    .grid-side .card,
+    .grid-sts .card{
+
+        height:28px !important;
+
+        min-height:28px !important;
+
+    }
+
+
+    .grid .code,
+    .grid-side .code,
+    .grid-sts .code{
+
+        font-size:6px !important;
+
+    }
+
+
+    .grid .small,
+    .grid-side .small,
+    .grid-sts .small{
+
+        display:none !important;
+
+    }
+
+
+    .leyenda-corner{
+
+        width:60px !important;
+
+        transform:scale(.75);
+
+    }
+
+}
+/* =====================================
+   GRUAS + SIDE LOADER + STS
+   TAMAÑO COMPACTO AJUSTADO
+===================================== */
+
+@media(max-width:768px){
+
+    .grid,
+    .grid-side,
+    .grid-sts{
+
+        display:grid !important;
+
+        grid-template-columns:repeat(11, 45px) !important;
+
+        gap:3px !important;
+
+        width:max-content !important;
+
+    }
+
+
+    .grid .card,
+    .grid-side .card,
+    .grid-sts .card{
+
+        width:45px !important;
+
+        min-width:45px !important;
+
+        max-width:45px !important;
+
+
+        height:45px !important;
+
+        min-height:45px !important;
+
+        max-height:45px !important;
+
+
+        padding:3px !important;
+
+        border-radius:5px !important;
+
+    }
+
+
+    .grid .code,
+    .grid-side .code,
+    .grid-sts .code{
+
+        font-size:9px !important;
+
+        line-height:1 !important;
+
+        margin:2px 0 !important;
+
+    }
+
+
+    .grid .small,
+    .grid-side .small,
+    .grid-sts .small{
+
+        font-size:6px !important;
+
+    }
+
+
+    .grid .timer-card,
+    .grid-side .timer-card,
+    .grid-sts .timer-card{
+
+        font-size:6px !important;
+
+    }
+
+}
+
+
+/* CELULARES PEQUEÑOS */
+
+@media(max-width:480px){
+
+    .grid,
+    .grid-side,
+    .grid-sts{
+
+        grid-template-columns:repeat(11, 40px) !important;
+
+        gap:2px !important;
+
+    }
+
+
+    .grid .card,
+    .grid-side .card,
+    .grid-sts .card{
+
+        width:40px !important;
+
+        min-width:40px !important;
+
+        height:40px !important;
+
+        min-height:40px !important;
+
+    }
+
+
+    .grid .code,
+    .grid-side .code,
+    .grid-sts .code{
+
+        font-size:8px !important;
+
+    }
+
+}
+/* =====================================
+   PRIORIDAD BUQUE AJUSTADA A TARJETA GRUA
+===================================== */
+
+@media(max-width:768px){
+
+    .card{
+
+        position:relative !important;
+
+    }
+
+
+    .priority-text{
+
+        position:absolute !important;
+
+        bottom:2px !important;
+
+        left:50% !important;
+
+        transform:translateX(-50%) !important;
+
+
+        font-size:4px !important;
+
+        line-height:1 !important;
+
+
+        height:7px !important;
+
+        min-height:7px !important;
+
+
+        width:90% !important;
+
+        padding:0 !important;
+
+
+        display:flex !important;
+
+        align-items:center !important;
+
+        justify-content:center !important;
+
+
+        border-radius:2px !important;
+
+        white-space:nowrap !important;
+
+        overflow:hidden !important;
+
+    }
+
+}
+
+
+@media(max-width:480px){
+
+    .priority-text{
+
+        bottom:1px !important;
+
+        height:6px !important;
+
+        min-height:6px !important;
+
+        font-size:3.5px !important;
+
+    }
+
+}
 </style>
 </head>
 <body>
@@ -3518,7 +4080,7 @@ style="display:none;">
 <div id="mensajeActivo" class="mensaje-activo">
     Cargando mensaje...
 </div>
-<span id="msgBadge" class="msg-badge" style="display:none;">1</span>
+
 </div>
         </div>
 
