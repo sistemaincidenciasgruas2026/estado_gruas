@@ -5154,6 +5154,7 @@ document.getElementById("estado").value = "disponible";
 document.getElementById("registro_falla").value = "";
 document.getElementById("quienReporto").value = "";
 document.getElementById("actividad").value = "";
+
   setTimeout(() => {
   const area = detectarArea(id);
 
@@ -5229,6 +5230,7 @@ if (bloque) {
   document.getElementById('opMonitorReporta').value = g.monitor_reporta || '';
   document.getElementById('opMonitorCierre').value = g.monitor_cierre || '';
   document.getElementById('gruaGeneral').value = grupoTREN[0];
+  
   // ================= INDICADOR =================
   const indicador = document.getElementById('estadoIndicador');
 
@@ -8048,16 +8050,10 @@ if(estado === 'falla'){
 
 }
 const grupoFechaOpRepo =
-document.getElementById('grupoFechaOpRepo');
+document.getElementById("grupoFechaOpRepo");
 
-
-if(grupoFechaOpRepo){
-
-    grupoFechaOpRepo.style.display =
-    estado === 'falla'
-    ? 'block'
-    : 'none';
-
+if (grupoFechaOpRepo) {
+    grupoFechaOpRepo.style.display = "none";
 }
 // CONTROL SD / STS
 const esSDSTS =
@@ -8629,6 +8625,7 @@ function mostrarEditorOperador() {
 
 function ocultarEditorOperador() {
     document.getElementById("editorOperador").style.display = "none";
+    
 }
 
 function obtenerZonaGrua(idGrua){
