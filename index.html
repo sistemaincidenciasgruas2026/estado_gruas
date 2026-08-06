@@ -25,6 +25,8 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 <link 
 rel="stylesheet" 
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
 <style>
 
 /* ================= RESET ================= */
@@ -7154,8 +7156,11 @@ async function guardarEstadoRapido() {
   const tipoGrua = actual.substring(0,3);
 
 const esSDSTS =
-  tipoGrua === "SD-" ||
-  tipoGrua === "STS";
+    actual &&
+    (
+        actual.toUpperCase().startsWith("SD") ||
+        actual.toUpperCase().startsWith("STS")
+    );
 
 console.log("ENTRÉ A GUARDAR ESTADO RÁPIDO");
 try {
@@ -8426,7 +8431,8 @@ function cargarOpcionesTiempoMuerto() {
     // Limpiar
     select.innerHTML = '<option value="">Seleccione...</option>';
 
-    for (let minutos = 10; minutos <= 600; minutos += 10) {
+    // Cada 5 minutos hasta 10 horas
+    for (let minutos = 5; minutos <= 600; minutos += 5) {
 
         const horas = String(Math.floor(minutos / 60)).padStart(2, "0");
         const mins = String(minutos % 60).padStart(2, "0");
@@ -8509,27 +8515,33 @@ async function cargarResponsabilidades(){
 
   columnasCodigos = Object.keys(data[0]);
 
-  const select =
-    document.getElementById("responsabilidad");
+  const select = document.getElementById("responsabilidad");
 
-  select.innerHTML =
-    '<option value="">Seleccione...</option>';
+  select.innerHTML = '<option value="">Seleccione...</option>';
 
-columnasCodigos.forEach(col =>{
+  columnasCodigos.forEach(col => {
 
-  const option = document.createElement("option");
+    const option = document.createElement("option");
 
-  // Valor real para consultar Supabase
-  option.value = col;
+    // Valor real para consultar Supabase
+    option.value = col;
 
-  // Texto mostrado al usuario
-  option.textContent = col
-    .replace(/_/g, ' ')
-    .toUpperCase();
+    // Texto mostrado al usuario
+    option.textContent = col
+      .replace(/_/g, ' ')
+      .toUpperCase();
 
-  select.appendChild(option);
+    select.appendChild(option);
 
-});
+  });
+
+  // Activar búsqueda UNA SOLA VEZ
+  if (!select.tomselect) {
+    new TomSelect("#responsabilidad", {
+      create: false,
+      placeholder: "Escriba para buscar..."
+    });
+  }
 
 }
 async function cargarCodigos(){
@@ -8874,6 +8886,7 @@ function filtrarReporteDT(){
     pintarReporteDT(datos);
 
 }
+
 </script>
 
 </div>
