@@ -3752,14 +3752,575 @@ body{
     }
 
 }
+/* =====================================================
+   LOGIN - CONTROL DE GRÚAS
+===================================================== */
+
+#login {
+    min-height: 100vh;
+    width: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            135deg,
+            #dbe7f1 0%,
+            #eef4f8 45%,
+            #d5e1eb 100%
+        );
+
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decoración de fondo */
+
+#login::before {
+    content: "";
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    border-radius: 50%;
+
+    background: rgba(255,255,255,.35);
+
+    top: -300px;
+    right: -200px;
+}
+
+#login::after {
+    content: "";
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    border-radius: 50%;
+
+    background: rgba(59,130,246,.06);
+
+    bottom: -250px;
+    left: -150px;
+}
+
+
+/* =====================================================
+   TARJETA
+===================================================== */
+
+#login .login-card {
+
+    position: relative;
+    z-index: 2;
+
+    width: 390px;
+    max-width: calc(100% - 40px);
+
+    background: rgba(255,255,255,.96);
+
+    border-radius: 18px;
+
+    padding: 38px 36px 32px;
+
+    box-shadow:
+        0 20px 50px rgba(15,23,42,.16),
+        0 4px 12px rgba(15,23,42,.08);
+
+    border: 1px solid rgba(255,255,255,.8);
+}
+
+
+/* =====================================================
+   ENCABEZADO
+===================================================== */
+
+#login .login-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+#login .login-icon {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 16px;
+
+    border-radius: 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: linear-gradient(
+        135deg,
+        #334155,
+        #1e293b
+    );
+
+    color: white;
+
+    font-size: 30px;
+
+    box-shadow:
+        0 8px 20px rgba(30,41,59,.25);
+}
+
+#login h1 {
+    margin: 0;
+
+    color: #1e293b;
+
+    font-size: 26px;
+    font-weight: 800;
+
+    letter-spacing: .4px;
+}
+
+#login .login-subtitle {
+    margin-top: 7px;
+
+    color: #64748b;
+
+    font-size: 14px;
+}
+
+
+/* =====================================================
+   ETIQUETAS
+===================================================== */
+
+#login label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 700;
+}
+
+
+/* =====================================================
+   INPUTS
+===================================================== */
+
+#login select,
+#login input[type="password"] {
+
+    width: 100%;
+
+    height: 46px;
+
+    box-sizing: border-box;
+
+    border: 1px solid #cbd5e1;
+
+    border-radius: 9px;
+
+    background: #f8fafc;
+
+    padding: 0 13px;
+
+    color: #1e293b;
+
+    font-size: 14px;
+
+    outline: none;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s,
+        background .2s;
+}
+
+#login select:focus,
+#login input[type="password"]:focus {
+
+    background: white;
+
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px rgba(59,130,246,.12);
+}
+
+
+/* =====================================================
+   GRUPOS
+===================================================== */
+
+#login .login-field {
+    margin-bottom: 18px;
+}
+
+
+/* =====================================================
+   BOTÓN
+===================================================== */
+
+#login button {
+
+    width: 100%;
+
+    height: 48px;
+
+    margin-top: 6px;
+
+    border: none;
+
+    border-radius: 9px;
+
+    background: linear-gradient(
+        135deg,
+        #334155,
+        #1e293b
+    );
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    letter-spacing: .5px;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s,
+        box-shadow .15s,
+        background .15s;
+}
+
+#login button:hover {
+
+    background: linear-gradient(
+        135deg,
+        #1e40af,
+        #1d4ed8
+    );
+
+    box-shadow:
+        0 7px 18px rgba(30,64,175,.25);
+
+    transform: translateY(-1px);
+}
+
+#login button:active {
+    transform: translateY(0);
+}
+
+
+/* =====================================================
+   ERROR
+===================================================== */
+
+#loginError {
+
+    min-height: 20px;
+
+    margin-top: 14px;
+
+    text-align: center;
+
+    color: #dc2626;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+/* =====================================================
+   PIE
+===================================================== */
+
+/* ================================
+   FOOTER LOGIN
+================================ */
+
+#login .login-footer {
+    margin-top: 25px;
+    padding-top: 18px;
+    border-top: 1px solid #e2e8f0;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+
+/* ================================
+   BARRA SUPERIOR
+================================ */
+
+.topbar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 40px;
+    height: 40px;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+.logo {
+    font-weight: 800;
+    font-size: 18px;
+    letter-spacing: 0.4px;
+
+    /* IMPORTANTE */
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+/* ================================
+   USUARIO ACTIVO
+================================ */
+
+.usuario-topbar {
+    margin-left: auto;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    color: white;
+    font-size: 13px;
+    font-weight: 500;
+
+    padding-left: 15px;
+
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+
+/* TEXTO "Usuario:" */
+
+.usuario-topbar span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    white-space: nowrap;
+}
+
+
+/* NOMBRE DEL USUARIO */
+
+.usuario-topbar strong {
+    color: #ffffff;
+    font-weight: 800;
+}
+
+
+/* ================================
+   BOTÓN SALIR
+================================ */
+
+.btn-cerrar-sesion {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+
+    background: rgba(255, 255, 255, 0.12);
+    color: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+
+    padding: 2px 5px;
+
+    font-size: 10px;
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.btn-cerrar-sesion i {
+    font-size: 10px;
+}
+
+.btn-cerrar-sesion i {
+    font-size: 11px;
+}
+
+.btn-cerrar-sesion:hover {
+    background: rgba(255, 255, 255, 0.22);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+
+/* ICONO */
+
+.btn-cerrar-sesion i {
+    font-size: 13px;
+}
+
+
+/* AL PASAR EL MOUSE */
+
+.btn-cerrar-sesion:hover {
+    background: #dc2626;
+
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 4px 8px rgba(0,0,0,0.20);
+}
+
+
+/* AL PRESIONAR */
+
+.btn-cerrar-sesion:active {
+    transform: translateY(0);
+
+    box-shadow:
+        0 2px 4px rgba(0,0,0,0.15);
+}
+
+
+/* ================================
+   RESPONSIVE
+================================ */
+
+@media (max-width: 700px) {
+
+    .topbar {
+        padding: 0 12px;
+    }
+
+    .logo {
+        font-size: 14px;
+    }
+
+    .usuario-topbar {
+        gap: 8px;
+        padding-left: 10px;
+        font-size: 11px;
+    }
+
+    .btn-cerrar-sesion {
+        padding: 7px 9px;
+    }
+
+    .btn-cerrar-sesion span {
+        display: none;
+    }
+}
 </style>
 </head>
 <body>
 
+<div id="login">
+
+    <div class="login-card">
+
+        <div class="login-header">
+
+
+            <h1>VISUALIZACION DE ESTADO DE GRUAS EN OPERACION</h1>
+
+            <div class="login-subtitle">
+                Acceso
+            </div>
+
+        </div>
+
+
+        <div class="login-field">
+
+            <label for="loginUsuario">
+                Usuario
+            </label>
+
+            <select id="loginUsuario" onchange="controlarPasswordLogin()">
+
+                <option value="RPC">
+                    RPC
+                </option>
+
+                <option value="Mantenimiento gruas">
+                    Mantenimiento grúas
+                </option>
+
+                <option value="Visualizacion">
+                    Visualizacion
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="login-field">
+
+<div id="contenedorPassword">
+
+    <label for="loginPassword">
+        Contraseña
+    </label>
+
+    <input
+        type="password"
+        id="loginPassword"
+        placeholder="Contraseña">
+
+</div>
+
+        </div>
+
+
+        <button
+            type="button"
+            onclick="iniciarSesion()"
+        >
+            ENTRAR
+        </button>
+
+
+        <div id="loginError"></div>
+
+
+        <div class="login-footer">
+            Sistema de control y monitoreo de grúas
+        </div>
+
+    </div>
+
+</div>
+<div id="app" style="display:none;">
 <div class="topbar">
+
     <div class="logo">
         CONTROL OPERATIVO DE GRÚAS
     </div>
+
+<div class="topbar">
+
+    <div class="usuario-topbar">
+
+        <span>
+            Usuario:
+            <strong id="usuarioActivo"></strong>
+        </span>
+
+        <button
+            type="button"
+            class="btn-cerrar-sesion"
+            onclick="cerrarSesion()">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            Salir
+        </button>
+
+    </div>
+
+</div>
+
 </div>
 
 <div class="layout">
@@ -3770,24 +4331,24 @@ body{
   </div>
 
   <button class="menu-btn" onclick="mostrarVista('operativo')">
-    <span>Control Operativo de gruas RTG</span>
+    <span>Control Operativo de gruas</span>
   </button>
   
-<button class="menu-btn" onclick="mostrarVista('mensajes')">
-  Mensajes Operativos
-  <span id="msgBadge" class="msg-badge">1</span>
+<button class="menu-btn solo-edicion" onclick="mostrarVista('mensajes')">
+    Mensajes Operativos
+    <span id="msgBadge" class="msg-badge">1</span>
 </button>
 
-<button class="menu-btn" onclick="abrirDowntimeMTTO()">
-  <span>Downtime gruas operacion</span>
+<button class="menu-btn solo-edicion" onclick="abrirDowntimeMTTO()">
+    <span>Downtime gruas operacion</span>
 </button>
 
-<button class="menu-btn" onclick="abrirIFS()">
-  <span>Gestion de Work Task</span>
+<button class="menu-btn solo-edicion" onclick="abrirIFS()">
+    <span>Gestion de Work Task</span>
 </button>
 
- <button class="menu-btn" onclick="abrirIncidentes()">
-  <span>Incidentes grúas</span>
+<button class="menu-btn solo-edicion" onclick="abrirIncidentes()">
+    <span>Incidentes grúas</span>
 </button>
 <div id="vistaReportes" class="vista">
     <iframe
@@ -3974,14 +4535,15 @@ style="display:none;">
 >
 <div class="barra-acciones">
 
-    <button 
-        class="btn-accion btn-importar"
-        onclick="document.getElementById('excelFile').click()">
+<button 
+    id="btnImportarExcel"
+    class="btn-accion btn-importar"
+    onclick="document.getElementById('excelFile').click()">
 
-        <i class="fa-solid fa-file-import"></i>
-        Importar Estados de Hoja de Equipo
+    <i class="fa-solid fa-file-import"></i>
+    Importar Estados de Hoja de Equipo
 
-    </button>
+</button>
     <button 
         class="btn-accion btn-captura"
         onclick="capturarTablero()">
@@ -4447,6 +5009,7 @@ onclick="cerrarModal()"
 CERRAR
 </button>
 </div>
+</div>
 
 </div>
 </div>
@@ -4454,7 +5017,28 @@ CERRAR
 
 
 <script>
+// ================= USUARIOS =================
 
+const USUARIOS = {
+
+    "RPC": {
+        password: "RPC2026",
+        rol: "editar"
+    },
+
+    "Mantenimiento gruas": {
+        password: "MG2026",
+        rol: "editar"
+    },
+
+    "Visualizacion": {
+        password: "",
+        rol: "visualizar"
+    }
+
+};
+
+let usuarioSesion = null;
 /* ================= SUPABASE ================= */
 
 const SUPABASE_URL =
@@ -4598,7 +5182,7 @@ gruas:[
     },
     {
         zona: "STS",
-        gruas: ["STS10","STS11","STS12","STS13","STS16","STS17","STS18","STS19","STS20","STS21","STS22","STS23"]
+        gruas: ["STS13","STS12","STS11","STS10","STS17","STS16","STS23","STS22","STS19","STS18","STS21","STS20"]
     }
 
 ];
@@ -4950,21 +5534,26 @@ document.getElementById('yard').innerHTML = html;
 
 function renderKPIs(){
 
-  document.getElementById('k1').innerText =
-    equipos.filter(g => g.estado === 'operacion').length;
+    // Solo RTG (K, N y Z)
+    const rtg = equipos.filter(g => {
+        const id = (g.id || "").toUpperCase();
 
-  document.getElementById('k2').innerText =
-    equipos.filter(g =>
-      g.estado === 'dayli'
-      
-    ).length;
+        return id.startsWith("K") ||
+               id.startsWith("N") ||
+               id.startsWith("Z");
+    });
 
-  document.getElementById('k3').innerText =
-    equipos.filter(g => g.estado === 'falla').length;
+    document.getElementById('k1').innerText =
+        rtg.filter(g => g.estado === 'operacion').length;
 
-  document.getElementById('k4').innerText =
-    equipos.filter(g => parseInt(g.prioridad || 0) > 0).length;
+    document.getElementById('k2').innerText =
+        rtg.filter(g => g.estado === 'dayli').length;
 
+    document.getElementById('k3').innerText =
+        rtg.filter(g => g.estado === 'falla').length;
+
+    document.getElementById('k4').innerText =
+        rtg.filter(g => parseInt(g.prioridad || 0) > 0).length;
 }
 function obtenerTiempoContador(g){
 
@@ -5149,7 +5738,12 @@ cont.innerHTML = list.map(g => `
 /* ================= MODAL ================= */
 
 function abrir(id){
-  
+      const rol = localStorage.getItem("rolSistema");
+
+    // CASSETAS = SOLO VISUALIZACIÓN
+    if (rol === "visualizar") {
+        return;
+    }
   actual = id;
   // Limpiar formulario anterior
 document.getElementById("estado").value = "disponible";
@@ -8886,7 +9480,317 @@ function filtrarReporteDT(){
     pintarReporteDT(datos);
 
 }
+function limpiarModoVisualizacion() {
+    // Restaurar restricciones que pudo dejar el usuario Visualizacion.
+    document.querySelectorAll(".card").forEach(card => {
+        card.style.cursor = "";
+        card.style.pointerEvents = "";
+    });
 
+    document.querySelectorAll(
+        "#panelEstado input, #panelEstado select, #panelEstado textarea, #panelEstado button, " +
+        "#formularioCierre input, #formularioCierre select, #formularioCierre textarea, #formularioCierre button, " +
+        "#formularioCierreFalla input, #formularioCierreFalla select, #formularioCierreFalla textarea, #formularioCierreFalla button"
+    ).forEach(elemento => {
+        elemento.disabled = false;
+    });
+
+    document.querySelectorAll(".menu-btn").forEach(boton => {
+        boton.disabled = false;
+        boton.style.pointerEvents = "";
+        boton.style.opacity = "";
+        boton.style.cursor = "";
+    });
+
+    const btnImportarExcel = document.getElementById("btnImportarExcel");
+    if (btnImportarExcel) {
+        btnImportarExcel.disabled = false;
+        btnImportarExcel.style.pointerEvents = "";
+        btnImportarExcel.style.opacity = "";
+        btnImportarExcel.style.cursor = "";
+        btnImportarExcel.onclick = function () {
+            const input = document.getElementById("excelFile");
+            if (input) input.click();
+        };
+    }
+}
+
+function aplicarPermisos() {
+    // Nunca arrastrar restricciones del usuario anterior.
+    limpiarModoVisualizacion();
+
+    if (localStorage.getItem("rolSistema") === "visualizar") {
+        activarSoloVisualizacion();
+    }
+}
+
+function activarSoloVisualizacion() {
+
+    const rol = localStorage.getItem("rolSistema");
+
+    if (rol !== "visualizar") {
+        return;
+    }
+
+    // ==============================
+    // CONGELAR CONTROLES DE EDICIÓN
+    // ==============================
+
+    document.querySelectorAll(
+        "#panelEstado input, " +
+        "#panelEstado select, " +
+        "#panelEstado textarea, " +
+        "#panelEstado button, " +
+
+        "#formularioCierre input, " +
+        "#formularioCierre select, " +
+        "#formularioCierre textarea, " +
+        "#formularioCierre button, " +
+
+        "#formularioCierreFalla input, " +
+        "#formularioCierreFalla select, " +
+        "#formularioCierreFalla textarea, " +
+        "#formularioCierreFalla button"
+    ).forEach(elemento => {
+
+        elemento.disabled = true;
+
+    });
+
+
+    // ==============================
+    // CONGELAR BOTONES DEL MENÚ
+    // ==============================
+
+    const botonesBloqueados = document.querySelectorAll(
+        '.menu-btn[onclick="mostrarVista(\'mensajes\')"], ' +
+        '.menu-btn[onclick="abrirDowntimeMTTO()"], ' +
+        '.menu-btn[onclick="abrirIFS()"], ' +
+        '.menu-btn[onclick="abrirIncidentes()"]'
+    );
+
+    botonesBloqueados.forEach(boton => {
+
+        boton.disabled = true;
+
+        boton.style.pointerEvents = "none";
+        boton.style.opacity = "0.45";
+        boton.style.cursor = "not-allowed";
+
+    });
+// ==============================
+// CONGELAR IMPORTAR EXCEL
+// ==============================
+
+const btnImportarExcel =
+    document.getElementById("btnImportarExcel");
+
+if (btnImportarExcel) {
+
+    btnImportarExcel.disabled = true;
+
+    // Evita que se pueda ejecutar el onclick
+    btnImportarExcel.onclick = null;
+
+    btnImportarExcel.style.pointerEvents = "none";
+    btnImportarExcel.style.opacity = "0.45";
+    btnImportarExcel.style.cursor = "not-allowed";
+}
+}
+function iniciarSesion() {
+
+  const usuario =
+    document.getElementById("loginUsuario").value;
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+  const error =
+    document.getElementById("loginError");
+
+  if (!usuario) {
+    error.innerText = "Seleccione un usuario";
+    return;
+  }
+
+  const datos = USUARIOS[usuario];
+
+  if (!datos) {
+    error.innerText = "Usuario no válido";
+    return;
+  }
+
+  // ==========================================
+  // USUARIO SIN CONTRASEÑA
+  // ==========================================
+  if (datos.password !== "" && datos.password !== password) {
+    error.innerText = "Contraseña incorrecta";
+    return;
+  }
+
+  // Guardar sesión
+  usuarioSesion = {
+    nombre: usuario,
+    rol: datos.rol,
+    puedeEditar: datos.rol === "editar"
+  };
+
+const usuarioActivo =
+    document.getElementById("usuarioActivo");
+
+if (usuarioActivo) {
+    usuarioActivo.innerText = usuario;
+}
+
+
+localStorage.setItem("usuarioSistema", usuario);
+localStorage.setItem("rolSistema", datos.rol);
+document.getElementById("usuarioActivo").innerText =
+    "👤 " + usuario;
+
+  // Ocultar login
+  document.getElementById("login").style.display = "none";
+
+  // Mostrar aplicación
+  document.getElementById("app").style.display = "block";
+document.getElementById("usuarioActivo").innerText =
+    "👤 " + usuario;
+
+  // ==========================================
+  // SIEMPRE INICIAR EN CONTROL OPERATIVO
+  // ==========================================
+  // Si el usuario anterior terminó en "Mensajes Operativos",
+  // esa vista queda viva en el DOM. Al cambiar de usuario sin
+  // recargar la página hay que llevarlo nuevamente al dashboard.
+  mostrarVista("operativo");
+
+  // ==========================================
+  // APLICAR PERMISOS DEL USUARIO ACTUAL
+  // ==========================================
+  aplicarPermisos();
+
+  console.log("Sesión iniciada:", usuarioSesion);
+}
+function mostrarSistema() {
+
+  const usuario =
+    localStorage.getItem("usuarioSistema");
+
+  const rol =
+    localStorage.getItem("rolSistema");
+
+  if (!usuario || !rol) {
+    return;
+  }
+
+  document.getElementById("login").style.display = "none";
+
+  document.getElementById("app").style.display = "block";
+
+  // CASO SOLO VISUALIZACIÓN
+  aplicarPermisos();
+
+}
+function congelarModoVisualizacion() {
+
+    const rol = localStorage.getItem("rolSistema");
+
+    if (rol !== "visualizar") {
+        return;
+    }
+
+    // Bloquear selección de grúas
+    document.querySelectorAll(".card").forEach(card => {
+
+        card.style.cursor = "default";
+        card.style.pointerEvents = "none";
+
+    });
+
+    // Mantener habilitada únicamente la visualización
+    document.querySelectorAll(
+        "#panelEstado input, " +
+        "#panelEstado select, " +
+        "#panelEstado textarea, " +
+        "#panelEstado button, " +
+        "#formularioCierre input, " +
+        "#formularioCierre select, " +
+        "#formularioCierre textarea, " +
+        "#formularioCierre button, " +
+        "#formularioCierreFalla input, " +
+        "#formularioCierreFalla select, " +
+        "#formularioCierreFalla textarea, " +
+        "#formularioCierreFalla button"
+    ).forEach(elemento => {
+
+        elemento.disabled = true;
+
+    });
+
+}
+function controlarPasswordLogin() {
+
+    const usuario =
+        document.getElementById("loginUsuario").value;
+
+    const contenedor =
+        document.getElementById("contenedorPassword");
+
+    const password =
+        document.getElementById("loginPassword");
+
+    if (!contenedor || !password) return;
+
+    if (usuario === "Visualizacion") {
+
+        // Ocultar contraseña completa
+        contenedor.style.display = "none";
+
+        // Limpiar contraseña
+        password.value = "";
+
+    } else {
+
+        // Mostrar contraseña
+        contenedor.style.display = "block";
+
+    }
+}
+function cerrarSesion() {
+
+    // IMPORTANTE: quitar primero los bloqueos del usuario Visualizacion.
+    // Así RPC/Mantenimiento gruas no heredan disabled/pointer-events.
+    limpiarModoVisualizacion();
+
+    // Reiniciar la vista para que la siguiente sesión NO herede
+    // "Mensajes Operativos", Downtime, etc.
+    mostrarVista("operativo");
+
+    // Limpiar sesión
+    localStorage.removeItem("usuarioSistema");
+    localStorage.removeItem("rolSistema");
+
+    // Ocultar aplicación
+    document.getElementById("app").style.display = "none";
+
+    // Mostrar login
+    document.getElementById("login").style.display = "flex";
+
+    // Limpiar contraseña
+    const password = document.getElementById("loginPassword");
+
+    if (password) {
+        password.value = "";
+    }
+
+    // Limpiar error
+    const error = document.getElementById("loginError");
+
+    if (error) {
+        error.innerText = "";
+    }
+
+}
 </script>
 
 </div>
