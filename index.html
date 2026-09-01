@@ -382,7 +382,7 @@ margin-bottom:8px;
   color:white;
 }
 .dayli-falla{
-  background:#0F20A8;
+  background:#6E1C0F;
   color:white;
 }
 .percance{
@@ -2061,7 +2061,7 @@ button:hover{
 .color-box.disponible{ background:#1f6fb2; }
 .color-box.falla{ background:#e53935; }
 .color-box.dayli{ background:#141212; }
-.color-box.dayli-falla{ background:#0F20A8; }
+.color-box.dayli-falla{ background:#6E1C0F; }
 .color-box.anclada{ background:#806237; }
 .color-box.baño{ background:#F5B427; }
 .color-box.fmenor{ background:#ED7158; }
@@ -2094,7 +2094,7 @@ button:hover{
   background:#141212;
 }
 .estado-indicador.dayli-falla{
-  background:#0F20A8;
+  background:#6E1C0F;
 }
 .estado-indicador.fseñal{
   background:#969696;
@@ -10810,19 +10810,6 @@ function ponerFechaGruaReportada(){
 }
 
 async function guardarEstadoRapido() {
-  const estadoSolicitado = document.getElementById('estado')?.value;
-  const equipoEstadoActual = typeof getEquipo === 'function' ? getEquipo(actual) : null;
-
-  if (
-    estadoSolicitado === 'dayli-falla' &&
-    equipoEstadoActual &&
-    equipoEstadoActual.estado === 'falla' &&
-    !(window._dayliFallaFormularioCompletado || {})[actual]
-  ) {
-    alert("Debe cerrar la falla antes de cambiar a DAYLI-FALLA.");
-    return;
-  }
-
   const tipoGrua = actual.substring(0,3);
 
 const esSD =
@@ -11440,20 +11427,6 @@ function manejarCambioEstado() {
   const esSD = idEquipo.startsWith('SD');
   if (esSD) {
     guardarEstadoRapido();
-    return;
-  }
-
-  if (nuevoEstado === 'dayli-falla' && equipo.estado === 'falla') {
-    const confirmar = confirm(
-      "Se cerrará la falla y se generará el reporte. ¿Continuar?"
-    );
-
-    if (!confirmar) {
-      document.getElementById('estado').value = 'falla';
-      return;
-    }
-
-    abrirFormularioCierreFalla(equipo);
     return;
   }
 
