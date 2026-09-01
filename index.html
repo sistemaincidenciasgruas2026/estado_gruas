@@ -7711,7 +7711,7 @@ gruas:[
 {
 zona:'B',
 gruas:[
-'Z-28','Z-32','N-58','K-23','Z-42','N-53','N-54','K-22','',''
+'Z-28','Z-32','N-58','K-23','N-53','N-54','K-22','Z-42','',''
 ]
 },
 
@@ -8137,15 +8137,17 @@ function renderKPIs(){
 
 
     const rtg = equipos.filter(g => {
-        const id = (g.id || "").toUpperCase();
-        return id.startsWith("K") ||
-               id.startsWith("N") ||
-               id.startsWith("Z");
+        const id = String(g.id || "").toUpperCase().replace(/[-\s]/g, "");
+        return !id.startsWith("SD") && (
+            id.startsWith("K") ||
+            id.startsWith("N") ||
+            id.startsWith("Z")
+        );
     });
 
 
     const sts = equipos.filter(g => {
-        const id = (g.id || "").toUpperCase();
+        const id = String(g.id || "").toUpperCase().replace(/[-\s]/g, "");
         return id.startsWith("STS");
     });
 
@@ -8154,13 +8156,23 @@ function renderKPIs(){
         rtg.filter(g => g.estado === 'operacion').length;
 
     document.getElementById('k2').innerText =
-        rtg.filter(g => g.estado === 'dayli').length;
+        equipos.filter(g => {
+            const id = String(g.id || "").toUpperCase().replace(/[-\s]/g, "");
+            return (
+                (id.startsWith("K") || id.startsWith("N") || id.startsWith("Z")) &&
+                !id.startsWith("SD") &&
+                !id.startsWith("STS") &&
+                g.estado === 'dayli'
+            );
+        }).length;
 
     document.getElementById('k3').innerText =
         rtg.filter(g => g.estado === 'falla').length;
 
     document.getElementById('k4').innerText =
-        rtg.filter(g => parseInt(g.prioridad || 0) > 0).length;
+        rtg.filter(g =>
+            g.observacion_extra === 'GRÚA PRIORIDAD PARA OPERACIÓN'
+        ).length;
 
 
     document.getElementById('k5').innerText =
@@ -10575,7 +10587,7 @@ function pintarTablaReporteGruas(data){
 
   const fila = (r) => `
       <tr>
-        <td>${formatearFechaMX(r.fecha_hora_falla)}</td>
+        <td>${formatearFechaMX(r.fecha_op_repo)}</td>
         <td>${r.turno || obtenerNumeroTurno(r.fecha_hora_falla)}</td>
         <td>${r.supervisor ?? ''}</td>
         <td>${r.standby ?? ''}</td>
@@ -10798,6 +10810,19 @@ function ponerFechaGruaReportada(){
 }
 
 async function guardarEstadoRapido() {
+  const estadoSolicitado = document.getElementById('estado')?.value;
+  const equipoEstadoActual = typeof getEquipo === 'function' ? getEquipo(actual) : null;
+
+  if (
+    estadoSolicitado === 'dayli-falla' &&
+    equipoEstadoActual &&
+    equipoEstadoActual.estado === 'falla' &&
+    !(window._dayliFallaFormularioCompletado || {})[actual]
+  ) {
+    alert("Debe cerrar la falla antes de cambiar a DAYLI-FALLA.");
+    return;
+  }
+
   const tipoGrua = actual.substring(0,3);
 
 const esSD =
@@ -11326,6 +11351,11 @@ async function guardarCierreFalla(){
   
   const grua = document.getElementById('c_grua').value;
 
+  if (!window._dayliFallaFormularioCompletado) {
+    window._dayliFallaFormularioCompletado = {};
+  }
+  window._dayliFallaFormularioCompletado[grua] = true;
+
 
   const { error } = await db
     .from('reportes_operacion')
@@ -11413,7 +11443,17 @@ function manejarCambioEstado() {
     return;
   }
 
-  if (nuevoEstado === 'dayli-falla') {
+  if (nuevoEstado === 'dayli-falla' && equipo.estado === 'falla') {
+    const confirmar = confirm(
+      "Se cerrará la falla y se generará el reporte. ¿Continuar?"
+    );
+
+    if (!confirmar) {
+      document.getElementById('estado').value = 'falla';
+      return;
+    }
+
+    abrirFormularioCierreFalla(equipo);
     return;
   }
 
@@ -11504,6 +11544,33 @@ function getDescripcionActividad(g) {
     ''
   );
 }
+function formatearFechaCierreMX(registro) {
+  if (!registro || !registro.fecha_hora_falla) return '';
+
+  const inicio = new Date(String(registro.fecha_hora_falla).trim());
+  if (Number.isNaN(inicio.getTime())) return formatearFechaMX(registro.fecha_hora_falla);
+
+  const duracion = String(registro.tiempo_muerto_real || registro.tiempo_muerto || '00:00:00').trim();
+  const partes = duracion.split(':').map(Number);
+  if (partes.length !== 3 || partes.some(Number.isNaN)) {
+    return formatearFechaMX(registro.fecha_hora_falla);
+  }
+
+  const segundos = (partes[0] * 3600) + (partes[1] * 60) + partes[2];
+  const cierre = new Date(inicio.getTime() + (segundos * 1000));
+
+  // El 3er turno pertenece a la fecha en que inició el turno:
+  // 22:00-23:59 y 00:00-05:59 forman el mismo turno operativo.
+  // La fecha mostrada se basa en el momento de cierre de la falla.
+  if (cierre.getHours() < 6) {
+    cierre.setDate(cierre.getDate() - 1);
+  }
+
+  return formatearFechaMX(
+    `${cierre.getFullYear()}-${String(cierre.getMonth()+1).padStart(2,'0')}-${String(cierre.getDate()).padStart(2,'0')}`
+  );
+}
+
 function formatearFechaMX(fechaBD) {
   if (!fechaBD) return '';
 
@@ -12551,9 +12618,8 @@ function obtenerFechaOperativaMX(fecha = null){
   const fechaOperativa = new Date(ahora.getTime());
   const hora = ahora.getUTCHours();
 
-  // El 3er turno inicia a las 22:00 y termina a las 05:59 del día siguiente.
-  // De 00:00 a 05:59 conserva como fecha operativa el día en que inició el 3er turno.
-  // A partir de las 06:00 comienza el 1er turno y la fecha vuelve a ser la fecha calendario normal.
+  // El 3er turno pertenece a la fecha en que inició a las 22:00.
+  // Por eso, de 00:00 a 05:59 se conserva la fecha del día anterior.
   if(hora < 6){
     fechaOperativa.setUTCDate(fechaOperativa.getUTCDate() - 1);
   }
