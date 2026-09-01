@@ -9996,6 +9996,13 @@ if(
 }
 document.addEventListener('DOMContentLoaded', () => {
 
+  sincronizarHoraInternet().then(() => {
+    if (typeof haySesionActiva === 'function' && haySesionActiva()) {
+      ponerFechasFallaAutomaticas();
+    }
+  });
+  setInterval(sincronizarHoraInternet, 60000);
+
   if (typeof haySesionActiva === 'function' && haySesionActiva()) {
     ponerFechasFallaAutomaticas();
     controlarBotonStandby();
@@ -10778,40 +10785,16 @@ function actualizarIndicadorEstado(){
   indicador.className = 'estado-indicador ' + estado;
 }
 function ponerFechaFallaActual(){
-
     const fecha = document.getElementById('fechaReporte');
-
     if(!fecha) return;
-
-    const ahora = new Date();
-
-    const año = ahora.getFullYear();
-    const mes = String(ahora.getMonth()+1).padStart(2,'0');
-    const dia = String(ahora.getDate()).padStart(2,'0');
-
-    const hora = String(ahora.getHours()).padStart(2,'0');
-    const minuto = String(ahora.getMinutes()).padStart(2,'0');
-
-    fecha.value = `${año}-${mes}-${dia}T${hora}:${minuto}`;
-
-    console.log("FECHA PUESTA:", fecha.value);
+    fecha.value = formatearFechaInputMX();
+    console.log('FECHA PUESTA:', fecha.value, 'TURNO:', obtenerTurnoActual());
 }
+
 function ponerFechaGruaReportada(){
-
     const fecha = document.getElementById('fechaOpRepo');
-
     if(!fecha) return;
-
-    const ahora = new Date();
-
-    const año = ahora.getFullYear();
-    const mes = String(ahora.getMonth()+1).padStart(2,'0');
-    const dia = String(ahora.getDate()).padStart(2,'0');
-
-    const hora = String(ahora.getHours()).padStart(2,'0');
-    const minuto = String(ahora.getMinutes()).padStart(2,'0');
-
-    fecha.value = `${año}-${mes}-${dia}T${hora}:${minuto}`;
+    fecha.value = formatearFechaInputMX();
 }
 
 async function guardarEstadoRapido() {
@@ -11656,7 +11639,8 @@ function descargarExcel() {
     }
     if(area === 'TREN') area = 'RMG';
 
-    const bloqueTramo = indiceBloque >= 0 ? (celdas[indiceBloque] || '') : '';
+    const bloqueTramoOriginal = indiceBloque >= 0 ? (celdas[indiceBloque] || '') : '';
+    const bloqueTramo = String(bloqueTramoOriginal).replace(/^ZONA\b/i, 'BLOQUE');
     const celdasSinBloqueNiInactiva = celdas.filter((_, i) => !indicesExcluirExcel.has(i));
 
     // En Excel se conserva únicamente la FECHA, sin hora.
@@ -12469,73 +12453,123 @@ async function cargarCodigos(){
   });
 
 }
-function obtenerTurnoActual(fechaHora = null){
+/* ================= HORA Y TURNO OFICIAL =================
+   La hora actual se sincroniza con Internet (hora de México).
+   Si la API no responde, se conserva la hora local como respaldo.
 
-  const fecha = fechaHora ? new Date(fechaHora) : new Date();
-  let hora = fecha.getHours();
+   Turnos:
+     06:00 - 13:59  -> 1er Turno
+     14:00 - 21:59  -> 2do Turno
+     22:00 - 05:59  -> 3er Turno
 
-  // Acepta tanto hora de 24 horas (14:00) como formato de 12 horas (2:00 PM).
-  if(fechaHora){
-    const textoHora = String(fechaHora).trim();
-    const coincidencia = textoHora.match(/(?:^|T|\\s)(\\d{1,2})(?::\\d{2})?(?::\\d{2})?\\s*(AM|PM)\\b/i);
+   Fecha operativa:
+     22:00 - 23:59  -> fecha normal
+     00:00 - 05:59  -> fecha del día anterior
+============================================================ */
+let horaInternetMX = null;
+let referenciaHoraInternet = 0;
 
-    if(coincidencia){
-      let h = parseInt(coincidencia[1], 10);
-      const periodo = coincidencia[2].toUpperCase();
+function fechaHoraMXActual(){
+  if(horaInternetMX){
+    return new Date(horaInternetMX.getTime() + (Date.now() - referenciaHoraInternet));
+  }
+  return new Date();
+}
 
-      if(periodo === "AM"){
-        if(h === 12) h = 0;
-      }else{
-        if(h !== 12) h += 12;
-      }
+async function sincronizarHoraInternet(){
+  try{
+    const respuesta = await fetch(
+      'https://timeapi.io/api/Time/current/zone?timeZone=America%2FMexico_City',
+      { cache: 'no-store' }
+    );
+    if(!respuesta.ok) throw new Error('No se pudo obtener la hora de Internet');
 
-      hora = h;
+    const data = await respuesta.json();
+    const texto = String(data.dateTime || data.currentLocalTime || '').trim();
+    const m = texto.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?/);
+    if(!m) throw new Error('Formato de hora no reconocido');
+
+    // Fecha virtual en UTC para que el dispositivo no cambie la hora de México.
+    horaInternetMX = new Date(Date.UTC(
+      Number(m[1]), Number(m[2])-1, Number(m[3]),
+      Number(m[4]), Number(m[5]), Number(m[6] || 0)
+    ));
+    referenciaHoraInternet = Date.now();
+    console.log('HORA INTERNET MÉXICO SINCRONIZADA:', texto);
+    return true;
+  }catch(error){
+    console.warn('No se pudo sincronizar la hora de Internet. Se usa hora local como respaldo:', error);
+    horaInternetMX = null;
+    referenciaHoraInternet = 0;
+    return false;
+  }
+}
+
+function extraerHoraMX(fechaHora = null){
+  if(!fechaHora) return fechaHoraMXActual().getUTCHours();
+
+  const textoHora = String(fechaHora).trim();
+  const coincidencia = textoHora.match(/(?:^|T|\s)(\d{1,2})(?::\d{2})?(?::\d{2})?\s*(AM|PM)\b/i);
+  if(coincidencia){
+    let h = parseInt(coincidencia[1], 10);
+    const periodo = coincidencia[2].toUpperCase();
+    if(periodo === 'AM'){
+      if(h === 12) h = 0;
+    }else if(h !== 12){
+      h += 12;
     }
+    return h;
   }
 
-  
-  if(hora >= 6 && hora < 14){
-    return "1er Turno";
+  const fecha = new Date(fechaHora);
+  if(!Number.isNaN(fecha.getTime())){
+    const partes = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Mexico_City', hour: '2-digit', hour12: false
+    }).formatToParts(fecha);
+    const parteHora = partes.find(p => p.type === 'hour');
+    if(parteHora) return Number(parteHora.value);
   }
+  return fechaHoraMXActual().getUTCHours();
+}
 
-  
-  if(hora >= 14 && hora < 22){
-    return "2do Turno";
-  }
-
-  
-  return "3er Turno";
-
+function obtenerTurnoActual(fechaHora = null){
+  const hora = extraerHoraMX(fechaHora);
+  if(hora >= 6 && hora < 14) return '1er Turno';
+  if(hora >= 14 && hora < 22) return '2do Turno';
+  return '3er Turno';
 }
 
 function obtenerNumeroTurno(fechaHora = null){
-
-  const fecha = fechaHora ? new Date(fechaHora) : new Date();
-  let hora = fecha.getHours();
-
-  
-  if(fechaHora){
-    const textoHora = String(fechaHora).trim();
-    const coincidencia = textoHora.match(/(?:^|T|\\s)(\\d{1,2})(?::\\d{2})?(?::\\d{2})?\\s*(AM|PM)\\b/i);
-
-    if(coincidencia){
-      let h = parseInt(coincidencia[1], 10);
-      const periodo = coincidencia[2].toUpperCase();
-
-      if(periodo === "AM"){
-        if(h === 12) h = 0;
-      }else{
-        if(h !== 12) h += 12;
-      }
-
-      hora = h;
-    }
-  }
-
+  const hora = extraerHoraMX(fechaHora);
   if(hora >= 6 && hora < 14) return 1;
   if(hora >= 14 && hora < 22) return 2;
   return 3;
+}
 
+function obtenerFechaOperativaMX(fecha = null){
+  const ahora = fecha || fechaHoraMXActual();
+  const fechaOperativa = new Date(ahora.getTime());
+  const hora = ahora.getUTCHours();
+
+  // El 3er turno inicia a las 22:00 y termina a las 05:59 del día siguiente.
+  // De 00:00 a 05:59 conserva como fecha operativa el día en que inició el 3er turno.
+  // A partir de las 06:00 comienza el 1er turno y la fecha vuelve a ser la fecha calendario normal.
+  if(hora < 6){
+    fechaOperativa.setUTCDate(fechaOperativa.getUTCDate() - 1);
+  }
+
+  return fechaOperativa;
+}
+
+function formatearFechaInputMX(fecha = null){
+  const ahora = fecha || fechaHoraMXActual();
+  const fechaOperativa = obtenerFechaOperativaMX(ahora);
+  const año = fechaOperativa.getUTCFullYear();
+  const mes = String(fechaOperativa.getUTCMonth()+1).padStart(2,'0');
+  const dia = String(fechaOperativa.getUTCDate()).padStart(2,'0');
+  const hora = String(ahora.getUTCHours()).padStart(2,'0');
+  const minuto = String(ahora.getUTCMinutes()).padStart(2,'0');
+  return `${año}-${mes}-${dia}T${hora}:${minuto}`;
 }
 
 function controlarBotonStandby(){
@@ -12664,27 +12698,16 @@ function generarReporteDT(){
 
 }
 function ponerFechasFallaAutomaticas(){
+    const fechaActual = formatearFechaInputMX();
 
-    const ahora = new Date();
+    const fechaRepo = document.getElementById('fechaOpRepo');
+    if(fechaRepo) fechaRepo.value = fechaActual;
 
-    const año = ahora.getFullYear();
-    const mes = String(ahora.getMonth()+1).padStart(2,'0');
-    const dia = String(ahora.getDate()).padStart(2,'0');
+    const fechaEntrega = document.getElementById('fechaReporte');
+    if(fechaEntrega) fechaEntrega.value = fechaActual;
 
-    const hora = String(ahora.getHours()).padStart(2,'0');
-    const minuto = String(ahora.getMinutes()).padStart(2,'0');
-
-    const fechaActual = `${año}-${mes}-${dia}T${hora}:${minuto}`;
-
-    const fechaRepo = document.getElementById("fechaOpRepo");
-    if(fechaRepo){
-        fechaRepo.value = fechaActual;
-    }
-
-    const fechaEntrega = document.getElementById("fechaReporte");
-    if(fechaEntrega){
-        fechaEntrega.value = fechaActual;
-    }
+    const turno = document.getElementById('turnoGeneral');
+    if(turno) turno.value = String(obtenerNumeroTurno());
 }
 
 function capturarTablero(){
