@@ -10058,7 +10058,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 function obtenerTextoEstado(g){
 
+ // if(g.estado === 'operacion')
+ //   return 'OPERACIÓN';
 
+ // if(g.estado === 'disponible')
+ //   return 'DISPONIBLE';
+
+ // if(g.estado === 'falla')
+ //   return 'FALLA EN TURNO';
+
+ // if(g.estado === 'dayli')
+ //   return 'DAYLI';
+  
+ // if(g.estado === 'baño')
+ //   return 'BAÑO';  
+  
+ // if(g.estado === 'anclada')
+ //   return 'ANCLADA';
+
+ // if(g.estado === 'fmenor')
+ //   return 'FALLA MENOR';
+
+ // if(g.estado === 'fseñal')
+ //   return 'FALLA DE SEÑAL';
+
+ // if(g.estado === 'percance')
+ //   return 'PERCANCE';
 
   return '';
 }
@@ -11625,7 +11650,8 @@ function descargarExcel() {
   ];
   filas.push(encabezados);
 
-
+  // Orden solicitado para el AREA en Excel: RTG, TREN, OFF DOCK.
+  // Se conserva el orden actual de los registros; solo se agrega la columna AREA.
   const filasDatos = Array.from(tabla.querySelectorAll('tbody tr')).map(tr => {
     const celdas = Array.from(tr.children).map(td => {
       const select = td.querySelector('select');
@@ -11639,7 +11665,8 @@ function descargarExcel() {
 
     if(!celdas.length) return null;
 
-
+    // AREA toma el valor guardado en el registro cuando está disponible.
+    // Si no existe, se conserva la detección actual de RTG/TREN.
     const id = tr.querySelector('[data-id]')?.getAttribute('data-id') || '';
     const registro = (typeof reporteGruasData !== 'undefined')
       ? reporteGruasData.find(r => String(r.id) === String(id))
@@ -11656,7 +11683,7 @@ function descargarExcel() {
     const bloqueTramo = String(bloqueTramoOriginal).replace(/^ZONA\b/i, 'BLOQUE');
     const celdasSinBloqueNiInactiva = celdas.filter((_, i) => !indicesExcluirExcel.has(i));
 
-
+    // En Excel se conserva únicamente la FECHA, sin hora.
     let fechaSolo = String(celdasSinBloqueNiInactiva[0] || '').trim();
     if(/^\d{2}\/\d{2}\/\d{4}/.test(fechaSolo)){
       fechaSolo = fechaSolo.slice(0,10);
@@ -11737,7 +11764,7 @@ function descargarExcel() {
     }
   }
 
-
+  // TM/TI: convertir HH:MM:SS a minutos enteros, sin decimales.
   const indiceTM = encabezados.findIndex(h => h === 'TM' || h === 'TI');
   if(indiceTM >= 0){
     for(let r=4;r<ultimaFila;r++){
@@ -11759,7 +11786,7 @@ function descargarExcel() {
     }
   }
 
-
+  // Formato visual del Excel sin modificar el tamaño de la tabla del sistema.
   const anchos=[];
   for(let c=0;c<totalColumnas;c++){
     let max=10;
@@ -12466,14 +12493,23 @@ async function cargarCodigos(){
   });
 
 }
+/* ================= HORA Y TURNO OFICIAL =================
+   La hora actual se sincroniza con Internet (hora de México).
+   Si la API no responde, se conserva la hora local como respaldo.
 
+   Turnos:
+     06:00 - 13:59  -> 1er Turno
+     14:00 - 21:59  -> 2do Turno
+     22:00 - 05:59  -> 3er Turno
+
+   Fecha operativa:
+     22:00 - 23:59  -> fecha normal
+     00:00 - 05:59  -> fecha del día anterior
+============================================================ */
 let horaInternetMX = null;
 let referenciaHoraInternet = 0;
 
 function fechaHoraMXActual(){
-  if(horaInternetMX){
-    return new Date(horaInternetMX.getTime() + (Date.now() - referenciaHoraInternet));
-  }
   return new Date();
 }
 
@@ -12507,7 +12543,7 @@ async function sincronizarHoraInternet(){
 }
 
 function extraerHoraMX(fechaHora = null){
-  if(!fechaHora) return fechaHoraMXActual().getUTCHours();
+  if(!fechaHora) return fechaHoraMXActual().getHours();
 
   const textoHora = String(fechaHora).trim();
   const coincidencia = textoHora.match(/(?:^|T|\s)(\d{1,2})(?::\d{2})?(?::\d{2})?\s*(AM|PM)\b/i);
@@ -12530,7 +12566,7 @@ function extraerHoraMX(fechaHora = null){
     const parteHora = partes.find(p => p.type === 'hour');
     if(parteHora) return Number(parteHora.value);
   }
-  return fechaHoraMXActual().getUTCHours();
+  return fechaHoraMXActual().getHours();
 }
 
 function obtenerTurnoActual(fechaHora = null){
@@ -12550,11 +12586,13 @@ function obtenerNumeroTurno(fechaHora = null){
 function obtenerFechaOperativaMX(fecha = null){
   const ahora = fecha || fechaHoraMXActual();
   const fechaOperativa = new Date(ahora.getTime());
-  const hora = ahora.getUTCHours();
+  const hora = ahora.getHours();
 
-
-  if(hora >= 0 && hora < 6){
-    fechaOperativa.setUTCDate(fechaOperativa.getUTCDate() - 1);
+  // El 3er turno pertenece a la fecha en que inició a las 22:00.
+  // Por eso, de 00:00 a 05:59 se conserva la fecha del día anterior.
+  // A las 06:00 inicia el 1er turno y toma la fecha actual.
+  if(hora < 6){
+    fechaOperativa.setDate(fechaOperativa.getDate() - 1);
   }
 
   return fechaOperativa;
@@ -12563,11 +12601,11 @@ function obtenerFechaOperativaMX(fecha = null){
 function formatearFechaInputMX(fecha = null){
   const ahora = fecha || fechaHoraMXActual();
   const fechaOperativa = obtenerFechaOperativaMX(ahora);
-  const año = fechaOperativa.getUTCFullYear();
-  const mes = String(fechaOperativa.getUTCMonth()+1).padStart(2,'0');
-  const dia = String(fechaOperativa.getUTCDate()).padStart(2,'0');
-  const hora = String(ahora.getUTCHours()).padStart(2,'0');
-  const minuto = String(ahora.getUTCMinutes()).padStart(2,'0');
+  const año = fechaOperativa.getFullYear();
+  const mes = String(fechaOperativa.getMonth()+1).padStart(2,'0');
+  const dia = String(fechaOperativa.getDate()).padStart(2,'0');
+  const hora = String(ahora.getHours()).padStart(2,'0');
+  const minuto = String(ahora.getMinutes()).padStart(2,'0');
   return `${año}-${mes}-${dia}T${hora}:${minuto}`;
 }
 
