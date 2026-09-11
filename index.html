@@ -8891,6 +8891,13 @@ estadoNuevo !== 'falla';
     obtenerZonaGrua(grua);
 
 
+  // Al entrar a una falla, tomar fecha y hora directamente del equipo
+  // (PC, celular o tablet) antes de capturar los valores del registro.
+  if (entroAFalla) {
+    ponerFechaFallaActual();
+    ponerFechaGruaReportada();
+  }
+
   const fecha_hora_falla =
     document.getElementById("fechaReporte").value;
 
@@ -8899,7 +8906,9 @@ const turno =
     obtenerNumeroTurno();
 
  const fecha_op_repo =
-equipoActual.fecha_op_repo || null;
+  entroAFalla
+    ? document.getElementById("fechaOpRepo").value
+    : (equipoActual.fecha_op_repo || null);
 
 
 
