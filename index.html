@@ -6704,6 +6704,7 @@ body.modo-visualizacion .main-content{
   padding: 8px 9px;
 }
 </style>
+<!-- OPTIMIZACION_RENDER_FINAL -->
 </head>
 <body>
 
@@ -7970,7 +7971,7 @@ render();
 
 }
 let fallasAtendiendo = [];
-function render(){
+function __renderOriginal(){
   
   let html = '';
 
@@ -8131,6 +8132,32 @@ document.getElementById('yard').innerHTML = html;
   
 }
 
+
+
+
+function render() {
+  // Si el navegador ya tiene un render pendiente, no acumulamos otro.
+  if (window.__renderOptimizadoV1_pendiente) return;
+  window.__renderOptimizadoV1_pendiente = true;
+
+  const ejecutar = () => {
+    window.__renderOptimizadoV1_pendiente = false;
+    try {
+      __renderOriginal();
+    } catch (e) {
+      console.error("Error en render():", e);
+      // No ocultamos errores del render original.
+      throw e;
+    }
+  };
+
+  // Agrupa renders provocados por varios cambios casi simultáneos.
+  if (typeof requestAnimationFrame === "function") {
+    requestAnimationFrame(ejecutar);
+  } else {
+    setTimeout(ejecutar, 0);
+  }
+}
 
 
 function renderKPIs(){
