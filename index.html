@@ -6785,6 +6785,15 @@ body.modo-visualizacion .main-content{
 
 </div>
 <div id="app" style="display:none;">
+
+<div id="cargandoDatos" style="display:none;position:fixed;inset:0;z-index:99999;background:rgba(255,255,255,.96);align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:20px;">
+  <div style="width:42px;height:42px;border:4px solid #d9d9d9;border-top-color:#333;border-radius:50%;animation:giroCargaDatos .8s linear infinite;margin-bottom:16px;"></div>
+  <div style="font-size:18px;font-weight:700;color:#222;">Cargando datos...</div>
+  <div style="font-size:13px;color:#666;margin-top:6px;">Espere un momento mientras se prepara el sistema.</div>
+</div>
+<style>
+@keyframes giroCargaDatos{to{transform:rotate(360deg)}}
+</style>
 <div class="topbar">
 
     <div class="logo">
@@ -6837,7 +6846,7 @@ body.modo-visualizacion .main-content{
 </button>
 <div id="vistaReportes" class="vista">
     <iframe
-        src="https://carrix.ifs.cloud/main/ifsapplications/web/page/WorkTasks/List;path=0.644174039.1121334549.1222308653.1131468548"
+        data-src="https://carrix.ifs.cloud/main/ifsapplications/web/page/WorkTasks/List;path=0.644174039.1121334549.1222308653.1131468548"
         style="
             width:100%;
             height:calc(100vh - 70px);
@@ -6906,7 +6915,7 @@ style="display:none;">
 </div>
     <div id="vistaIncidentes" class="vista">
   <iframe
-    src="https://sistemaincidenciasgruas2026.github.io/Reporte-Gruas2.0/"
+    data-src="https://sistemaincidenciasgruas2026.github.io/Reporte-Gruas2.0/"
     style="
       width:100%;
       height:calc(100vh - 70px);
@@ -7607,6 +7616,11 @@ let alertaFallaInicializada = false;
 
 function prepararAudioAlerta() {
   try {
+    // No inicializar AudioContext mientras la pantalla de login está activa.
+    // Esto evita que el primer teclado de la contraseña provoque un bloqueo.
+    const login = document.getElementById("login");
+    if (login && login.style.display !== "none") return;
+
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
     if (!audioContextAlerta) audioContextAlerta = new AC();
@@ -7896,6 +7910,12 @@ function procesarEstadoFalla(equipo, estadoNuevo){
 }
 
 async function cargar(){
+
+  // No consultar datos antes de que exista una sesión activa.
+  // La llamada original se conserva; simplemente se difiere hasta después del login.
+  if (typeof haySesionActiva === 'function' && !haySesionActiva()) {
+    return;
+  }
 
   const {data,error} =
     await db.from('gruas')
@@ -8378,12 +8398,10 @@ function actualizarTimerIndependiente(g) {
     el.textContent = textoTiempo;
   }
 
-  const fallaTimers = document.querySelectorAll('[data-falla-timer]');
-  fallaTimers.forEach(timer => {
-    if (timer.dataset.fallaTimer === String(g.id)) {
-      timer.textContent = textoTiempo;
-    }
-  });
+  const fallaTimer = document.querySelector(`.falla-timer[data-falla-timer=\"${String(g.id).replace(/\"/g, '\\"')}\"]`);
+  if (fallaTimer && fallaTimer.textContent !== textoTiempo) {
+    fallaTimer.textContent = textoTiempo;
+  }
 
 
   const key = String(g.id);
@@ -8866,6 +8884,46 @@ async function guardar() {
 
   const estadoNuevo = document.getElementById('estado').value;
   const estado = estadoNuevo;
+
+  const equipoValidacionDayli = getEquipo(actual);
+
+  if (
+    (estado === 'dayli-falla' || estado === 'dayli') &&
+    equipoValidacionDayli &&
+    (
+      equipoValidacionDayli.estado === 'disponible' ||
+      equipoValidacionDayli.estado === 'falla'
+    )
+  ) {
+    const camposDowntime = [
+      'tiempoMuerto',
+      'supervisor',
+      'standby',
+      'responsabilidad',
+      'TMI'
+    ];
+
+    const nombresDowntime = {
+      tiempoMuerto: 'Tiempo Muerto',
+      supervisor: 'Supervisor',
+      standby: 'StandBy',
+      responsabilidad: 'Responsabilidad',
+      TMI: 'Tipo de falla (TM/TI/ST)'
+    };
+
+    const faltantesDowntime = camposDowntime.filter(id => {
+      const el = document.getElementById(id);
+      return !el || !String(el.value || '').trim();
+    });
+
+    if (faltantesDowntime.length > 0) {
+      alert(
+        "Para cambiar a DAYLI-FALLA debes completar el Formulario para Downtime:\n\n- " +
+        faltantesDowntime.map(id => nombresDowntime[id] || id).join("\n- ")
+      );
+      return;
+    }
+  }
   
 if (estado === 'disponible') {
 
@@ -9484,11 +9542,23 @@ async function actualizarTodo(origen = 'manual') {
 
   refreshEnCurso = true;
   try {
-    await Promise.allSettled([
-      cargar(),
-      cargarMensajeActual(),
-      cargarHistorial()
-    ]);
+    const origenTexto = String(origen || '').toLowerCase();
+
+    if (origenTexto.includes('realtime grúas')) {
+      await cargar();
+    } else if (origenTexto.includes('realtime mensajes')) {
+      await Promise.allSettled([
+        cargarMensajeActual(),
+        cargarHistorial()
+      ]);
+    } else {
+      await Promise.allSettled([
+        cargar(),
+        cargarMensajeActual(),
+        cargarHistorial()
+      ]);
+    }
+
     console.log('Datos actualizados:', origen, new Date().toLocaleTimeString());
   } catch (e) {
     console.warn('Actualización:', e);
@@ -9602,25 +9672,60 @@ setInterval(() => {
 
 
 let sistemaDatosIniciado = false;
+let sincronizacionHoraIniciada = false;
 
 function haySesionActiva(){
   return !!(usuarioSesion || localStorage.getItem('usuarioSistema'));
 }
 
-function iniciarDatosDespuesLogin(){
+function iniciarSincronizacionHoraDespuesLogin(){
+  if (sincronizacionHoraIniciada) return;
+  if (!haySesionActiva()) return;
+  sincronizacionHoraIniciada = true;
+
+  // La sincronización de hora se inicia solamente después del login.
+  sincronizarHoraInternet().then(() => {
+    if (typeof haySesionActiva === 'function' && haySesionActiva()) {
+      ponerFechasFallaAutomaticas();
+    }
+  });
+  setInterval(sincronizarHoraInternet, 60000);
+}
+
+function cargarIframesDespuesLogin(){
+  const iframes = document.querySelectorAll('iframe[data-src]');
+  iframes.forEach((iframe) => {
+    if (!iframe.getAttribute('src')) {
+      iframe.setAttribute('src', iframe.getAttribute('data-src'));
+    }
+  });
+}
+
+async function iniciarDatosDespuesLogin(){
   if (sistemaDatosIniciado) return;
   sistemaDatosIniciado = true;
 
+  iniciarSincronizacionHoraDespuesLogin();
 
-  setTimeout(() => {
-    try {
-      actualizarTodo('login correcto');
-      cargarResponsabilidades();
-      iniciarRealtime();
-    } catch(e) {
-      console.warn('Inicialización posterior al login:', e);
-    }
-  }, 0);
+  const cargando = document.getElementById('cargandoDatos');
+  if (cargando) cargando.style.display = 'flex';
+
+  try {
+    // Los datos de Supabase se cargan solamente despues de tener una sesion activa.
+    await Promise.allSettled([
+      cargar(),
+      cargarMensajeActual(),
+      cargarHistorial(),
+      cargarResponsabilidades(),
+      Promise.resolve(cargarOpcionesTiempoMuerto())
+    ]);
+
+    iniciarRealtime();
+  } catch(e) {
+    console.warn('Inicialización posterior al login:', e);
+  } finally {
+    if (cargando) cargando.style.display = 'none';
+  }
 }
 
 
@@ -10044,18 +10149,14 @@ if(
 }
 document.addEventListener('DOMContentLoaded', () => {
 
-  sincronizarHoraInternet().then(() => {
-    if (typeof haySesionActiva === 'function' && haySesionActiva()) {
-      ponerFechasFallaAutomaticas();
-    }
-  });
-  setInterval(sincronizarHoraInternet, 60000);
-
+  // Durante el login no se realizan consultas de hora ni inicializaciones de datos.
+  // Todo se inicia en iniciarDatosDespuesLogin(), después de autenticar al usuario.
   if (typeof haySesionActiva === 'function' && haySesionActiva()) {
     ponerFechasFallaAutomaticas();
     controlarBotonStandby();
     mostrarVista('operativo');
     cargarOpcionesTiempoMuerto();
+    cargarIframesDespuesLogin();
     iniciarDatosDespuesLogin();
   }
 
@@ -11460,6 +11561,15 @@ function manejarCambioEstado() {
 
 
   const idEquipo = String(equipo.id || actual || '').toUpperCase().replace(/[-\s]/g,'');
+
+  if (
+    (nuevoEstado === 'dayli-falla' || nuevoEstado === 'dayli') &&
+    (equipo.estado === 'disponible' || equipo.estado === 'falla')
+  ) {
+    mostrarFormularioCierre();
+    return;
+  }
+
   const esSD = idEquipo.startsWith('SD');
   if (esSD) {
     guardarEstadoRapido();
@@ -13193,6 +13303,7 @@ async function iniciarSesion() {
         }
 
 
+        cargarIframesDespuesLogin();
         iniciarDatosDespuesLogin();
       } catch (e) {
         console.error(
@@ -14353,5 +14464,25 @@ main, .dashboard, .dashboard-container {
 
 .filtros-reporte .campo-filtro:has(#filtroResponsabilidad){
   display:none !important;
+}
+</style>
+
+<style id="solo-scroll-gruas-en-falla">
+/* Solo agrega desplazamiento interno a GRÚAS EN FALLA. No modifica su contenido. */
+#listaFallas{
+  max-height:400px !important;
+  overflow-y:scroll !important;
+  overflow-x:hidden !important;
+  scrollbar-width:thin;
+  overscroll-behavior:contain;
+}
+
+@media (max-width:600px){
+  .events-panel > .dashboard-panel:first-child #listaFallas{
+    height:400px !important;
+    max-height:400px !important;
+    overflow-y:scroll !important;
+    overflow-x:hidden !important;
+  }
 }
 </style>
